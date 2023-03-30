@@ -5,7 +5,7 @@
  * needed.
  * See https://www.npmjs.com/package/react-app-rewire-alias#outside-of-root.
  */
-const path = require('path')
+// const path = require('path')
 const { override } = require('customize-cra')
 const {
   aliasDangerous,
