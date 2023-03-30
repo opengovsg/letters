@@ -1,4 +1,4 @@
-FROM node:lts-alpine AS node-modules-builder
+FROM node:14-alpine AS node-modules-builder
 LABEL maintainer="Open Government Products"
 
 ARG ENV=production
@@ -9,7 +9,7 @@ RUN npm ci
 RUN ENV=$ENV REACT_APP_ENV=$ENV npm run build \
   && npm prune --production
 
-FROM node:lts-alpine
+FROM node:14-alpine
 WORKDIR /usr/src/app
 
 COPY --from=node-modules-builder /usr/src/app/backend ./backend
