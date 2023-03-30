@@ -1,0 +1,54 @@
+name: ci
+on:
+  push:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  build:
+    name: Build, Test, Lint
+    uses: ./.github/workflows/build.yml
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: [build]
+    if: github.ref_name == 'staging'
+    uses: opengovsg/deploy/.github/workflows/deploy.yml@latest
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID_STAGING }}
+      aws-role-arn: ${{ secrets.AWS_ROLE_ARN_STAGING }}
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-ecr-repo: ${{ secrets.ECR_REPO }}
+      fly-org-name: ${{ secrets.ORG_NAME_STAGING }}
+      fly-app-name: ${{ secrets.APP_NAME_STAGING }}
+      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
+    with:
+      env: "stg"
+      image-tag: ghactions-${{ github.ref_name }}-${{ github.sha }}
+      ecs-cluster-name: "cluster-application-server"
+      ecs-service-name: "application-server"
+      ecs-container-name: "app-server"
+      codedeploy-application: "AppECS-cluster-application-server"
+      codedeploy-deployment-group: "DgpECS-cluster-application-server"
+
+  deploy-production:
+    name: Deploy to Production
+    needs: [build]
+    if: github.ref_name == 'production'
+    uses: opengovsg/deploy/.github/workflows/deploy.yml@latest
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID_PROD }}
+      aws-role-arn: ${{ secrets.AWS_ROLE_ARN_PROD }}
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-ecr-repo: ${{ secrets.ECR_REPO }}
+      fly-org-name: ${{ secrets.ORG_NAME_PROD }}
+      fly-app-name: ${{ secrets.APP_NAME_PROD }}
+      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
+    with:
+      env: "prod"
+      image-tag: ghactions-${{ github.ref_name }}-${{ github.sha }}
+      ecs-cluster-name: "cluster-application-server"
+      ecs-service-name: "application-server"
+      ecs-container-name: "app-server"
+      codedeploy-application: "AppECS-cluster-application-server"
+      codedeploy-deployment-group: "DgpECS-cluster-application-server"

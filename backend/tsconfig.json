@@ -1,0 +1,35 @@
+{
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "**/jest.config.ts"
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "target": "es6",
+    "sourceMap": true,
+    "outDir": "./build",
+    "baseUrl": "./src",
+    "incremental": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "~shared/*": [
+        "../../shared/build/*"
+      ]
+    }
+  },
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  }
+}
