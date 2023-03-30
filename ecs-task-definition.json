@@ -30,41 +30,41 @@
       "secrets": [
         {
           "name": "DB_HOST",
-          "valueFrom": "/app/backend/DB_HOST"
+          "valueFrom": "letters-stg-rds-host"
         },
         {
           "name": "DB_NAME",
-          "valueFrom": "/app/backend/DB_NAME"
+          "valueFrom": "letters-stg-rds-database"
         },
         {
           "name": "DB_PASSWORD",
-          "valueFrom": "/app/backend/DB_PASSWORD"
+          "valueFrom": "letters-stg-rds-password"
         },
         {
           "name": "DB_USERNAME",
-          "valueFrom": "/app/backend/DB_USERNAME"
+          "valueFrom": "letters-stg-rds-username"
         },
         {
           "name": "SESSION_SECRET",
-          "valueFrom": "/app/backend/SESSION_SECRET"
+          "valueFrom": "letters-stg-session-secret"
         },
         {
           "name": "DD_API_KEY",
-          "valueFrom": "/app/backend/DD_API_KEY"
+          "valueFrom": "letters-stg-dd-api-key"
         },
         {
           "name": "DD_SERVICE",
-          "valueFrom": "/app/backend/DD_SERVICE"
+          "valueFrom": "letters-stg-dd-service"
         },
         {
           "name": "DD_TAGS",
-          "valueFrom": "/app/backend/DD_TAGS"
+          "valueFrom": "letters-stg-dd-tags"
         }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/application-server",
+          "awslogs-group": "letters-stg/ecs/application-server",
           "awslogs-region": "ap-southeast-1",
           "awslogs-stream-prefix": "ecs"
         }
@@ -109,21 +109,21 @@
       "secrets": [
         {
           "name": "DD_API_KEY",
-          "valueFrom": "/app/backend/DD_API_KEY"
+          "valueFrom": "letters-stg-dd-api-key"
         },
         {
           "name": "DD_SERVICE",
-          "valueFrom": "/app/backend/DD_SERVICE"
+          "valueFrom": "letters-stg-dd-service"
         },
         {
           "name": "DD_TAGS",
-          "valueFrom": "/app/backend/DD_TAGS_AGENT"
+          "valueFrom": "letters-stg-dd-tags"
         }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/dd-agent",
+          "awslogs-group": "letters-stg/ecs/dd-agent",
           "awslogs-region": "ap-southeast-1",
           "awslogs-stream-prefix": "ecs"
         }
@@ -138,8 +138,8 @@
     "operatingSystemFamily": "LINUX"
   },
   "requiresCompatibilities": ["FARGATE"],
-  "taskRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/application-server-role",
-  "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/application-server-role",
+  "taskRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/letters-stg-ecs-task-role",
+  "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/letters-stg-ecs-task-exec-role",
   "cpu": "512",
   "memory": "1024"
 }

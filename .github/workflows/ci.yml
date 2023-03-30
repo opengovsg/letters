@@ -25,11 +25,11 @@ jobs:
     with:
       env: "stg"
       image-tag: ghactions-${{ github.ref_name }}-${{ github.sha }}
-      ecs-cluster-name: "cluster-application-server"
-      ecs-service-name: "application-server"
+      ecs-cluster-name: "letters-stg-ecs"
+      ecs-service-name: "letters-stg-ecs-service"
       ecs-container-name: "app-server"
-      codedeploy-application: "AppECS-cluster-application-server"
-      codedeploy-deployment-group: "DgpECS-cluster-application-server"
+      codedeploy-application: "letters-stg-ecs-app"
+      codedeploy-deployment-group: "letters-stg-ecs-dg"
 
   deploy-production:
     name: Deploy to Production
@@ -47,8 +47,8 @@ jobs:
     with:
       env: "prod"
       image-tag: ghactions-${{ github.ref_name }}-${{ github.sha }}
-      ecs-cluster-name: "cluster-application-server"
-      ecs-service-name: "application-server"
+      ecs-cluster-name: "letters-stg-ecs"
+      ecs-service-name: "letters-stg-ecs-service"
       ecs-container-name: "app-server"
-      codedeploy-application: "AppECS-cluster-application-server"
-      codedeploy-deployment-group: "DgpECS-cluster-application-server"
+      codedeploy-application: "letters-stg-ecs-app"
+      codedeploy-deployment-group: "letters-stg-ecs-dg"
