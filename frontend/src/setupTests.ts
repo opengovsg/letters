@@ -2,15 +2,4 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom'
-
-// Handle TypeError: env.window.matchMedia is not a function
-window.matchMedia =
-  window.matchMedia ||
-  function () {
-    return {
-      matches: false,
-      addListener: () => null,
-      removeListener: () => null,
-    }
-  }
+import '@testing-library/jest-dom/extend-expect'

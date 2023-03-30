@@ -62,8 +62,8 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - run: npm ci
-      - name: Compile shared code for dependents
-        run: npm run --prefix shared build
+      # - name: Compile shared code for dependents
+      #   run: npm run --prefix shared build
       - name: Run tests and generate coverage
         run: npm run coverage
         env:

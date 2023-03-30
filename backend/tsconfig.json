@@ -1,13 +1,7 @@
 {
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "**/jest.config.ts"
-  ],
+  "include": ["src/**/*"],
   "compilerOptions": {
     "strict": true,
-    "strictPropertyInitialization": false,
     "esModuleInterop": true,
     "module": "commonjs",
     "declaration": true,
@@ -20,16 +14,6 @@
     "incremental": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "~shared/*": [
-        "../../shared/build/*"
-      ]
-    }
-  },
-  "ts-node": {
-    "require": [
-      "tsconfig-paths/register"
-    ]
+    "forceConsistentCasingInFileNames": true
   }
 }

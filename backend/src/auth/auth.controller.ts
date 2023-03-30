@@ -1,30 +1,24 @@
 import {
-  Body,
   Controller,
   Get,
-  HttpStatus,
   Post,
+  Body,
   Req,
   Res,
-  Session,
+  Logger,
+  HttpStatus,
+  UseGuards,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { Request, Response } from 'express'
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
-
-import { GenerateOtpDto, VerifyOtpDto } from '~shared/types/auth.dto'
-
-import { ConfigService } from '../config/config.service'
-import { UserSession } from '../types/session'
+import { AuthGuard } from './auth.guard'
 import { AuthService } from './auth.service'
+import { GenerateOtpDto, VerifyOtpDto } from './dto'
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
-  constructor(
-    private readonly config: ConfigService,
-    private readonly authService: AuthService,
-    @InjectPinoLogger(AuthController.name)
-    private readonly logger: PinoLogger,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post()
   async generateOtp(
@@ -34,11 +28,11 @@ export class AuthController {
     try {
       await this.authService.generateOtp(generateOtpDto)
       res.status(HttpStatus.OK).json({ message: 'OTP sent' })
-    } catch (error) {
-      this.logger.error(error)
+    } catch (error: any) {
+      Logger.error(error)
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json({ message: (error as Record<string, string>).message })
+        .json({ message: error.message })
     }
   }
 
@@ -51,41 +45,34 @@ export class AuthController {
     try {
       const user = await this.authService.verifyOtp(verifyOtpDto)
       if (user) {
-        req.session.user = user
-        this.logger.info(
-          `Successfully verified OTP for user ${verifyOtpDto.email}`,
-        )
+        Object.assign(req.session, { user })
+        Logger.log(`Successfully verified OTP for user ${verifyOtpDto.email}`)
         res.status(HttpStatus.OK).json({ message: 'OTP verified' })
       } else {
-        this.logger.warn(`Incorrect OTP given for ${verifyOtpDto.email}`)
+        Logger.warn(`Incorrect OTP given for ${verifyOtpDto.email}`)
         res
           .status(HttpStatus.UNAUTHORIZED)
           .json({ message: 'Incorrect OTP given' })
       }
-    } catch (error) {
-      this.logger.error(error)
+    } catch (error: any) {
+      Logger.error(error)
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json({ message: (error as Record<string, string>).message })
+        .json({ message: error.message })
     }
   }
 
   @Post('logout')
-  logout(
-    @Session() session: UserSession,
-    @Res({ passthrough: true }) res: Response,
-  ): void {
-    res.clearCookie(this.config.get('session.name'))
-    session.destroy(() =>
+  @UseGuards(AuthGuard)
+  async logout(@Req() req: Request, @Res() res: Response): Promise<void> {
+    req.session.destroy(() =>
       res.status(HttpStatus.OK).json({ message: 'Logged out' }),
     )
   }
 
   @Get('whoami')
-  whoami(@Req() req: Request, @Res() res: Response): void {
-    const user = req.session.user
-    res
-      .status(HttpStatus.OK)
-      .json(user ? { id: user.id, email: user.email } : null)
+  @UseGuards(AuthGuard)
+  async whoami(@Req() req: Request, @Res() res: Response): Promise<void> {
+    res.status(HttpStatus.OK).json(req.session.user)
   }
 }

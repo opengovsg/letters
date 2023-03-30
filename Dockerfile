@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 
 COPY --from=node-modules-builder /usr/src/app/backend ./backend
 COPY --from=node-modules-builder /usr/src/app/frontend/build ./frontend/build
-COPY --from=node-modules-builder /usr/src/app/shared ./shared
+# COPY --from=node-modules-builder /usr/src/app/shared ./shared
 COPY --from=node-modules-builder /usr/src/app/node_modules ./node_modules
 COPY --from=node-modules-builder /usr/src/app/package.json ./
 

@@ -24,5 +24,4 @@ yarn-error.log*
 
 storybook-static
 build-storybook.log
-
-.storybook/preview-head.html
+*
