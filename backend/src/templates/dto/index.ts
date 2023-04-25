@@ -1,6 +1,0 @@
-export * from './create-template.dto'
-export * from './update-template.dto'
-export * from './add-permission.dto'
-export * from './delete-permission.dto'
-export * from './list-permissions.dto'
-export * from './get-template.dto'

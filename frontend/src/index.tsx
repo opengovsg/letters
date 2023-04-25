@@ -1,19 +1,14 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import dayjs from 'dayjs'
-import calendar from 'dayjs/plugin/calendar'
+import { createRoot } from 'react-dom/client'
 
-import App from './App'
+import App from './app'
 import * as serviceWorker from './serviceWorker'
 
-// Init calendar plugin
-dayjs.extend(calendar)
-
-ReactDOM.render(
+const root = createRoot(document.getElementById('root') as HTMLElement)
+root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root'),
 )
 
 // If you want your app to work offline and load faster, you can change

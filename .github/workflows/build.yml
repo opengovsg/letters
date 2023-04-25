@@ -62,8 +62,8 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - run: npm ci
-      # - name: Compile shared code for dependents
-      #   run: npm run --prefix shared build
+      - name: Compile shared code for dependents
+        run: npm run --prefix shared build
       - name: Run tests and generate coverage
         run: npm run coverage
         env:
@@ -72,11 +72,11 @@ jobs:
           DB_PORT: 5432
           DB_USERNAME: test
           DB_PASSWORD: test
-      # - name: Coveralls
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     path-to-lcov: ./lcov.info
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./lcov.info
 
   build-docker:
     name: Build Docker image
