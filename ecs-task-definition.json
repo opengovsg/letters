@@ -49,10 +49,6 @@
           "valueFrom": "letters-stg-session-secret"
         },
         {
-          "name": "OTP_SECRET",
-          "valueFrom": "letters-stg-otp-secret"
-        },
-        {
           "name": "DD_API_KEY",
           "valueFrom": "letters-stg-dd-api-key"
         },
