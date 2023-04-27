@@ -1,14 +1,15 @@
-import { extendTheme, withDefaultColorScheme } from '@chakra-ui/react'
+import { extendTheme } from '@chakra-ui/react'
+// Importing from main so @chakra-cli can work properly without complaining about ESM.
+import { theme as baseTheme } from '@opengovsg/design-system-react/build/main/theme/theme'
 
-import { colours } from './foundations/colours'
 import { components } from './components'
-import { textStyles } from './textStyles'
 
-export const theme = extendTheme(
-  withDefaultColorScheme({ colorScheme: 'theme-orange' }),
-  {
-    colors: colours,
-    textStyles,
-    components,
-  },
-)
+/**
+ * Design system themes can be found at
+ * https://github.com/opengovsg/design-system/tree/main/token-gen/themes.
+ * README for importing themes can be found at
+ * https://github.com/opengovsg/design-system/tree/main/token-gen.
+ */
+export const theme = extendTheme(baseTheme, {
+  components,
+})

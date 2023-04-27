@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
@@ -25,7 +26,7 @@ type Config = {
   onUpdate?: (_registration: ServiceWorkerRegistration) => void
 }
 
-export function register(config?: Config) {
+export function register(config?: Config): void {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href)
@@ -45,7 +46,7 @@ export function register(config?: Config) {
 
         // Add some additional logging to localhost, pointing developers to the
         // service worker/PWA documentation.
-        navigator.serviceWorker.ready.then(() => {
+        void navigator.serviceWorker.ready.then(() => {
           console.log(
             'This web app is being served cache-first by a service ' +
               'worker. To learn more, visit https://bit.ly/CRA-PWA',
@@ -99,7 +100,7 @@ function registerValidSW(swUrl: string, config?: Config) {
       }
     })
     .catch((error) => {
-      console.error('Error during service worker registration:', error)
+      console.error('Error during service worker registration:', [error])
     })
 }
 
@@ -116,8 +117,8 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
         (contentType != null && contentType.indexOf('javascript') === -1)
       ) {
         // No service worker found. Probably a different app. Reload the page.
-        navigator.serviceWorker.ready.then((registration) => {
-          registration.unregister().then(() => {
+        return navigator.serviceWorker.ready.then((registration) => {
+          return registration.unregister().then(() => {
             window.location.reload()
           })
         })
@@ -133,13 +134,13 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
     })
 }
 
-export function unregister() {
+export function unregister(): void {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready
       .then((registration) => {
-        registration.unregister()
+        return registration.unregister()
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         console.error(error.message)
       })
   }

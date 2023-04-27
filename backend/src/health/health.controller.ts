@@ -1,11 +1,13 @@
 import { Controller, Get } from '@nestjs/common'
 import {
   HealthCheck,
-  HealthCheckResult,
   HealthCheckService,
   MemoryHealthIndicator,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus'
+
+import { HealthDto } from '~shared/types/health.dto'
+
 import { ConfigService } from '../config/config.service'
 
 @Controller('health')
@@ -19,13 +21,9 @@ export class HealthController {
     private memory: MemoryHealthIndicator,
   ) {}
 
-  /**
-   * Checks database and memory use
-   * @returns
-   */
   @Get()
   @HealthCheck()
-  async check(): Promise<HealthCheckResult> {
+  async check(): Promise<HealthDto> {
     return this.health.check([
       async () => this.db.pingCheck('database'),
       async () =>

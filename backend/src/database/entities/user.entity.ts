@@ -1,22 +1,34 @@
-import { Entity, Column } from 'typeorm'
-import { BaseEntity } from './'
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm'
+
+import { IsGovSgEmail } from '~shared/decorators/is-gov-sg-email'
 
 @Entity({ name: 'users' })
-export class User extends BaseEntity {
-  @Column({
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column('varchar', { length: 255 })
+  @Index('user_email_idx', {
     unique: true,
-    nullable: true,
+    where: '"deletedAt" IS NULL',
   })
-  email!: string
+  @IsGovSgEmail()
+  email: string
 
-  @Column({
-    nullable: true,
-  })
-  apiKeyHash?: string
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date
 
-  @Column({
-    type: 'jsonb',
-    nullable: true,
-  })
-  apiKeyScopes?: string[]
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date
+
+  @DeleteDateColumn({ type: 'timestamptz' })
+  deletedAt: Date | null
 }
