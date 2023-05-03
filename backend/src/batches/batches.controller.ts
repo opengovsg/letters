@@ -8,8 +8,9 @@ import {
   Post,
 } from '@nestjs/common'
 
-import { CreateBatchDto } from '../../../shared/src/dtos/create-batch.dto'
-import { UpdateBatchDto } from '../../../shared/src/dtos/update-batch.dto'
+import { CreateBatchDto } from '~shared/dtos/create-batch.dto'
+import { UpdateBatchDto } from '~shared/dtos/update-batch.dto'
+
 import { BatchesService } from './batches.service'
 
 @Controller('batches')
