@@ -8,8 +8,9 @@ import {
   Post,
 } from '@nestjs/common'
 
-import { CreateTemplateDto } from '../../../shared/src/dtos/create-template.dto'
-import { UpdateTemplateDto } from '../../../shared/src/dtos/update-template.dto'
+import { CreateTemplateDto } from '~shared/dtos/create-template.dto'
+import { UpdateTemplateDto } from '~shared/dtos/update-template.dto'
+
 import { TemplatesService } from './templates.service'
 
 @Controller('templates')
