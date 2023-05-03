@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 
 import { CreateTemplateDto } from '~shared/dtos/create-template.dto'
 import { UpdateTemplateDto } from '~shared/dtos/update-template.dto'
 
+import { Template } from '../database/entities'
+
 @Injectable()
 export class TemplatesService {
+  @InjectRepository(Template)
+  private repository: Repository<Template>
   create(createTemplateDto: CreateTemplateDto) {
     return 'This action adds a new template'
   }
@@ -13,8 +19,8 @@ export class TemplatesService {
     return `This action returns all templates`
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} template`
+  async findOne(id: number) {
+    return await this.repository.findOne({ where: { id } })
   }
 
   update(id: number, updateTemplateDto: UpdateTemplateDto) {
