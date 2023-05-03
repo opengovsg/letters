@@ -3,16 +3,21 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 
 import { CreateTemplateDto } from '~shared/dtos/create-template.dto'
 import { UpdateTemplateDto } from '~shared/dtos/update-template.dto'
 
+import { AuthGuard } from '../auth/auth.guard'
+import { mapTemplateToDto } from '../core/dto-mappers/template.dto-mapper'
 import { TemplatesService } from './templates.service'
 
+@UseGuards(AuthGuard)
 @Controller('templates')
 export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
@@ -28,8 +33,10 @@ export class TemplatesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.templatesService.findOne(+id)
+  async findOne(@Param('id') id: string) {
+    const template = await this.templatesService.findOne(+id)
+    if (!template) throw new NotFoundException('Template not found')
+    return mapTemplateToDto(template)
   }
 
   @Patch(':id')
