@@ -3,6 +3,7 @@ import { extendTheme } from '@chakra-ui/react'
 import { theme as baseTheme } from '@opengovsg/design-system-react/build/main/theme/theme'
 
 import { components } from './components'
+import { foundations } from './foundation'
 
 /**
  * Design system themes can be found at
@@ -11,5 +12,6 @@ import { components } from './components'
  * https://github.com/opengovsg/design-system/tree/main/token-gen.
  */
 export const theme = extendTheme(baseTheme, {
+  ...foundations,
   components,
 })

@@ -1,36 +1,40 @@
 import { Box } from '@chakra-ui/react'
 import { PropsWithChildren, Suspense } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+} from 'react-router-dom'
 
+import { AppLayout } from '~/layouts/AppLayout'
 import { routes } from '~constants/routes'
-import { lazyImport } from '~utils/lazyImport'
+import { AdminAuthProvider } from '~features/auth/context/AdminProtectedContext'
 
-const { AuthRoutes } = lazyImport(() => import('~features/auth'), 'AuthRoutes')
-const { DashboardRoutes } = lazyImport(
-  () => import('~features/dashboard'),
-  'DashboardRoutes',
-)
-const { HealthRoutes } = lazyImport(
-  () => import('~features/health'),
-  'HealthRoutes',
-)
+import { adminRoutes, publicRoutes } from './routes'
 
 const router = createBrowserRouter([
   {
-    path: routes.index,
-    element: <DashboardRoutes />,
-  },
-  {
-    path: routes.login,
-    element: <AuthRoutes />,
-  },
-  {
-    path: routes.health,
-    element: <HealthRoutes />,
-  },
-  {
-    path: '*',
-    element: <div>404</div>,
+    element: <AppLayout />,
+    children: [
+      {
+        path: routes.admin.index,
+        element: (
+          <AdminAuthProvider>
+            <Outlet />
+          </AdminAuthProvider>
+        ),
+        children: adminRoutes,
+      },
+      {
+        path: routes.public.index,
+        children: publicRoutes,
+      },
+      {
+        path: '*',
+        element: <Navigate to={routes.admin.index} />,
+      },
+    ],
   },
 ])
 
