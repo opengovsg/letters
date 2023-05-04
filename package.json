@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.0"
+    "class-validator": "^0.14.0",
+    "dayjs": "^1.11.7"
   }
 }
