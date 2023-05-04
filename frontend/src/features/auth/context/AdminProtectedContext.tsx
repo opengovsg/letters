@@ -9,9 +9,9 @@ import React, {
 import { useNavigate } from 'react-router-dom'
 
 import { UNAUTHORIZED_EVENT } from '~/constants/events'
+import { useToast } from '~/hooks/useToast'
 import { WhoAmIResponseDto } from '~shared/dtos/auth.dto'
 
-// import { useToast } from '~/hooks/useToast'
 import { useAdminLogout, useAdminUser } from '../hooks/auth.hooks'
 
 type AdminAuthContextProps = {
@@ -38,7 +38,7 @@ export const AdminAuthProvider: FC<React.PropsWithChildren> = ({
     },
   })
 
-  // const toast = useToast()
+  const toast = useToast()
 
   const logout = useCallback(async (): Promise<void> => {
     await adminLogout()
@@ -46,10 +46,10 @@ export const AdminAuthProvider: FC<React.PropsWithChildren> = ({
   }, [adminLogout, navigate])
 
   const handleUnauthorizedEvent = useCallback(async () => {
-    // toast({
-    //   status: 'error',
-    //   description: 'Please login again.',
-    // })
+    toast({
+      status: 'error',
+      description: 'Please login again.',
+    })
     await logout()
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
