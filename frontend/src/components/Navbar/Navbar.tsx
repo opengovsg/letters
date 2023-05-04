@@ -1,9 +1,9 @@
-// import { Suspense } from 'react'
-import { Flex, Image } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
+import { Suspense } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 // import LogoSvg from '~/assets/Logo.svg'
-// import { Loading } from '~/components/Loading'
+import { Loading } from '~/components/Loading'
 import { routes } from '~/constants/routes'
 
 import { UserMenu } from './components/UserMenu'
@@ -23,7 +23,7 @@ const NavbarBody = (): JSX.Element => {
     >
       <RouterLink to={routes.index}>
         {/* <Image maxW="8rem" src={LogoSvg} ml={'8px'} /> */}
-        Highway
+        Letters
       </RouterLink>
       <UserMenu />
     </Flex>
@@ -31,7 +31,7 @@ const NavbarBody = (): JSX.Element => {
 }
 
 export const Navbar = () => (
-  // <Suspense fallback={<Loading />}>
-  <NavbarBody />
-  // </Suspense>
+  <Suspense fallback={<Loading />}>
+    <NavbarBody />
+  </Suspense>
 )
