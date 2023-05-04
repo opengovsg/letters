@@ -1,14 +1,19 @@
 import { Box, Flex, GridItem, GridProps, Text } from '@chakra-ui/react'
-import { FC, PropsWithChildren, useState } from 'react'
+import { FC, PropsWithChildren, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { AppFooter } from '~/app/AppFooter'
 import { useIsDesktop } from '~hooks/useIsDesktop'
-import { useAuth } from '~lib/auth'
 import { AppGrid } from '~templates/AppGrid'
 
-import { LoginForm, LoginFormInputs } from '../components/LoginForm'
-import { LoginImageSvgr } from '../components/LoginImageSvgr'
-import { OtpForm, OtpFormInputs } from '../components/OtpForm'
+import { LoginForm, LoginFormInputs } from './components/LoginForm'
+import { LoginImageSvgr } from './components/LoginImageSvgr'
+import { OtpForm, OtpFormInputs } from './components/OtpForm'
+import { useAdminAuth } from './context/AdminProtectedContext'
+import {
+  useAdminSendLoginOtp,
+  useAdminVerifyLoginOtp,
+} from './hooks/auth.hooks'
 
 export type LoginOtpData = {
   email: string
@@ -77,8 +82,11 @@ const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) => (
 )
 
 export const LoginPage = (): JSX.Element => {
-  const { sendLoginOtp, verifyLoginOtp } = useAuth()
+  const { verifyLoginOtp } = useAdminVerifyLoginOtp()
+  const { sendLoginOtp } = useAdminSendLoginOtp()
+  const { adminUser } = useAdminAuth()
   const isDesktop = useIsDesktop()
+  const navigate = useNavigate()
 
   const [email, setEmail] = useState<string>()
 
@@ -87,6 +95,11 @@ export const LoginPage = (): JSX.Element => {
     await sendLoginOtp({ email: trimmedEmail })
     return setEmail(trimmedEmail)
   }
+
+  // If user is already logged in, redirect to dashboard.
+  useEffect(() => {
+    if (adminUser) navigate('/admin/dashboard')
+  }, [navigate, adminUser])
 
   const handleVerifyOtp = async ({ token }: OtpFormInputs) => {
     // Should not happen, since OtpForm component is only shown when there is
@@ -142,7 +155,9 @@ export const LoginPage = (): JSX.Element => {
             ) : (
               <OtpForm
                 email={email}
-                onSubmit={handleVerifyOtp}
+                onSubmit={async (values) => {
+                  await handleVerifyOtp(values)
+                }}
                 onResendOtp={handleResendOtp}
               />
             )}

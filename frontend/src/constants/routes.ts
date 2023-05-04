@@ -1,5 +1,13 @@
 export const routes = {
   index: '/',
-  login: '/login',
-  health: '/health',
+  public: {
+    index: 'public',
+    letters: 'letters',
+  },
+  admin: {
+    index: 'admin',
+    login: 'login',
+    templates: 'templates',
+    letters: 'letters',
+  },
 }
