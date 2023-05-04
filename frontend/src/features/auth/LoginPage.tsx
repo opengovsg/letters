@@ -98,7 +98,7 @@ export const LoginPage = (): JSX.Element => {
 
   // If user is already logged in, redirect to dashboard.
   useEffect(() => {
-    if (adminUser) navigate('/admin/dashboard')
+    if (adminUser) navigate('/admin/templates')
   }, [navigate, adminUser])
 
   const handleVerifyOtp = async ({ token }: OtpFormInputs) => {
