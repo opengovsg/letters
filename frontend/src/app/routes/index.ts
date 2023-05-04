@@ -1,2 +1,2 @@
 export * from './admin.routes'
-export * from './user.routes'
+export * from './public.routes'

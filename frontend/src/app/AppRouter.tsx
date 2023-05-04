@@ -11,7 +11,7 @@ import { AppLayout } from '~/layouts/AppLayout'
 import { routes } from '~constants/routes'
 import { AdminAuthProvider } from '~features/auth/context/AdminProtectedContext'
 
-import { adminRoutes, userRoutes } from './routes'
+import { adminRoutes, publicRoutes } from './routes'
 
 const router = createBrowserRouter([
   {
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: routes.public.index,
-        children: userRoutes,
+        children: publicRoutes,
       },
       {
         path: '*',

@@ -4,7 +4,7 @@ import { PublicLayout } from '~/layouts/PublicLayout'
 import { routes } from '~constants/routes'
 import { WelcomePage } from '~features/public/WelcomePage'
 
-export const userRoutes: RouteObject[] = [
+export const publicRoutes: RouteObject[] = [
   {
     index: true,
     element: <Navigate to={routes.public.letters} />,
