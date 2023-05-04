@@ -1,7 +1,7 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 
-import { api } from "~lib/api";
+import { unversionedApi } from "~lib/api";
 
 import { TemplateCard } from "./TemplateCard";
 
@@ -17,7 +17,7 @@ type GetTemplateDTO = {
 
 export const useGetTemplates = () => {
 	const { data, isLoading } = useQuery(["templates"], () =>
-		api.url(`/templates`).get().json<GetTemplateDTO[]>()
+		unversionedApi.url(`/templates`).get().json<GetTemplateDTO[]>()
 	);
 
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -25,19 +25,21 @@ export const useGetTemplates = () => {
 };
 
 export const DashboardBody = () => {
-	const { templates } = useGetTemplates();
+	const { templates, isTemplatesLoading } = useGetTemplates();
 	return (
 		<Flex flexDir="row" flex="1" gap="20px" py="10" overflow="auto">
-			{templates.map((template, index) => {
-				return (
+			{templates || !isTemplatesLoading ? (
+				templates.map((template, index) => (
 					<TemplateCard
 						name={template.name}
 						updatedAt={template.createdAt}
 						thumbnailS3Path={template.thumbnailS3Path}
 						key={index}
 					/>
-				);
-			})}
+				))
+			) : (
+				<Text>Loading</Text>
+			)}
 		</Flex>
 	);
 };
