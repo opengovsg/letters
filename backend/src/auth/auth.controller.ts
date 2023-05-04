@@ -11,7 +11,7 @@ import {
 import { Request, Response } from 'express'
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 
-import { GenerateOtpDto, VerifyOtpDto } from '~shared/types/auth.dto'
+import { GenerateOtpDto, VerifyOtpDto } from '~shared/dtos/auth.dto'
 
 import { ConfigService } from '../config/config.service'
 import { UserSession } from '../types/session'

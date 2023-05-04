@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 import { FindOneOptions, Repository } from 'typeorm'
 
-import { GenerateOtpDto, VerifyOtpDto } from '~shared/types/auth.dto'
+import { GenerateOtpDto, VerifyOtpDto } from '~shared/dtos/auth.dto'
 
 import { ConfigService } from '../config/config.service'
 import { Session, User } from '../database/entities'
