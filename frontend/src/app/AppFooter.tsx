@@ -7,6 +7,7 @@ import {
 import { APP_NAME } from '~/constants/config'
 import {
   CONTACT_US,
+  PRIVACY,
   REPORT_VULNERABILITY,
   TERMS_OF_USE,
   USER_GUIDE,
@@ -23,7 +24,7 @@ const FOOTER_LINKS = [
   },
   {
     label: 'Privacy',
-    href: '/privacy',
+    href: PRIVACY,
   },
   {
     label: 'Terms of Use',
