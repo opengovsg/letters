@@ -4,11 +4,11 @@ export const useCardIndex = (initialIndex = 0, maxIndex = 2) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
 
   const handleNext = () => {
-    setCurrentIndex((currentIndex + 1) % (maxIndex + 1))
+    setCurrentIndex(Math.min(currentIndex + 1, maxIndex))
   }
 
   const handlePrev = () => {
-    setCurrentIndex((currentIndex - 1 + (maxIndex + 1)) % (maxIndex + 1))
+    setCurrentIndex(Math.max(currentIndex - 1, 0))
   }
 
   return [currentIndex, setCurrentIndex, handleNext, handlePrev] as const
