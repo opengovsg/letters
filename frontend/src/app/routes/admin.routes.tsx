@@ -7,7 +7,7 @@ import { LoginPage } from '~features/auth/LoginPage'
 import { CreateTemplatePage } from '~features/create/CreateTemplatePage'
 import { IssuedLettersPage } from '~features/dashboard/IssuedLettersPage'
 import { TemplatesPage } from '~features/dashboard/TemplatesPage'
-import { BulkIssueDrawer } from '~features/issue/BulkIssueDrawer'
+import { BulkIssuePage } from '~features/templates/BulkIssuePage'
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -64,20 +64,9 @@ export const adminRoutes: RouteObject[] = [
     path: `${routes.admin.templates}/:templateId/issue`,
     element: (
       <AdminProtectedRoute>
-        <AdminLayout />
+        <BulkIssuePage />
       </AdminProtectedRoute>
     ),
-    children: [
-      {
-        index: true,
-        element: (
-          <>
-            <TemplatesPage />
-            <BulkIssueDrawer />
-          </>
-        ),
-      },
-    ],
   },
   {
     path: '*',
