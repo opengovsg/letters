@@ -5,6 +5,7 @@ import { AdminLayout } from '~/layouts/AdminLayout'
 import { AdminProtectedRoute } from '~features/auth/context/AdminProtectedRoute'
 import { LoginPage } from '~features/auth/LoginPage'
 import { DashboardPage } from '~features/dashboard/DashboardPage'
+import { BulkIssuePage } from '~features/templates/BulkIssuePage'
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -42,6 +43,14 @@ export const adminRoutes: RouteObject[] = [
         element: <DashboardPage />,
       },
     ],
+  },
+  {
+    path: `${routes.admin.templates}/:templateId/issue`,
+    element: (
+      <AdminProtectedRoute>
+        <BulkIssuePage />
+      </AdminProtectedRoute>
+    ),
   },
   {
     path: '*',
