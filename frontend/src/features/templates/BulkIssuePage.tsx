@@ -1,11 +1,15 @@
 import { Text, VStack } from '@chakra-ui/react'
 
-import { useTemplateId } from './hooks/templates.hooks'
+import { TemplateHeader } from './components/TemplateHeader'
+import { useGetTemplateById, useTemplateId } from './hooks/templates.hooks'
+
 export const BulkIssuePage = (): JSX.Element => {
   const { templateId } = useTemplateId()
+  const { name } = useGetTemplateById(templateId)
+
   return (
     <VStack alignItems="left" spacing="0px">
-      <Text>{`This is the bulk upload page for ${templateId}`}</Text>
+      <TemplateHeader templateName={name} />
     </VStack>
   )
 }
