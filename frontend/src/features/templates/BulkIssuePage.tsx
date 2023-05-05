@@ -14,7 +14,7 @@ export const BulkIssuePage = (): JSX.Element => {
   const { name } = useGetTemplateById(templateId)
   const navigate = useNavigate()
 
-  const [currIndex, setCurrIndex, nextIndex, prevIndex] = useCardIndex(0)
+  const [currIndex, setCurrIndex, handleNext, handlePrev] = useCardIndex(0)
 
   const steps = [
     'Download .CSV file',
@@ -40,11 +40,11 @@ export const BulkIssuePage = (): JSX.Element => {
         </HStack>
         <SampleCsvCard
           shouldDisplay={currIndex === 0}
-          onCompletion={nextIndex}
+          onCompletion={handleNext}
         />
         <UploadCsvCard
           shouldDisplay={currIndex === 1}
-          onCompletion={nextIndex}
+          onCompletion={handleNext}
         />
         <CompletionCsvCard
           shouldDisplay={currIndex === 2}
