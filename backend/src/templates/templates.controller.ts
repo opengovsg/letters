@@ -13,18 +13,18 @@ import {
 import { CreateTemplateDto } from '~shared/dtos/create-template.dto'
 import { UpdateTemplateDto } from '~shared/dtos/update-template.dto'
 
-import { AuthGuard } from '../auth/auth.guard'
 import { mapTemplateToDto } from '../core/dto-mappers/template.dto-mapper'
 import { TemplatesService } from './templates.service'
 
-@UseGuards(AuthGuard)
-@Controller('templates')
+@Controller()
 export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
 
   @Post()
-  create(@Body() createTemplateDto: CreateTemplateDto) {
-    return this.templatesService.create(createTemplateDto)
+  async create(@Body() templateDto: CreateTemplateDto) {
+    return await this.templatesService
+      .create(templateDto)
+      .then((c) => mapTemplateToDto(c))
   }
 
   @Get()
