@@ -14,7 +14,6 @@ export class AuthGuard implements CanActivate {
     if (requestUserId === undefined) {
       throw new UnauthorizedException('User is not logged in.')
     }
-    const { userId } = request.params
-    return requestUserId === Number(userId)
+    return true
   }
 }
