@@ -11,8 +11,9 @@ import { Template } from '../database/entities'
 export class TemplatesService {
   @InjectRepository(Template)
   private repository: Repository<Template>
-  create(createTemplateDto: CreateTemplateDto) {
-    return 'This action adds a new template'
+  async create(createTemplateDto: CreateTemplateDto): Promise<Template> {
+    const template = this.repository.create(createTemplateDto)
+    return await this.repository.save(template)
   }
 
   findAll() {

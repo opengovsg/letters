@@ -29,6 +29,10 @@ const apiModules = [
             path: 'v1',
             children: apiModules,
           },
+          {
+            path: '/templates',
+            module: TemplatesModule,
+          },
         ],
       },
     ]),
