@@ -32,7 +32,6 @@ export const DashboardBody = () => {
         templates.map((template, index) => (
           <TemplateCard
             name={template.name}
-            updatedAt={template.createdAt}
             thumbnailS3Path={template.thumbnailS3Path}
             key={index}
           />
