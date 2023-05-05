@@ -1,9 +1,18 @@
 import { CardHeader } from '@chakra-ui/react'
+import { Button } from '@opengovsg/design-system-react'
 
-import { BulkIssueCard } from './BulkIssueCard'
+import { ToggleCard, ToggleCardProps } from './ToggleCard'
 
-export const UploadCsvCard = (props: any) => (
-  <BulkIssueCard {...props}>
+interface UploadCsvCardProps extends ToggleCardProps {
+  onCompletion?: () => void
+}
+
+export const UploadCsvCard = ({
+  onCompletion,
+  ...toggleCardProps
+}: UploadCsvCardProps) => (
+  <ToggleCard {...toggleCardProps}>
     <CardHeader>Upload the completed .CSV file</CardHeader>
-  </BulkIssueCard>
+    <Button onClick={onCompletion}>Upload</Button>
+  </ToggleCard>
 )

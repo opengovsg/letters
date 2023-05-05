@@ -1,9 +1,18 @@
 import { CardHeader } from '@chakra-ui/react'
+import { Button } from '@opengovsg/design-system-react'
 
-import { BulkIssueCard } from './BulkIssueCard'
+import { ToggleCard, ToggleCardProps } from './ToggleCard'
 
-export const CompletionCsvCard = (props: any) => (
-  <BulkIssueCard {...props}>
+interface CompletionCsvCardProps extends ToggleCardProps {
+  onCompletion?: () => void
+}
+
+export const CompletionCsvCard = ({
+  onCompletion,
+  ...toggleCardProps
+}: CompletionCsvCardProps) => (
+  <ToggleCard {...toggleCardProps}>
     <CardHeader>400 letters generated</CardHeader>
-  </BulkIssueCard>
+    <Button onClick={onCompletion}>Completed</Button>
+  </ToggleCard>
 )

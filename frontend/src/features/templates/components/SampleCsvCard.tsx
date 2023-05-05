@@ -1,9 +1,18 @@
 import { CardHeader } from '@chakra-ui/react'
+import { Button } from '@opengovsg/design-system-react'
 
-import { BulkIssueCard } from './BulkIssueCard'
+import { ToggleCard, ToggleCardProps } from './ToggleCard'
 
-export const SampleCsvCard = (props: any) => (
-  <BulkIssueCard {...props}>
+interface SampleCsvCardProps extends ToggleCardProps {
+  onCompletion?: () => void
+}
+
+export const SampleCsvCard = ({
+  onCompletion,
+  ...toggleCardProps
+}: SampleCsvCardProps) => (
+  <ToggleCard {...toggleCardProps}>
     <CardHeader>Download the sample .CSV file</CardHeader>
-  </BulkIssueCard>
+    <Button onClick={onCompletion}>Download</Button>
+  </ToggleCard>
 )
