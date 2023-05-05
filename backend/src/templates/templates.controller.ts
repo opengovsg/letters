@@ -18,7 +18,7 @@ import { mapTemplateToDto } from '../core/dto-mappers/template.dto-mapper'
 import { TemplatesService } from './templates.service'
 
 @UseGuards(AuthGuard)
-@Controller()
+@Controller('/templates')
 export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
 
