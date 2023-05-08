@@ -8,7 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 type TemplateCardProps = {
   name: string
@@ -18,6 +18,7 @@ type TemplateCardProps = {
 
 export const TemplateCard = (templateCardProps: TemplateCardProps) => {
   const [zoom, setZoom] = useState(false)
+  const navigate = useNavigate()
 
   function handleMouseHover() {
     setZoom((prev) => !prev)
@@ -53,9 +54,9 @@ export const TemplateCard = (templateCardProps: TemplateCardProps) => {
         </Heading>
       </CardHeader>
       {zoom && (
-        <RouterLink to={`${templateCardProps.id}/issue`}>
-          <Button>Issue Letter</Button>
-        </RouterLink>
+        <Button onClick={() => navigate(`${templateCardProps.id}/issue`)}>
+          Issue Letter
+        </Button>
       )}
     </Card>
   )
