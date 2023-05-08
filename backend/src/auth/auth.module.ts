@@ -6,6 +6,7 @@ import { Session, User } from '../database/entities'
 import { MailerModule } from '../mailer/mailer.module'
 import { OtpModule } from '../otp/otp.module'
 import { AuthController } from './auth.controller'
+import { AuthGuard } from './auth.guard'
 import { AuthService } from './auth.service'
 
 @Module({
@@ -16,6 +17,7 @@ import { AuthService } from './auth.service'
     TypeOrmModule.forFeature([User, Session]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard],
+  exports: [AuthGuard],
 })
 export class AuthModule {}
