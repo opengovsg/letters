@@ -8,10 +8,12 @@ import {
   Text,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 
 type TemplateCardProps = {
   name: string
   thumbnailS3Path: string
+  id: number
 }
 
 export const TemplateCard = (templateCardProps: TemplateCardProps) => {
@@ -50,7 +52,11 @@ export const TemplateCard = (templateCardProps: TemplateCardProps) => {
           <Text noOfLines={2}>{templateCardProps.name}</Text>
         </Heading>
       </CardHeader>
-      {zoom && <Button>Issue Letter</Button>}
+      {zoom && (
+        <RouterLink to={`${templateCardProps.id}/issue`}>
+          <Button>Issue Letter</Button>
+        </RouterLink>
+      )}
     </Card>
   )
 }

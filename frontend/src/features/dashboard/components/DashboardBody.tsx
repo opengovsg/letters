@@ -36,6 +36,7 @@ export const DashboardBody = () => {
                 name={template.name}
                 thumbnailS3Path={template.thumbnailS3Path}
                 key={index}
+                id={template.id}
               />
             </WrapItem>
           ))
