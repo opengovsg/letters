@@ -1,7 +1,7 @@
 import { Flex, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 
-import { unversionedApi } from '~lib/api'
+import { api } from '~lib/api'
 
 import { TemplateCard } from './TemplateCard'
 
@@ -17,7 +17,7 @@ type GetTemplateDTO = {
 
 export const useGetTemplates = () => {
   const { data, isLoading } = useQuery(['templates'], () =>
-    unversionedApi.url(`/templates`).get().json<GetTemplateDTO[]>(),
+    api.url(`/templates`).get().json<GetTemplateDTO[]>(),
   )
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

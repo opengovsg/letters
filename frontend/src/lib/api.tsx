@@ -12,9 +12,3 @@ export const api = wretch('/api')
     throw err
   })
   .errorType('json')
-
-//Leaving this here since our endpoints are currently not prefixed with 'api/v1/'
-export const unversionedApi = wretch('').catcher(403, (err) => {
-  window.dispatchEvent(new Event(UNAUTHORIZED_EVENT))
-  throw err
-})
