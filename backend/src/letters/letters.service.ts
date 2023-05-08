@@ -85,19 +85,33 @@ export class LettersService {
     })
   }
 
-  findAll() {
-    return `This action returns all letters`
-  }
+	create(createLetterDto: CreateLetterDto) {
+		return "This action adds a new letter";
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} letter`
-  }
+	findAll() {
+		return `This action returns all letters`;
+	}
 
-  update(id: number, updateLetterDto: UpdateLetterDto) {
-    return `This action updates a #${id} letter`
-  }
+	async findByPublicId(publicId: string) {
+		const letter = await this.repository.findOne({
+			where: {
+				publicId: publicId,
+			},
+		});
+		if (!letter) throw new NotFoundException("Letter not found");
+		return letter;
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} letter`
-  }
+	findOne(id: number) {
+		return `This action returns a #${id} letter`;
+	}
+
+	update(id: number, updateLetterDto: UpdateLetterDto) {
+		return `This action updates a #${id} letter`;
+	}
+
+	remove(id: number) {
+		return `This action removes a #${id} letter`;
+	}
 }
