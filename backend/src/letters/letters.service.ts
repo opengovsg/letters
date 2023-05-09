@@ -24,7 +24,7 @@ export class LettersService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async create(
+  async createWithTransaction(
     createLetterDto: CreateLetterDto,
     entityManager: EntityManager | undefined,
   ): Promise<Letter> {
@@ -33,6 +33,10 @@ export class LettersService {
       return await entityManager.save(letter)
     }
     return await this.repository.save(letter)
+  }
+
+  async create(createLetterDto: CreateLetterDto): Promise<Letter> {
+    return await this.createWithTransaction(createLetterDto, undefined)
   }
 
   findAll() {
@@ -74,7 +78,7 @@ export class LettersService {
         templateId: bulkRequest.templateId,
         rawCsv: JSON.stringify(bulkRequest.letterParamMaps),
       }
-      const batch = await this.batchesService.create(
+      const batch = await this.batchesService.createWithTransaction(
         createBatchDto,
         entityManager,
       )
@@ -91,7 +95,10 @@ export class LettersService {
           fieldValues: JSON.stringify(letterParamMap),
           shortLink: '',
         }
-        const letter = await this.create(createLetterDto, entityManager)
+        const letter = await this.createWithTransaction(
+          createLetterDto,
+          entityManager,
+        )
         ret.push(letter)
       }
       return ret

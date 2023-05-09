@@ -28,7 +28,7 @@ export class LettersController {
 
   @Post()
   create(@Body() createLetterDto: CreateLetterDto) {
-    return this.lettersService.create(createLetterDto, undefined)
+    return this.lettersService.create(createLetterDto)
   }
 
   @Post('bulks')

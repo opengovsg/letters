@@ -10,7 +10,12 @@ import { Batch } from '../database/entities'
 export class BatchesService {
   @InjectRepository(Batch)
   private repository: Repository<Batch>
-  async create(
+
+  async create(createBatchDto: CreateBatchDto): Promise<Batch> {
+    return await this.createWithTransaction(createBatchDto, undefined)
+  }
+
+  async createWithTransaction(
     createBatchDto: CreateBatchDto,
     entityManager: EntityManager | undefined,
   ): Promise<Batch> {
