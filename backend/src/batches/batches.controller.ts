@@ -19,7 +19,7 @@ export class BatchesController {
 
   @Post()
   create(@Body() createBatchDto: CreateBatchDto) {
-    return this.batchesService.createWithTransaction(createBatchDto, undefined)
+    return this.batchesService.create(createBatchDto)
   }
 
   @Get()
