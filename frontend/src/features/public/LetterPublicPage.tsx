@@ -1,7 +1,6 @@
-import { VStack } from '@chakra-ui/react'
-import { Editor } from '@tinymce/tinymce-react'
-import { useRef } from 'react'
+import { Spinner, VStack } from '@chakra-ui/react'
 
+import { LetterViewer } from './components/LetterViewer'
 import {
   useGetLetterByPublicId,
   useLetterPublicId,
@@ -14,12 +13,9 @@ export const LetterPublicPage = (): JSX.Element => {
   return (
     <VStack alignItems="left" spacing="0px">
       <VStack padding={16} spacing={8} align={'center'}>
-        <Editor
-          disabled={true}
-          initialValue={letter?.issuedLetter}
-          init={{
-            inline: true,
-          }}
+        <LetterViewer
+          htmlLetter={letter?.issuedLetter}
+          isLoading={isLetterLoading}
         />
       </VStack>
     </VStack>

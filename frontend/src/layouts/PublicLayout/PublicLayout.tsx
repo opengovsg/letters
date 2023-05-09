@@ -21,8 +21,7 @@ export const PublicLayout = () => {
       >
         {/* <Image maxW="8rem" src={LogoSvg} /> */}
       </Flex>
-      {/** @ts-expect-error align for box */}
-      <Box minH="admin-content-min-height" w="full" align="center">
+      <Box minH="admin-content-min-height" w="full" bg="gray.100">
         <Outlet />
       </Box>
       <AppFooter />
