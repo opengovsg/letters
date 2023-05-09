@@ -15,8 +15,8 @@ import {
   UpdateLetterDto,
 } from '~shared/dtos/letters.dto'
 
-import { CurrentUser } from '../../build/core/decorators/current-user.decorator'
 import { AuthGuard } from '../auth/auth.guard'
+import { CurrentUser } from '../core/decorators/current-user.decorator'
 import { mapLetterToDto } from '../core/dto-mappers/letter.dto-mapper'
 import { User } from '../database/entities'
 import { LettersService } from './letters.service'
