@@ -16,9 +16,8 @@ import { UpdateLetterDto } from '~shared/dtos/update-letter.dto'
 import { CurrentUser } from '../../build/core/decorators/current-user.decorator'
 import { AuthGuard } from '../auth/auth.guard'
 import { mapLetterToDto } from '../core/dto-mappers/letter.dto-mapper'
-import { User } from '../database/entities' // To be deleted
+import { User } from '../database/entities'
 import { LettersService } from './letters.service'
-import { ValidationService } from './letters-validation.service'
 
 @UseGuards(AuthGuard)
 @Controller('letters')
