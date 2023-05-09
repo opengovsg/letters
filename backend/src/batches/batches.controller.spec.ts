@@ -9,7 +9,7 @@ describe('BatchesController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [BatchesController],
-      providers: [BatchesService],
+      providers: [{ provide: BatchesService, useValue: {} }],
     }).compile()
 
     controller = module.get<BatchesController>(BatchesController)
