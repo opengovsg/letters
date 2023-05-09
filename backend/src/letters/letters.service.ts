@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { CreateLetterDto } from '~shared/dtos/create-letter.dto'
-import { UpdateLetterDto } from '~shared/dtos/update-letter.dto'
+import { CreateLetterDto, UpdateLetterDto } from '~shared/dtos/letters.dto'
 
 @Injectable()
 export class LettersService {
