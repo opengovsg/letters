@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
+import { generatePublicId } from '../../core/utils'
 import { Batch } from './batch.entity'
 import { Template } from './template.entity'
 import { User } from './user.entity'
@@ -20,8 +21,8 @@ export class Letter {
   @Column('int')
   batchId: number
 
-  @Column('text')
-  publicId: string
+  @Column('varchar', { length: 255, nullable: false, unique: true })
+  publicId: string = generatePublicId()
 
   @ManyToOne(() => Template)
   template: Template

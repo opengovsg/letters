@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { BULK_MAX_ROW_LENGTH } from '~shared/constants/letters'
+import { LetterParamMaps } from '~shared/dtos/create-bulk-letter.dto'
 
 import { CustomBulkError } from '../types/errors'
-import { JsonStreamObject } from './letters.controller'
 
 @Injectable()
 export class ValidationService {
-  bulkValidation(jsonStream: JsonStreamObject, fields: string) {
+  bulkValidation(jsonStream: LetterParamMaps, fields: string) {
     // Length validation
     if (jsonStream.length >= BULK_MAX_ROW_LENGTH) {
       throw new BadRequestException(

@@ -20,7 +20,7 @@ export class TemplatesService {
     return `This action returns all templates`
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Template | null> {
     return await this.repository.findOne({ where: { id } })
   }
 

@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -7,70 +6,34 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm' // To be deleted
-import { Repository } from 'typeorm' // To be deleted
 
+import { BulkRequestBody } from '~shared/dtos/create-bulk-letter.dto'
 import { CreateLetterDto } from '~shared/dtos/create-letter.dto'
 import { UpdateLetterDto } from '~shared/dtos/update-letter.dto'
 
-import { Template } from '../database/entities' // To be deleted
-import { TemplatesService } from '../templates/templates.service'
-import { CustomBulkError } from '../types/errors'
+import { CurrentUser } from '../../build/core/decorators/current-user.decorator'
+import { AuthGuard } from '../auth/auth.guard'
+import { mapLetterToDto } from '../core/dto-mappers/letter.dto-mapper'
+import { User } from '../database/entities' // To be deleted
 import { LettersService } from './letters.service'
 import { ValidationService } from './letters-validation.service'
 
-export type JsonStreamObject = Array<{ [key: string]: string }>
-
-interface BulkRequestBody {
-  templateId: number
-  jsonStream: JsonStreamObject
-}
-
+@UseGuards(AuthGuard)
 @Controller('letters')
 export class LettersController {
-  constructor(
-    @InjectRepository(Template) // To be deleted
-    private readonly repository: Repository<Template>, // To be deleted
-    private readonly lettersService: LettersService,
-    private readonly validationService: ValidationService,
-    private readonly templatesService: TemplatesService,
-  ) {}
+  constructor(private readonly lettersService: LettersService) {}
 
   @Post()
   create(@Body() createLetterDto: CreateLetterDto) {
-    return this.lettersService.create(createLetterDto)
+    return this.lettersService.create(createLetterDto, undefined)
   }
 
-  @Post('bulk')
-  async createBulk(@Body() { templateId, jsonStream }: BulkRequestBody) {
-    try {
-      // TODO: Call from templatesService to find template
-      // const template = this.templatesService.findOne(templateId)
-      const template = await this.repository.findOne({
-        where: { id: templateId },
-      })
-
-      if (!template) throw new BadRequestException('Unable to find template')
-
-      this.validationService.bulkValidation(jsonStream, template.fields)
-
-      // TODO: Bulk creation
-      return { message: 'Bulk create success' }
-    } catch (e) {
-      if (typeof e === 'object' && e !== null) {
-        const customError = e as CustomBulkError
-
-        if (customError.details) {
-          throw new BadRequestException({
-            message: customError.message,
-            details: customError.details,
-          })
-        } else {
-          throw new BadRequestException(customError.message)
-        }
-      }
-    }
+  @Post('bulks')
+  async bulk(@CurrentUser() user: User, @Body() bulkRequest: BulkRequestBody) {
+    const letters = await this.lettersService.bulkCreate(user.id, bulkRequest)
+    return letters.map(mapLetterToDto)
   }
 
   @Get()
