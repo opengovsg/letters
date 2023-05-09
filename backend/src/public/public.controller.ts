@@ -4,12 +4,12 @@ import { LettersService } from 'letters/letters.service'
 
 import { GetLetterPublicDto } from '~shared/dtos/get-letter.dto'
 
-@Controller()
+@Controller('public')
 export class PublicController {
   constructor(private readonly lettersService: LettersService) {}
 
   @Get('letters/:publicId')
-  async getletterPublic(
+  async getLetterPublic(
     @Param('publicId') publicId: string,
   ): Promise<GetLetterPublicDto> {
     const letter = await this.lettersService.findOneByPublicId(publicId)

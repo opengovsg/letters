@@ -8,6 +8,7 @@ import { HealthModule } from './health/health.module'
 import { LettersModule } from './letters/letters.module'
 import { MailerModule } from './mailer/mailer.module'
 import { OtpModule } from './otp/otp.module'
+import { PublicModule } from './public/public.module'
 import { TemplatesModule } from './templates/templates.module'
 
 const apiModules = [
@@ -19,6 +20,7 @@ const apiModules = [
   LettersModule,
   TemplatesModule,
   BatchesModule,
+  PublicModule,
 ]
 
 @Module({
