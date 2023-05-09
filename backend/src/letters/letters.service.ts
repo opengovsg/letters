@@ -7,7 +7,7 @@ import { CreateLetterDto } from '~shared/dtos/create-letter.dto'
 import { UpdateLetterDto } from '~shared/dtos/update-letter.dto'
 
 import { BatchesService } from '../batches/batches.service'
-import { Letter, Template } from '../database/entities'
+import { Batch, Letter, Template } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 
 @Injectable()
@@ -37,6 +37,84 @@ export class LettersService {
     return await this.createWithTransaction(createLetterDto, undefined)
   }
 
+  async bulkCreate(
+    userId: number,
+    bulkRequest: BulkRequestBody,
+  ): Promise<Letter[]> {
+    const template = await this.templatesService.findOne(bulkRequest.templateId)
+    if (!template) throw new NotFoundException('Template not found')
+    // TODO: validation logic
+    return await this.bulkRenderAndInsert(userId, bulkRequest, template)
+  }
+
+  private async bulkRenderAndInsert(
+    userId: number,
+    bulkRequest: BulkRequestBody,
+    template: Template,
+  ) {
+    return await this.dataSource.transaction(async (entityManager) => {
+      const createBatchDto = {
+        userId: userId,
+        templateId: bulkRequest.templateId,
+        rawCsv: JSON.stringify(bulkRequest.letterParamMaps),
+      }
+      const batch = await this.batchesService.createWithTransaction(
+        createBatchDto,
+        entityManager,
+      )
+      const letterDtos = this.bulkRender(bulkRequest, template, userId, batch)
+      const letters = await this.bulkCreateWithTransaction(
+        letterDtos,
+        entityManager,
+      )
+      return letters
+    })
+  }
+
+  private bulkRender(
+    bulkRequest: BulkRequestBody,
+    template: Template,
+    userId: number,
+    batch: Batch,
+  ) {
+    const letterDtos = []
+    for (const letterParamMap of bulkRequest.letterParamMaps) {
+      const issuedLetter = this.render(template.html, letterParamMap)
+      letterDtos.push({
+        userId: userId,
+        batchId: batch.id,
+        templateId: bulkRequest.templateId,
+        issuedLetter: issuedLetter,
+        fieldValues: JSON.stringify(letterParamMap),
+        shortLink: '',
+      })
+    }
+    return letterDtos
+  }
+
+  private render(
+    html: string,
+    letterParamMap: { [key: string]: string },
+  ): string {
+    for (const key in letterParamMap) {
+      const value = letterParamMap[key]
+      const placeHolder = `${this.PLACE_HOLDER_PREFIX}${key}${this.PLACE_HOLDER_SUFFIX}`
+      html = html.replace(placeHolder, value)
+    }
+    return html
+  }
+
+  private async bulkCreateWithTransaction(
+    letterDtos: CreateLetterDto[],
+    entityManager: EntityManager,
+  ) {
+    const letters = this.repository.create(letterDtos)
+    if (entityManager) {
+      return await entityManager.save(letters)
+    }
+    return await this.repository.save(letters)
+  }
+
   findAll() {
     return `This action returns all letters`
   }
@@ -51,67 +129,5 @@ export class LettersService {
 
   remove(id: number) {
     return `This action removes a #${id} letter`
-  }
-
-  async bulkCreate(
-    userId: number,
-    bulkRequest: BulkRequestBody,
-  ): Promise<Letter[]> {
-    const ret: Letter[] = []
-    const template = await this.templatesService.findOne(bulkRequest.templateId)
-    if (!template) throw new NotFoundException('Template not found')
-    // TODO: validation logic
-    return await this.bulkInsertLetters(userId, bulkRequest, template, ret)
-  }
-
-  private async bulkInsertLetters(
-    userId: number,
-    bulkRequest: BulkRequestBody,
-    template: Template,
-    ret: Letter[],
-  ) {
-    return await this.dataSource.transaction(async (entityManager) => {
-      const createBatchDto = {
-        userId: userId,
-        templateId: bulkRequest.templateId,
-        rawCsv: JSON.stringify(bulkRequest.letterParamMaps),
-      }
-      const batch = await this.batchesService.createWithTransaction(
-        createBatchDto,
-        entityManager,
-      )
-      for (const letterParamMap of bulkRequest.letterParamMaps) {
-        const issuedLetter = this.renderLetterFromTemplate(
-          template.html,
-          letterParamMap,
-        )
-        const createLetterDto = {
-          userId: userId,
-          batchId: batch.id,
-          templateId: bulkRequest.templateId,
-          issuedLetter: issuedLetter,
-          fieldValues: JSON.stringify(letterParamMap),
-          shortLink: '',
-        }
-        const letter = await this.createWithTransaction(
-          createLetterDto,
-          entityManager,
-        )
-        ret.push(letter)
-      }
-      return ret
-    })
-  }
-
-  private renderLetterFromTemplate(
-    html: string,
-    letterParamMap: { [key: string]: string },
-  ): string {
-    for (const key in letterParamMap) {
-      const value = letterParamMap[key]
-      const placeHolder = `${this.PLACE_HOLDER_PREFIX}${key}${this.PLACE_HOLDER_SUFFIX}`
-      html = html.replace(placeHolder, value)
-    }
-    return html
   }
 }
