@@ -1,9 +1,9 @@
-import { Box, Flex, Image, VStack } from "@chakra-ui/react";
-import { Link as RouterLink, Outlet } from "react-router-dom";
+import { Box, Flex, Image, VStack } from '@chakra-ui/react'
+import { Link as RouterLink, Outlet } from 'react-router-dom'
 
-import { AppFooter } from "~/app/AppFooter";
-import { UserMenu } from "~components/Navbar/components/UserMenu";
-import { routes } from "~constants/routes";
+import { AppFooter } from '~/app/AppFooter'
+import { UserMenu } from '~components/Navbar/components/UserMenu'
+import { routes } from '~constants/routes'
 // import LogoSvg from '~/assets/Logo.svg'
 
 export const PublicLayout = () => {
@@ -32,5 +32,5 @@ export const PublicLayout = () => {
       </Box>
       <AppFooter />
     </VStack>
-  );
-};
+  )
+}

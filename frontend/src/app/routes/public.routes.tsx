@@ -1,9 +1,9 @@
-import { Navigate, RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from 'react-router-dom'
 
-import { PublicLayout } from "~/layouts/PublicLayout";
-import { routes } from "~constants/routes";
-import { ErrorPage } from "~features/public/ErrorPage";
-import { LetterPublicPage } from "~features/public/LetterPublicPage";
+import { PublicLayout } from '~/layouts/PublicLayout'
+import { routes } from '~constants/routes'
+import { ErrorPage } from '~features/public/ErrorPage'
+import { LetterPublicPage } from '~features/public/LetterPublicPage'
 
 export const publicRoutes: RouteObject[] = [
   {
@@ -31,7 +31,7 @@ export const publicRoutes: RouteObject[] = [
     ],
   },
   {
-    path: "*",
+    path: '*',
     element: <Navigate to={routes.index} />, // TODO: add 404 page
   },
-];
+]

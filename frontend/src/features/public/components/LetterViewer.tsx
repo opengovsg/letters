@@ -1,12 +1,12 @@
-import { Box, Spinner } from "@chakra-ui/react";
-import { Editor } from "@tinymce/tinymce-react";
-import { Navigate } from "react-router-dom";
+import { Box, Spinner } from '@chakra-ui/react'
+import { Editor } from '@tinymce/tinymce-react'
+import { Navigate } from 'react-router-dom'
 
-import { routes } from "~constants/routes";
+import { routes } from '~constants/routes'
 
 interface LetterViewerProps {
-  htmlLetter: string | undefined;
-  isLoading: boolean;
+  htmlLetter: string | undefined
+  isLoading: boolean
 }
 
 export const LetterViewer = ({
@@ -14,11 +14,11 @@ export const LetterViewer = ({
   isLoading,
 }: LetterViewerProps): JSX.Element => {
   if (isLoading) {
-    return <Spinner />;
+    return <Spinner />
   }
 
   if (!htmlLetter) {
-    return <Navigate to={`/${routes.public.index}/${routes.public.error}`} />;
+    return <Navigate to={`/${routes.public.index}/${routes.public.error}`} />
   }
 
   return (
@@ -37,5 +37,5 @@ export const LetterViewer = ({
         </Box>
       )}
     </>
-  );
-};
+  )
+}

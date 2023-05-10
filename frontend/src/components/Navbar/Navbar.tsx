@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
-import { Suspense } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Flex } from '@chakra-ui/react'
+import { Suspense } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 
 // import LogoSvg from '~/assets/Logo.svg'
-import { Loading } from "~/components/Loading";
-import { routes } from "~/constants/routes";
+import { Loading } from '~/components/Loading'
+import { routes } from '~/constants/routes'
 
-import { UserMenu } from "./components/UserMenu";
+import { UserMenu } from './components/UserMenu'
 
 const NavbarBody = (): JSX.Element => {
   return (
@@ -27,11 +27,11 @@ const NavbarBody = (): JSX.Element => {
       </RouterLink>
       <UserMenu />
     </Flex>
-  );
-};
+  )
+}
 
 export const Navbar = () => (
   <Suspense fallback={<Loading />}>
     <NavbarBody />
   </Suspense>
-);
+)
