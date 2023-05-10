@@ -1,4 +1,4 @@
-import { GetTemplateDto } from '~shared/dtos/get-template.dto'
+import { GetTemplateDto } from '~shared/dtos/templates.dto'
 
 import { Template } from '../../database/entities'
 

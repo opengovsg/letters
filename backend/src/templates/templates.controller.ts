@@ -10,8 +10,10 @@ import {
   UseGuards,
 } from '@nestjs/common'
 
-import { CreateTemplateDto } from '~shared/dtos/create-template.dto'
-import { UpdateTemplateDto } from '~shared/dtos/update-template.dto'
+import {
+  CreateTemplateDto,
+  UpdateTemplateDto,
+} from '~shared/dtos/templates.dto'
 
 import { AuthGuard } from '../auth/auth.guard'
 import { mapTemplateToDto } from '../core/dto-mappers/template.dto-mapper'
