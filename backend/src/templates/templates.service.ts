@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { CreateTemplateDto } from '~shared/dtos/create-template.dto'
-import { UpdateTemplateDto } from '~shared/dtos/update-template.dto'
+import {
+  CreateTemplateDto,
+  UpdateTemplateDto,
+} from '~shared/dtos/templates.dto'
 
 import { Template } from '../database/entities'
 
