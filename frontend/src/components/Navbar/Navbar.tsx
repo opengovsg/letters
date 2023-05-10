@@ -9,29 +9,29 @@ import { routes } from "~/constants/routes";
 import { UserMenu } from "./components/UserMenu";
 
 const NavbarBody = (): JSX.Element => {
-	return (
-		<Flex
-			position="static"
-			pos="relative"
-			flexDir="row"
-			p={6}
-			justifyContent="space-between"
-			borderBottom="1px"
-			borderBottomColor="base.divider.medium"
-			w="full"
-			align="center"
-		>
-			<RouterLink to={routes.index}>
-				{/* <Image maxW="8rem" src={LogoSvg} ml={'8px'} /> */}
-				Letters
-			</RouterLink>
-			<UserMenu />
-		</Flex>
-	);
+  return (
+    <Flex
+      position="static"
+      pos="relative"
+      flexDir="row"
+      p={6}
+      justifyContent="space-between"
+      borderBottom="1px"
+      borderBottomColor="base.divider.medium"
+      w="full"
+      align="center"
+    >
+      <RouterLink to={routes.index}>
+        {/* <Image maxW="8rem" src={LogoSvg} ml={'8px'} /> */}
+        Letters
+      </RouterLink>
+      <UserMenu />
+    </Flex>
+  );
 };
 
 export const Navbar = () => (
-	<Suspense fallback={<Loading />}>
-		<NavbarBody />
-	</Suspense>
+  <Suspense fallback={<Loading />}>
+    <NavbarBody />
+  </Suspense>
 );
