@@ -1,28 +1,7 @@
 import { Flex, Text, Wrap, WrapItem } from '@chakra-ui/react'
-import { useQuery } from '@tanstack/react-query'
 
-import { api } from '~lib/api'
-
+import { useGetTemplates } from '../hooks/dashboard.hooks'
 import { TemplateCard } from './TemplateCard'
-
-type GetTemplateDTO = {
-  id: number
-  fields: string[]
-  html: string
-  name: string
-  thumbnailS3Path: string
-  createdAt: string
-  updatedAt: string
-}
-
-export const useGetTemplates = () => {
-  const { data, isLoading } = useQuery(['templates'], () =>
-    api.url(`/templates`).get().json<GetTemplateDTO[]>(),
-  )
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return { templates: data!, isTemplatesLoading: isLoading }
-}
 
 export const DashboardBody = () => {
   const { templates, isTemplatesLoading } = useGetTemplates()

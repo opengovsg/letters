@@ -1,6 +1,6 @@
 export class GetTemplateDto {
   id: number
-  fields: string
+  fields: string[]
   html: string
   name: string
   thumbnailS3Path: string
