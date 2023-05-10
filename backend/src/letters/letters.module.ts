@@ -7,7 +7,7 @@ import { Letter } from '../database/entities' // To be deleted
 import { TemplatesModule } from '../templates/templates.module'
 import { LettersController } from './letters.controller'
 import { LettersService } from './letters.service'
-import { LettersValidationService } from './validation.service'
+import { ValidationService } from './letters-validation.service'
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { LettersValidationService } from './validation.service'
     TemplatesModule,
   ],
   controllers: [LettersController],
-  providers: [LettersService, LettersValidationService],
+  providers: [LettersService, ValidationService],
   exports: [LettersService, TypeOrmModule],
 })
 export class LettersModule {}
