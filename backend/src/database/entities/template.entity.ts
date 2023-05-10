@@ -12,7 +12,7 @@ export class Template {
   id: number
 
   @Column('jsonb', { nullable: false, default: {} })
-  fields: string
+  fields: string[]
 
   @Column('text')
   html: string

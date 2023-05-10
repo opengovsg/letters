@@ -3,7 +3,7 @@ import { IsDefined, IsString } from 'class-validator'
 export class CreateTemplateDto {
   @IsDefined()
   @IsString()
-  fields: string
+  fields: string[]
   @IsDefined()
   @IsString()
   html: string
