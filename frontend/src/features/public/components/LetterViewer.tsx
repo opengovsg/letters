@@ -18,7 +18,7 @@ export const LetterViewer = ({
 	}
 
 	if (!htmlLetter) {
-		return <Navigate to={routes.public.error} />;
+		return <Navigate to={`/${routes.public.index}/${routes.public.error}`} />;
 	}
 
 	return (

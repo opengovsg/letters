@@ -3,7 +3,7 @@ export const routes = {
 	public: {
 		index: "public",
 		letters: "letters",
-		error: "/public/error",
+		error: "error",
 	},
 	admin: {
 		index: "admin",
