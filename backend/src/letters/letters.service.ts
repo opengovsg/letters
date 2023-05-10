@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, EntityManager, Repository } from 'typeorm'
 
@@ -11,6 +15,7 @@ import {
 import { BatchesService } from '../batches/batches.service'
 import { Batch, Letter, Template } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
+import { LettersValidationService } from './validation.service'
 
 @Injectable()
 export class LettersService {
@@ -22,6 +27,7 @@ export class LettersService {
     private readonly templatesService: TemplatesService,
     private readonly batchesService: BatchesService,
     private readonly dataSource: DataSource,
+    private readonly lettersValidationService: LettersValidationService,
   ) {}
 
   async createWithTransaction(
@@ -45,7 +51,22 @@ export class LettersService {
   ): Promise<Letter[]> {
     const template = await this.templatesService.findOne(bulkRequest.templateId)
     if (!template) throw new NotFoundException('Template not found')
-    // TODO: validation logic
+
+    const validationResult = this.lettersValidationService.validateBulk(
+      template.fields,
+      bulkRequest.letterParamMaps,
+    )
+
+    if (!validationResult.success) {
+      const response = validationResult.errors
+        ? {
+            message: validationResult.message,
+            details: validationResult.errors,
+          }
+        : { message: validationResult.message }
+      throw new BadRequestException(response)
+    }
+
     return await this.bulkRenderAndInsert(userId, bulkRequest, template)
   }
 
