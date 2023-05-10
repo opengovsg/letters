@@ -1,33 +1,29 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { BULK_MAX_ROW_LENGTH } from '~shared/constants/letters'
 import { LetterParamMaps } from '~shared/dtos/create-bulk-letter.dto'
 
-class ValidationResult {
-  success: boolean
-  message: string
-  errors?: object[]
-}
+import { CustomBulkError } from '../types/errors'
 
 @Injectable()
-export class LettersValidationService {
-  validateBulk(template: string, params: LetterParamMaps): ValidationResult {
-    const errorArray = []
-
-    if (params.length >= BULK_MAX_ROW_LENGTH) {
-      return {
-        success: false,
-        message: 'Number of rows exceeded max length of bulk create',
-      }
+export class ValidationService {
+  bulkValidation(jsonStream: LetterParamMaps, fields: string) {
+    // Length validation
+    if (jsonStream.length >= BULK_MAX_ROW_LENGTH) {
+      throw new BadRequestException(
+        'Number of rows exceeded max length of bulk create',
+      )
     }
 
-    for (let i = 0; i < params.length; i++) {
-      const obj = params[i]
+    // Field & attribution validation
+    const errorArray = []
+    for (let i = 0; i < jsonStream.length; i++) {
+      const obj = jsonStream[i]
       // If object has an attribute that doesn't exist in the template
       for (const key in obj) {
         if (
           Object.prototype.hasOwnProperty.call(obj, key) &&
-          !template.includes(key)
+          !fields.includes(key)
         ) {
           errorArray.push({
             id: i,
@@ -36,7 +32,7 @@ export class LettersValidationService {
           })
         }
       }
-      for (const attr of template) {
+      for (const attr of fields) {
         // If object does not have the attribute in the template
         if (!Object.prototype.hasOwnProperty.call(obj, attr)) {
           errorArray.push({
@@ -55,17 +51,8 @@ export class LettersValidationService {
         }
       }
     }
-
-    if (errorArray.length === 0)
-      return {
-        success: true,
-        message: 'Validation Success',
-      }
-
-    return {
-      success: false,
-      message: 'Malformed bulk create object',
-      errors: errorArray,
+    if (errorArray.length > 0) {
+      throw new CustomBulkError('Malformed bulk create object', errorArray)
     }
   }
 }
