@@ -23,7 +23,7 @@ export class LettersService {
     private readonly batchesService: BatchesService,
     private readonly lettersRenderingService: LettersRenderingService,
     private dataSource: DataSource,
-  ) { }
+  ) {}
 
   async create(createLetterDto: CreateLetterDto): Promise<Letter> {
     const letter = this.repository.create(createLetterDto)
@@ -103,7 +103,7 @@ export class LettersService {
     return `This action returns a #${id} letter`
   }
 
-  update(id: number, updateLetterDto: UpdateLetterDto,) {
+  update(id: number, updateLetterDto: UpdateLetterDto) {
     return `This action updates a #${id} letter`
   }
 
