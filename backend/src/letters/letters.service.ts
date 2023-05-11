@@ -9,7 +9,7 @@ import {
 } from '~shared/dtos/letters.dto'
 
 import { BatchesService } from '../batches/batches.service'
-import { Batch, Letter, Template } from '../database/entities'
+import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersRenderingService } from './letters-rendering.service'
 
@@ -21,6 +21,7 @@ export class LettersService {
     private readonly templatesService: TemplatesService,
     private readonly batchesService: BatchesService,
     private readonly lettersRenderingService: LettersRenderingService,
+    private dataSource: DataSource,
   ) {}
 
   async createWithTransaction(
@@ -64,14 +65,15 @@ export class LettersService {
       const lettersDto = renderedLetters.map(
         (renderedLetter: Partial<Letter>) => ({
           ...renderedLetter,
-          batchId: batch.userId,
+          batchId: batch.id,
           userId,
           templateId,
           shortLink: '',
         }),
       ) as CreateLetterDto[]
+
       const letters = await this.bulkCreateWithTransaction(
-        letterDtos,
+        lettersDto,
         entityManager,
       )
       return letters
