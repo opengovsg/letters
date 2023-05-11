@@ -11,17 +11,16 @@ import {
 import { BatchesService } from '../batches/batches.service'
 import { Batch, Letter, Template } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
+import { LettersRenderingService } from './letters-rendering.service'
 
 @Injectable()
 export class LettersService {
   @InjectRepository(Letter)
   private repository: Repository<Letter>
-  readonly PLACE_HOLDER_PREFIX = '{{'
-  readonly PLACE_HOLDER_SUFFIX = '}}'
   constructor(
     private readonly templatesService: TemplatesService,
     private readonly batchesService: BatchesService,
-    private readonly dataSource: DataSource,
+    private readonly lettersRenderingService: LettersRenderingService,
   ) {}
 
   async createWithTransaction(
@@ -64,46 +63,25 @@ export class LettersService {
         createBatchDto,
         entityManager,
       )
-      const letterDtos = this.bulkRender(bulkRequest, template, userId, batch)
+      const renderedLetters = this.lettersRenderingService.bulkRender(
+        template.html,
+        bulkRequest.letterParamMaps,
+      )
+      const lettersDto = renderedLetters.map(
+        (renderedLetter: Partial<Letter>) => ({
+          ...renderedLetter,
+          batchId: batch.userId,
+          userId,
+          templateId,
+          shortLink: '',
+        }),
+      ) as CreateLetterDto[]
       const letters = await this.bulkCreateWithTransaction(
         letterDtos,
         entityManager,
       )
       return letters
     })
-  }
-
-  private bulkRender(
-    bulkRequest: BulkRequestBody,
-    template: Template,
-    userId: number,
-    batch: Batch,
-  ) {
-    const letterDtos = []
-    for (const letterParamMap of bulkRequest.letterParamMaps) {
-      const issuedLetter = this.render(template.html, letterParamMap)
-      letterDtos.push({
-        userId: userId,
-        batchId: batch.id,
-        templateId: bulkRequest.templateId,
-        issuedLetter: issuedLetter,
-        fieldValues: JSON.stringify(letterParamMap),
-        shortLink: '',
-      })
-    }
-    return letterDtos
-  }
-
-  private render(
-    html: string,
-    letterParamMap: { [key: string]: string },
-  ): string {
-    for (const key in letterParamMap) {
-      const value = letterParamMap[key]
-      const placeHolder = `${this.PLACE_HOLDER_PREFIX}${key}${this.PLACE_HOLDER_SUFFIX}`
-      html = html.replace(placeHolder, value)
-    }
-    return html
   }
 
   private async bulkCreateWithTransaction(
