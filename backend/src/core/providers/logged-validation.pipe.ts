@@ -8,14 +8,14 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 export class LoggedValidationPipe extends ValidationPipe {
   constructor(
     @InjectPinoLogger(ValidationPipe.name)
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {
     super({
       whitelist: true,
       transform: true,
       exceptionFactory: (errors: ValidationError[]) => {
         errors = this.flattenErrors(errors).filter(
-          (errors) => !!errors.constraints,
+          (errors) => !!errors.constraints
         )
         this.logger.info(JSON.stringify(errors))
         const allErrors = errors
@@ -27,7 +27,7 @@ export class LoggedValidationPipe extends ValidationPipe {
   }
 
   private flattenErrors(
-    errors: ValidationError[],
+    errors: ValidationError[]
   ): Omit<ValidationError, 'children'>[] {
     const result = errors.flatMap(({ children, ...error }) => {
       return [error].concat(this.flattenErrors(children || []))

@@ -20,7 +20,7 @@ type AdminAuthContextProps = {
 }
 
 const AdminAuthContext = createContext<AdminAuthContextProps | undefined>(
-  undefined,
+  undefined
 )
 
 /**
@@ -99,7 +99,7 @@ export const useAdminAuth = (): AdminAuthContextProps => {
   const context = useContext(AdminAuthContext)
   if (!context) {
     throw new Error(
-      `useAdminAuth must be used within a AdminAuthProvider component`,
+      `useAdminAuth must be used within a AdminAuthProvider component`
     )
   }
   return context

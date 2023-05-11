@@ -15,13 +15,13 @@ export class MailerService {
   constructor(
     private config: ConfigService,
     @InjectPinoLogger(MailerService.name)
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {}
 
   private chooseTransporter(): Pick<Transporter, 'sendMail'> {
     if (this.config.get('postmangovsgApiKey')) {
       return createTransport(
-        new PostmanNodemailerTransport(this.config.get('postmangovsgApiKey')),
+        new PostmanNodemailerTransport(this.config.get('postmangovsgApiKey'))
       )
     } else if (this.config.isDevEnv) {
       return createTransport({
@@ -36,7 +36,7 @@ export class MailerService {
           this.logger.warn(
             `REMOVE ME ONCE POSTMAN OR MAIL IS IN PLACE Logging mail: ${
               mailOptions.html?.toString() ?? ''
-            }`,
+            }`
           )
           return Promise.resolve()
         },

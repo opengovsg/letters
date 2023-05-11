@@ -10,7 +10,7 @@ export class PublicController {
 
   @Get('letters/:publicId')
   async getLetterPublic(
-    @Param('publicId') publicId: string,
+    @Param('publicId') publicId: string
   ): Promise<GetLetterPublicDto> {
     const letter = await this.lettersService.findOneByPublicId(publicId)
     if (!letter) throw new NotFoundException('letter not found')

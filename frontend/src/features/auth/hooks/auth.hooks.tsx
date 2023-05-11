@@ -12,7 +12,7 @@ import {
 export const useAdminUser = () => {
   const { data, isLoading } = useQuery<WhoAmIResponseDto | undefined>(
     ['admin-who-am-i'],
-    () => api.get('/auth/whoami').json<WhoAmIResponseDto>(),
+    () => api.get('/auth/whoami').json<WhoAmIResponseDto>()
   )
   return { adminUser: data, isLoadingAdminUser: isLoading }
 }
@@ -26,7 +26,7 @@ export const useAdminVerifyLoginOtp = () => {
       onSuccess: async () => {
         await queryClient.invalidateQueries(['admin-who-am-i'])
       },
-    },
+    }
   )
   return { verifyLoginOtp: mutateAsync }
 }

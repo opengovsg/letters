@@ -23,13 +23,13 @@ export class AuthController {
     private readonly config: ConfigService,
     private readonly authService: AuthService,
     @InjectPinoLogger(AuthController.name)
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {}
 
   @Post()
   async generateOtp(
     @Res() res: Response,
-    @Body() generateOtpDto: GenerateOtpDto,
+    @Body() generateOtpDto: GenerateOtpDto
   ): Promise<void> {
     try {
       await this.authService.generateOtp(generateOtpDto)
@@ -46,14 +46,14 @@ export class AuthController {
   async verifyOtp(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() verifyOtpDto: VerifyOtpDto,
+    @Body() verifyOtpDto: VerifyOtpDto
   ): Promise<void> {
     try {
       const user = await this.authService.verifyOtp(verifyOtpDto)
       if (user) {
         req.session.user = user
         this.logger.info(
-          `Successfully verified OTP for user ${verifyOtpDto.email}`,
+          `Successfully verified OTP for user ${verifyOtpDto.email}`
         )
         res.status(HttpStatus.OK).json({ message: 'OTP verified' })
       } else {
@@ -73,11 +73,11 @@ export class AuthController {
   @Post('logout')
   logout(
     @Session() session: UserSession,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: true }) res: Response
   ): void {
     res.clearCookie(this.config.get('session.name'))
     session.destroy(() =>
-      res.status(HttpStatus.OK).json({ message: 'Logged out' }),
+      res.status(HttpStatus.OK).json({ message: 'Logged out' })
     )
   }
 

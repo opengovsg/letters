@@ -7,5 +7,5 @@ export const CurrentUser = createParamDecorator(
 
     if (!session.user) throw new Error('User does not exist on request')
     return session.user
-  },
+  }
 )

@@ -18,7 +18,7 @@ export class BatchesService {
 
   async createWithTransaction(
     createBatchDto: CreateBatchDto,
-    entityManager: EntityManager,
+    entityManager: EntityManager
   ): Promise<Batch> {
     const batch = this.repository.create(createBatchDto)
     return await entityManager.save(batch)

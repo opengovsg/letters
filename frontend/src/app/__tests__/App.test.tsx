@@ -7,7 +7,7 @@ test('renders page', async () => {
 
   await waitFor(() =>
     expect(
-      screen.getAllByText('Scaffold a starter project in minutes').length,
-    ).toEqual(2),
+      screen.getAllByText('Scaffold a starter project in minutes').length
+    ).toEqual(2)
   )
 })

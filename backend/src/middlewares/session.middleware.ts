@@ -15,7 +15,7 @@ export class SessionMiddleware implements NestMiddleware {
   constructor(
     private config: ConfigService,
     @InjectDataSource()
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {
     const sessionRepository = dataSource.getRepository(Session)
 

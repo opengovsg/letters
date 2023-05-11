@@ -22,7 +22,7 @@ export const ResendOtpButton = ({
   useInterval(
     () => setTimer(timer - 1),
     // Stop interval if timer hits 0.
-    timer <= 0 ? null : 1000,
+    timer <= 0 ? null : 1000
   )
 
   return (

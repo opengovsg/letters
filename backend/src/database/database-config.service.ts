@@ -24,7 +24,7 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
 
     const res = await client.query(
       'SELECT 1 FROM pg_database WHERE datname = $1;',
-      [this.config.get('database.name')],
+      [this.config.get('database.name')]
     )
     if (res.rowCount === 0) {
       await client.query(`CREATE DATABASE ${this.config.get('database.name')}`)

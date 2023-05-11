@@ -36,7 +36,7 @@ export class LettersController {
   @Post('bulks')
   async bulk(
     @CurrentUser() user: User,
-    @Body() bulkRequest: CreateBulkLetterDto,
+    @Body() bulkRequest: CreateBulkLetterDto
   ): Promise<GetLetterPublicDto[]> {
     const letters = await this.lettersService.bulkCreate(user.id, bulkRequest)
     return letters.map(mapLetterToPublicDto)

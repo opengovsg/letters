@@ -11,7 +11,7 @@ export class ValidationService {
     // Length validation
     if (jsonStream.length >= BULK_MAX_ROW_LENGTH) {
       throw new BadRequestException(
-        'Number of rows exceeded max length of bulk create',
+        'Number of rows exceeded max length of bulk create'
       )
     }
 

@@ -9,7 +9,7 @@ export const LOCAL_STORAGE_EVENT = 'app-local-storage'
 
 export const useLocalStorage = <T,>(
   key: string,
-  initialValue?: T,
+  initialValue?: T
 ): readonly [T | undefined, (value?: T) => void] => {
   // Get from local storage then
   // parse stored json or return initialValue

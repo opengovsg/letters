@@ -5,7 +5,7 @@ const random = (bytes: number) => crypto.randomBytes(bytes)
 const customRandom = (
   alphabet: string,
   size: number,
-  getRandom: (x: number) => Uint8Array,
+  getRandom: (x: number) => Uint8Array
 ) => {
   const mask = (2 << (Math.log(alphabet.length - 1) / Math.LN2)) - 1
   const step = -~((1.6 * mask * size) / alphabet.length)

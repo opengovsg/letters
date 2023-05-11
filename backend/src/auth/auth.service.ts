@@ -21,7 +21,7 @@ export class AuthService {
     private mailerService: MailerService,
     private config: ConfigService,
     @InjectPinoLogger(AuthService.name)
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {}
 
   async generateOtp(generateOtpDto: GenerateOtpDto): Promise<void> {
@@ -36,10 +36,10 @@ export class AuthService {
     const mail = {
       to: email,
       from: `${this.config.get('otp.sender_name')} <${this.config.get(
-        'otp.email',
+        'otp.email'
       )}>`,
       subject: `One-Time Password (OTP) for ${this.config.get(
-        'otp.sender_name',
+        'otp.sender_name'
       )}`,
       html,
     }
@@ -58,14 +58,14 @@ export class AuthService {
           { where: { email } },
           {
             email,
-          },
+          }
         )
       : undefined
   }
 
   async findOrCreate(
     query: FindOneOptions<Partial<User>>,
-    create: Partial<Omit<User, 'id'>>,
+    create: Partial<Omit<User, 'id'>>
   ): Promise<User> {
     const user = await this.usersRepository.findOne(query)
     return user ?? (await this.usersRepository.save(create))
