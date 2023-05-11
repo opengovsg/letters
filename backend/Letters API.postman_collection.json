@@ -1,23 +1,70 @@
 {
 	"info": {
-		"_postman_id": "06eea415-1a47-456a-9246-d9a17ec3e566",
+		"_postman_id": "4ed96371-45a6-4e02-b7a0-f0ad9bcab1dd",
 		"name": "Letters API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "199097",
-		"_collection_link": "https://restless-crater-9884.postman.co/workspace/OGP~dcb6a445-a7dd-4213-a29e-1395f65bce01/collection/199097-06eea415-1a47-456a-9246-d9a17ec3e566?action=share&creator=199097&source=collection_link"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "GET auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@open.gov.sg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET verify",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"381298\",\n    \"email\": \"test@open.gov.sg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/verify",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
 		{
 			"name": "POST templates",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Cookie",
-						"value": "ts-template.sid=<<Replace this with your tokeb>>",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"html\": \"this is sample template\",\n    \"name\": \"sample template {{ placeholder1 }}\",\n    \"thumbnailS3Path\": \"s3path\",\n    \"fields\": \"[\\\"{{ placeholder1 }}\\\"]\"\n}",
@@ -28,11 +75,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/templates",
+					"raw": "{{baseUrl}}/api/templates",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"templates"
@@ -45,23 +91,15 @@
 			"name": "GET templates",
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "Cookie",
-						"value": "ts-template.sid=<<Replace this with your tokeb>>",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/templates/20",
+					"raw": "{{baseUrl}}/api/templates",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "3000",
 					"path": [
 						"api",
-						"templates",
-						"20"
+						"templates"
 					]
 				}
 			},
@@ -71,16 +109,10 @@
 			"name": "POST letters bulk",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Cookie",
-						"value": "ts-template.sid=<<Replace this with your tokeb>>",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"templateId\": 33,\n    \"letterParamMaps\": [\n        {\n            \"name\": \"Some Name\",\n            \"date\": \"Mon 8 May, 2023\",\n            \"addressƒ\": \"Marina Parade\"\n        },\n        {\n            \"name\": \"Some other Name\",\n            \"date\": \"Mon 8 May, 2023\",\n            \"addressƒ\": \"Marina Parade\"\n        }\n    ]\n}",
+					"raw": "{\n    \"templateId\": 5,\n    \"letterParamMaps\": [\n        {\n            \"name\": \"First Last\",\n            \"date\": \"Mon 8 May, 2023\",\n            \"addressƒ\": \"Marina Parade\"\n        },\n        {\n            \"name\": \"Some Name\",\n            \"date\": \"Mon 8 May, 2023\",\n            \"addressƒ\": \"Marina Parade\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -88,11 +120,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/letters/bulks",
+					"raw": "{{baseUrl}}/api/letters/bulks",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"letters",
@@ -101,6 +132,13 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:3000",
+			"type": "default"
 		}
 	]
 }
