@@ -12,18 +12,16 @@ export class BatchesService {
   private repository: Repository<Batch>
 
   async create(createBatchDto: CreateBatchDto): Promise<Batch> {
-    return await this.createWithTransaction(createBatchDto, undefined)
+    const batch = this.repository.create(createBatchDto)
+    return this.repository.save(batch)
   }
 
   async createWithTransaction(
     createBatchDto: CreateBatchDto,
-    entityManager: EntityManager | undefined,
+    entityManager: EntityManager,
   ): Promise<Batch> {
     const batch = this.repository.create(createBatchDto)
-    if (entityManager) {
-      return await entityManager.save(batch)
-    }
-    return await this.repository.save(batch)
+    return await entityManager.save(batch)
   }
 
   findAll() {

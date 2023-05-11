@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, EntityManager, Repository } from 'typeorm'
 
+import { CreateBatchDto } from '~shared/dtos/batches.dto'
 import {
   CreateBulkLetterDto,
   CreateLetterDto,
@@ -24,19 +25,23 @@ export class LettersService {
     private dataSource: DataSource,
   ) {}
 
-  async createWithTransaction(
-    createLetterDto: CreateLetterDto,
-    entityManager: EntityManager | undefined,
-  ): Promise<Letter> {
+  async create(createLetterDto: CreateLetterDto): Promise<Letter> {
     const letter = this.repository.create(createLetterDto)
-    if (entityManager) {
-      return await entityManager.save(letter)
-    }
     return await this.repository.save(letter)
   }
 
-  async create(createLetterDto: CreateLetterDto): Promise<Letter> {
-    return await this.createWithTransaction(createLetterDto, undefined)
+  async createWithTransaction(
+    toCreate: CreateLetterDto | CreateLetterDto[],
+    entityManager: EntityManager,
+  ): Promise<Letter | Letter[]> {
+    let created
+    if (Array.isArray(toCreate)) {
+      created = this.repository.create(toCreate as Partial<Letter>[])
+      console.log(created)
+    } else {
+      created = this.repository.create(toCreate as Partial<Letter>)
+    }
+    return entityManager.save(created)
   }
 
   async bulkCreate(
@@ -72,23 +77,12 @@ export class LettersService {
         }),
       ) as CreateLetterDto[]
 
-      const letters = await this.bulkCreateWithTransaction(
+      const letters = (await this.createWithTransaction(
         lettersDto,
         entityManager,
-      )
+      )) as Letter[]
       return letters
     })
-  }
-
-  private async bulkCreateWithTransaction(
-    letterDtos: CreateLetterDto[],
-    entityManager: EntityManager,
-  ) {
-    const letters = this.repository.create(letterDtos)
-    if (entityManager) {
-      return await entityManager.save(letters)
-    }
-    return await this.repository.save(letters)
   }
 
   findAll() {
