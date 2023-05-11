@@ -1,4 +1,4 @@
-import { GetLetterDto } from '~shared/dtos/get-letter.dto'
+import { GetLetterDto } from '~shared/dtos/letters.dto'
 
 import { Letter } from '../../database/entities'
 

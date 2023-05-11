@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { BULK_MAX_ROW_LENGTH } from '~shared/constants/letters'
-import { LetterParamMaps } from '~shared/dtos/create-bulk-letter.dto'
+import { LetterParamMaps } from '~shared/dtos/letters.dto'
 
 import { CustomBulkError } from '../types/errors'
 
