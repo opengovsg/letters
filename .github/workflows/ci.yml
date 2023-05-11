@@ -47,8 +47,8 @@ jobs:
     with:
       env: "prod"
       image-tag: ghactions-${{ github.ref_name }}-${{ github.sha }}
-      ecs-cluster-name: "letters-stg-ecs"
-      ecs-service-name: "letters-stg-ecs-service"
+      ecs-cluster-name: "letters-prod-ecs"
+      ecs-service-name: "letters-prod-ecs-service"
       ecs-container-name: "app-server"
-      codedeploy-application: "letters-stg-ecs-app"
-      codedeploy-deployment-group: "letters-stg-ecs-dg"
+      codedeploy-application: "letters-prod-ecs-app"
+      codedeploy-deployment-group: "letters-prod-ecs-dg"
