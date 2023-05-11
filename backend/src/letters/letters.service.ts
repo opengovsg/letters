@@ -22,8 +22,8 @@ export class LettersService {
     private readonly templatesService: TemplatesService,
     private readonly batchesService: BatchesService,
     private readonly lettersRenderingService: LettersRenderingService,
-    private dataSource: DataSource
-  ) {}
+    private dataSource: DataSource,
+  ) { }
 
   async create(createLetterDto: CreateLetterDto): Promise<Letter> {
     const letter = this.repository.create(createLetterDto)
@@ -32,7 +32,7 @@ export class LettersService {
 
   async createWithTransaction(
     toCreate: CreateLetterDto | CreateLetterDto[],
-    entityManager: EntityManager
+    entityManager: EntityManager,
   ): Promise<Letter | Letter[]> {
     let created
     if (Array.isArray(toCreate)) {
@@ -46,7 +46,7 @@ export class LettersService {
 
   async bulkCreate(
     userId: number,
-    createBulkLetterDto: CreateBulkLetterDto
+    createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
     const { templateId, letterParamMaps } = createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
@@ -54,7 +54,7 @@ export class LettersService {
     // TODO: validation logic
     const renderedLetters = this.lettersRenderingService.bulkRender(
       template.html,
-      letterParamMaps
+      letterParamMaps,
     )
     return await this.dataSource.transaction(async (entityManager) => {
       const createBatchDto = {
@@ -65,7 +65,7 @@ export class LettersService {
 
       const batch = await this.batchesService.createWithTransaction(
         createBatchDto,
-        entityManager
+        entityManager,
       )
       const lettersDto = renderedLetters.map(
         (renderedLetter: Partial<Letter>) => ({
@@ -74,12 +74,12 @@ export class LettersService {
           userId,
           templateId,
           shortLink: '',
-        })
+        }),
       ) as CreateLetterDto[]
 
       const letters = (await this.createWithTransaction(
         lettersDto,
-        entityManager
+        entityManager,
       )) as Letter[]
       return letters
     })
@@ -103,7 +103,7 @@ export class LettersService {
     return `This action returns a #${id} letter`
   }
 
-  update(id: number, updateLetterDto: UpdateLetterDto) {
+  update(id: number, updateLetterDto: UpdateLetterDto,) {
     return `This action updates a #${id} letter`
   }
 
