@@ -32,6 +32,6 @@ export const publicRoutes: RouteObject[] = [
   },
   {
     path: '*',
-    element: <Navigate to={routes.index} />, // TODO: add 404 page
+    element: <Navigate to={routes.public.error} />, // TODO: Differentiate between invalid letters link and invalid page?
   },
 ]
