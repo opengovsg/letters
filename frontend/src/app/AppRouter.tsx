@@ -10,18 +10,19 @@ import {
 import { AppLayout } from '~/layouts/AppLayout'
 import { routes } from '~constants/routes'
 import { AdminAuthProvider } from '~features/auth/context/AdminProtectedContext'
-import { LandingPage } from '~features/landing/LandingPage'
 
 import { adminRoutes, publicRoutes } from './routes'
 
 const router = createBrowserRouter([
   {
+    path: routes.index,
     element: <AppLayout />,
     children: [
+      //Public Route
       {
-        path: routes.index,
-        element: <LandingPage />,
+        children: publicRoutes,
       },
+      //Admin Route
       {
         path: routes.admin.index,
         element: (
@@ -30,10 +31,6 @@ const router = createBrowserRouter([
           </AdminAuthProvider>
         ),
         children: adminRoutes,
-      },
-      {
-        path: routes.public.index,
-        children: publicRoutes,
       },
       {
         path: '*',

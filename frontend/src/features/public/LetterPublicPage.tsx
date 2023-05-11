@@ -16,7 +16,7 @@ export const LetterPublicPage = (): JSX.Element => {
   })
 
   if (!isLetterLoading && !letter) {
-    return <Navigate to={`/${routes.public.index}/${routes.public.error}`} />
+    return <Navigate to={`/${routes.public.error}`} />
   }
   return (
     <VStack alignItems="left" spacing="0px">

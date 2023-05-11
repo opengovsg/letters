@@ -1,7 +1,6 @@
 export const routes = {
   index: '/',
   public: {
-    index: 'public',
     letters: 'letters',
     error: 'error',
   },
