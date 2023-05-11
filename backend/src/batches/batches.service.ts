@@ -1,11 +1,27 @@
 import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { EntityManager, Repository } from 'typeorm'
 
 import { CreateBatchDto, UpdateBatchDto } from '~shared/dtos/batches.dto'
 
+import { Batch } from '../database/entities'
+
 @Injectable()
 export class BatchesService {
-  create(createBatchDto: CreateBatchDto) {
-    return 'This action adds a new batch'
+  @InjectRepository(Batch)
+  private repository: Repository<Batch>
+
+  async create(createBatchDto: CreateBatchDto): Promise<Batch> {
+    const batch = this.repository.create(createBatchDto)
+    return this.repository.save(batch)
+  }
+
+  async createWithTransaction(
+    createBatchDto: CreateBatchDto,
+    entityManager: EntityManager,
+  ): Promise<Batch> {
+    const batch = this.repository.create(createBatchDto)
+    return await entityManager.save(batch)
   }
 
   findAll() {

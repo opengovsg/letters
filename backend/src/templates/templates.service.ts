@@ -24,7 +24,7 @@ export class TemplatesService {
     })
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Template | null> {
     return await this.repository.findOne({ where: { id } })
   }
 
