@@ -2,119 +2,87 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, EntityManager, Repository } from 'typeorm'
 
+import { CreateBatchDto } from '~shared/dtos/batches.dto'
 import {
-  BulkRequestBody,
+  CreateBulkLetterDto,
   CreateLetterDto,
   UpdateLetterDto,
 } from '~shared/dtos/letters.dto'
 
 import { BatchesService } from '../batches/batches.service'
-import { Batch, Letter, Template } from '../database/entities'
+import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
+import { LettersRenderingService } from './letters-rendering.service'
 
 @Injectable()
 export class LettersService {
   @InjectRepository(Letter)
   private repository: Repository<Letter>
-  readonly PLACE_HOLDER_PREFIX = '{{'
-  readonly PLACE_HOLDER_SUFFIX = '}}'
   constructor(
     private readonly templatesService: TemplatesService,
     private readonly batchesService: BatchesService,
-    private readonly dataSource: DataSource,
+    private readonly lettersRenderingService: LettersRenderingService,
+    private dataSource: DataSource,
   ) {}
 
-  async createWithTransaction(
-    createLetterDto: CreateLetterDto,
-    entityManager: EntityManager | undefined,
-  ): Promise<Letter> {
+  async create(createLetterDto: CreateLetterDto): Promise<Letter> {
     const letter = this.repository.create(createLetterDto)
-    if (entityManager) {
-      return await entityManager.save(letter)
-    }
     return await this.repository.save(letter)
   }
 
-  async create(createLetterDto: CreateLetterDto): Promise<Letter> {
-    return await this.createWithTransaction(createLetterDto, undefined)
+  async createWithTransaction(
+    toCreate: CreateLetterDto | CreateLetterDto[],
+    entityManager: EntityManager,
+  ): Promise<Letter | Letter[]> {
+    let created
+    if (Array.isArray(toCreate)) {
+      created = this.repository.create(toCreate as Partial<Letter>[])
+      console.log(created)
+    } else {
+      created = this.repository.create(toCreate as Partial<Letter>)
+    }
+    return entityManager.save(created)
   }
 
   async bulkCreate(
     userId: number,
-    bulkRequest: BulkRequestBody,
+    createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const template = await this.templatesService.findOne(bulkRequest.templateId)
+    const { templateId, letterParamMaps } = createBulkLetterDto
+    const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
     // TODO: validation logic
-    return await this.bulkRenderAndInsert(userId, bulkRequest, template)
-  }
-
-  private async bulkRenderAndInsert(
-    userId: number,
-    bulkRequest: BulkRequestBody,
-    template: Template,
-  ) {
+    const renderedLetters = this.lettersRenderingService.bulkRender(
+      template.html,
+      letterParamMaps,
+    )
     return await this.dataSource.transaction(async (entityManager) => {
       const createBatchDto = {
-        userId: userId,
-        templateId: bulkRequest.templateId,
-        rawCsv: JSON.stringify(bulkRequest.letterParamMaps),
-      }
+        userId,
+        templateId,
+        rawCsv: JSON.stringify(letterParamMaps),
+      } as CreateBatchDto
+
       const batch = await this.batchesService.createWithTransaction(
         createBatchDto,
         entityManager,
       )
-      const letterDtos = this.bulkRender(bulkRequest, template, userId, batch)
-      const letters = await this.bulkCreateWithTransaction(
-        letterDtos,
+      const lettersDto = renderedLetters.map(
+        (renderedLetter: Partial<Letter>) => ({
+          ...renderedLetter,
+          batchId: batch.id,
+          userId,
+          templateId,
+          shortLink: '',
+        }),
+      ) as CreateLetterDto[]
+
+      const letters = (await this.createWithTransaction(
+        lettersDto,
         entityManager,
-      )
+      )) as Letter[]
       return letters
     })
-  }
-
-  private bulkRender(
-    bulkRequest: BulkRequestBody,
-    template: Template,
-    userId: number,
-    batch: Batch,
-  ) {
-    const letterDtos = []
-    for (const letterParamMap of bulkRequest.letterParamMaps) {
-      const issuedLetter = this.render(template.html, letterParamMap)
-      letterDtos.push({
-        userId: userId,
-        batchId: batch.id,
-        templateId: bulkRequest.templateId,
-        issuedLetter: issuedLetter,
-        fieldValues: JSON.stringify(letterParamMap),
-        shortLink: '',
-      })
-    }
-    return letterDtos
-  }
-
-  private render(
-    html: string,
-    letterParamMap: { [key: string]: string },
-  ): string {
-    for (const key in letterParamMap) {
-      const value = letterParamMap[key]
-      const placeHolder = `${this.PLACE_HOLDER_PREFIX}${key}${this.PLACE_HOLDER_SUFFIX}`
-      html = html.replace(placeHolder, value)
-    }
-    return html
-  }
-
-  private async bulkCreateWithTransaction(
-    letterDtos: CreateLetterDto[],
-    entityManager: EntityManager,
-  ) {
-    const letters = this.repository.create(letterDtos)
-    if (entityManager) {
-      return await entityManager.save(letters)
-    }
-    return await this.repository.save(letters)
   }
 
   findAll() {

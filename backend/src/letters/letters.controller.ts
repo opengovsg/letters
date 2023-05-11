@@ -10,8 +10,9 @@ import {
 } from '@nestjs/common'
 
 import {
-  BulkRequestBody,
+  CreateBulkLetterDto,
   CreateLetterDto,
+  GetLetterDto,
   UpdateLetterDto,
 } from '~shared/dtos/letters.dto'
 
@@ -32,7 +33,10 @@ export class LettersController {
   }
 
   @Post('bulks')
-  async bulk(@CurrentUser() user: User, @Body() bulkRequest: BulkRequestBody) {
+  async bulk(
+    @CurrentUser() user: User,
+    @Body() bulkRequest: CreateBulkLetterDto,
+  ): Promise<GetLetterDto[]> {
     const letters = await this.lettersService.bulkCreate(user.id, bulkRequest)
     return letters.map(mapLetterToDto)
   }
