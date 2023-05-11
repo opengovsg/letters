@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, EntityManager, Repository } from 'typeorm'
 
 import {
-  BulkRequestBody,
+  CreateBulkLetterDto,
   CreateLetterDto,
   UpdateLetterDto,
 } from '~shared/dtos/letters.dto'
@@ -40,24 +40,26 @@ export class LettersService {
 
   async bulkCreate(
     userId: number,
-    bulkRequest: BulkRequestBody,
+    createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const template = await this.templatesService.findOne(bulkRequest.templateId)
+    const template = await this.templatesService.findOne(
+      createBulkLetterDto.templateId,
+    )
     if (!template) throw new NotFoundException('Template not found')
     // TODO: validation logic
-    return await this.bulkRenderAndInsert(userId, bulkRequest, template)
+    return await this.bulkRenderAndInsert(userId, createBulkLetterDto, template)
   }
 
   private async bulkRenderAndInsert(
     userId: number,
-    bulkRequest: BulkRequestBody,
+    createBulkLetterDto: CreateBulkLetterDto,
     template: Template,
   ) {
     return await this.dataSource.transaction(async (entityManager) => {
       const createBatchDto = {
         userId: userId,
-        templateId: bulkRequest.templateId,
-        rawCsv: JSON.stringify(bulkRequest.letterParamMaps),
+        templateId: createBulkLetterDto.templateId,
+        rawCsv: JSON.stringify(createBulkLetterDto.letterParamMaps),
       }
       const batch = await this.batchesService.createWithTransaction(
         createBatchDto,
@@ -65,7 +67,7 @@ export class LettersService {
       )
       const renderedLetters = this.lettersRenderingService.bulkRender(
         template.html,
-        bulkRequest.letterParamMaps,
+        createBulkLetterDto.letterParamMaps,
       )
       const lettersDto = renderedLetters.map(
         (renderedLetter: Partial<Letter>) => ({
