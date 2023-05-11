@@ -42,32 +42,24 @@ export class LettersService {
     userId: number,
     createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const template = await this.templatesService.findOne(
-      createBulkLetterDto.templateId,
-    )
+    const { templateId, letterParamMaps } = createBulkLetterDto
+    const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
     // TODO: validation logic
-    return await this.bulkRenderAndInsert(userId, createBulkLetterDto, template)
-  }
-
-  private async bulkRenderAndInsert(
-    userId: number,
-    createBulkLetterDto: CreateBulkLetterDto,
-    template: Template,
-  ) {
+    const renderedLetters = this.lettersRenderingService.bulkRender(
+      template.html,
+      letterParamMaps,
+    )
     return await this.dataSource.transaction(async (entityManager) => {
       const createBatchDto = {
-        userId: userId,
-        templateId: createBulkLetterDto.templateId,
-        rawCsv: JSON.stringify(createBulkLetterDto.letterParamMaps),
-      }
+        userId,
+        templateId,
+        rawCsv: JSON.stringify(letterParamMaps),
+      } as CreateBatchDto
+
       const batch = await this.batchesService.createWithTransaction(
         createBatchDto,
         entityManager,
-      )
-      const renderedLetters = this.lettersRenderingService.bulkRender(
-        template.html,
-        createBulkLetterDto.letterParamMaps,
       )
       const lettersDto = renderedLetters.map(
         (renderedLetter: Partial<Letter>) => ({
