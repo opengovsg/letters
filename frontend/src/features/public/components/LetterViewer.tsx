@@ -22,20 +22,14 @@ export const LetterViewer = ({
   }
 
   return (
-    <>
-      {isLoading || !htmlLetter ? (
-        <Spinner />
-      ) : (
-        <Box border="1px" borderColor="grey.200" p={8} bg="white">
-          <Editor
-            disabled={true}
-            initialValue={htmlLetter}
-            init={{
-              inline: true,
-            }}
-          />
-        </Box>
-      )}
-    </>
+    <Box border="1px" borderColor="grey.200" p={8} bg="white">
+      <Editor
+        disabled={true}
+        initialValue={htmlLetter}
+        init={{
+          inline: true,
+        }}
+      />
+    </Box>
   )
 }
