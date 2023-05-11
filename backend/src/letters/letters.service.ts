@@ -14,6 +14,8 @@ import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersRenderingService } from './letters-rendering.service'
 
+import { Letter } from '../database/entities'
+
 @Injectable()
 export class LettersService {
   @InjectRepository(Letter)
