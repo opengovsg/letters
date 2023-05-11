@@ -17,10 +17,6 @@ export const LetterViewer = ({
     return <Spinner />
   }
 
-  if (!htmlLetter) {
-    return <Navigate to={`/${routes.public.index}/${routes.public.error}`} />
-  }
-
   return (
     <Box border="1px" borderColor="grey.200" p={8} bg="white">
       <Editor
