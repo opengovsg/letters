@@ -89,6 +89,16 @@ export class LettersService {
     return `This action returns all letters`
   }
 
+  async findOneByPublicId(publicId: string) {
+    const letter = await this.repository.findOne({
+      where: {
+        publicId: publicId,
+      },
+    })
+    if (!letter) throw new NotFoundException('Letter not found')
+    return letter
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} letter`
   }

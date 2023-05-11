@@ -1,7 +1,8 @@
-import { Box, Flex, Image, VStack } from '@chakra-ui/react'
-import { Outlet } from 'react-router-dom'
+import { Box, Flex, VStack } from '@chakra-ui/react'
+import { Link as RouterLink, Outlet } from 'react-router-dom'
 
 import { AppFooter } from '~/app/AppFooter'
+import { routes } from '~constants/routes'
 // import LogoSvg from '~/assets/Logo.svg'
 
 export const PublicLayout = () => {
@@ -11,8 +12,7 @@ export const PublicLayout = () => {
         position="static"
         pos="relative"
         flexDir="row"
-        px={6}
-        py={2}
+        p={6}
         justifyContent="space-between"
         borderBottom="1px"
         borderBottomColor="base.divider.medium"
@@ -20,9 +20,13 @@ export const PublicLayout = () => {
         align="center"
       >
         {/* <Image maxW="8rem" src={LogoSvg} /> */}
+        <RouterLink to={routes.index}>
+          {/* <Image maxW="8rem" src={LogoSvg} ml={'8px'} /> */}
+          Letters
+        </RouterLink>
       </Flex>
-      {/** @ts-expect-error align for box */}
-      <Box minH="admin-content-min-height" w="full" align="center">
+
+      <Box minH="admin-content-min-height" w="full" bg="gray.100">
         <Outlet />
       </Box>
       <AppFooter />
