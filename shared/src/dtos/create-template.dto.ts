@@ -14,15 +14,3 @@ export class CreateTemplateDto {
   @IsString()
   thumbnailS3Path: string
 }
-
-export class GetTemplateDto {
-  id: number
-  fields: string[]
-  html: string
-  name: string
-  thumbnailS3Path: string
-  createdAt: string
-  updatedAt: string
-}
-
-export class UpdateTemplateDto {}

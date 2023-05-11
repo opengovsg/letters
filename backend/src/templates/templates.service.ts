@@ -18,8 +18,10 @@ export class TemplatesService {
     return await this.repository.save(template)
   }
 
-  findAll() {
-    return `This action returns all templates`
+  async findAll() {
+    return await this.repository.find({
+      order: { createdAt: 'DESC' },
+    })
   }
 
   async findOne(id: number) {
