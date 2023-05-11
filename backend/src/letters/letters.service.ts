@@ -14,8 +14,6 @@ import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersRenderingService } from './letters-rendering.service'
 
-import { Letter } from '../database/entities'
-
 @Injectable()
 export class LettersService {
   @InjectRepository(Letter)
@@ -24,7 +22,7 @@ export class LettersService {
     private readonly templatesService: TemplatesService,
     private readonly batchesService: BatchesService,
     private readonly lettersRenderingService: LettersRenderingService,
-    private dataSource: DataSource,
+    private dataSource: DataSource
   ) {}
 
   async create(createLetterDto: CreateLetterDto): Promise<Letter> {
@@ -34,7 +32,7 @@ export class LettersService {
 
   async createWithTransaction(
     toCreate: CreateLetterDto | CreateLetterDto[],
-    entityManager: EntityManager,
+    entityManager: EntityManager
   ): Promise<Letter | Letter[]> {
     let created
     if (Array.isArray(toCreate)) {
@@ -48,7 +46,7 @@ export class LettersService {
 
   async bulkCreate(
     userId: number,
-    createBulkLetterDto: CreateBulkLetterDto,
+    createBulkLetterDto: CreateBulkLetterDto
   ): Promise<Letter[]> {
     const { templateId, letterParamMaps } = createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
@@ -56,7 +54,7 @@ export class LettersService {
     // TODO: validation logic
     const renderedLetters = this.lettersRenderingService.bulkRender(
       template.html,
-      letterParamMaps,
+      letterParamMaps
     )
     return await this.dataSource.transaction(async (entityManager) => {
       const createBatchDto = {
@@ -67,7 +65,7 @@ export class LettersService {
 
       const batch = await this.batchesService.createWithTransaction(
         createBatchDto,
-        entityManager,
+        entityManager
       )
       const lettersDto = renderedLetters.map(
         (renderedLetter: Partial<Letter>) => ({
@@ -76,44 +74,40 @@ export class LettersService {
           userId,
           templateId,
           shortLink: '',
-        }),
+        })
       ) as CreateLetterDto[]
 
       const letters = (await this.createWithTransaction(
         lettersDto,
-        entityManager,
+        entityManager
       )) as Letter[]
       return letters
     })
   }
 
-	create(createLetterDto: CreateLetterDto) {
-		return "This action adds a new letter";
-	}
+  findAll() {
+    return `This action returns all letters`
+  }
 
-	findAll() {
-		return `This action returns all letters`;
-	}
+  async findOneByPublicId(publicId: string) {
+    const letter = await this.repository.findOne({
+      where: {
+        publicId: publicId,
+      },
+    })
+    if (!letter) throw new NotFoundException('Letter not found')
+    return letter
+  }
 
-	async findByPublicId(publicId: string) {
-		const letter = await this.repository.findOne({
-			where: {
-				publicId: publicId,
-			},
-		});
-		if (!letter) throw new NotFoundException("Letter not found");
-		return letter;
-	}
+  findOne(id: number) {
+    return `This action returns a #${id} letter`
+  }
 
-	findOne(id: number) {
-		return `This action returns a #${id} letter`;
-	}
+  update(id: number, updateLetterDto: UpdateLetterDto) {
+    return `This action updates a #${id} letter`
+  }
 
-	update(id: number, updateLetterDto: UpdateLetterDto) {
-		return `This action updates a #${id} letter`;
-	}
-
-	remove(id: number) {
-		return `This action removes a #${id} letter`;
-	}
+  remove(id: number) {
+    return `This action removes a #${id} letter`
+  }
 }
