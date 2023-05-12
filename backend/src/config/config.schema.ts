@@ -41,6 +41,7 @@ export interface ConfigSchema {
     port: number
   }
   health: { heapSizeThreshold: number; rssThreshold: number }
+  tinymceApiKey: string
 }
 
 addFormats({
@@ -236,5 +237,11 @@ export const schema: Schema<ConfigSchema> = {
       // TODO: Set to a more reasonable value depending on the instance size used.
       default: 3000 * 1024 * 1024, // 3000MB
     },
+  },
+  tinymceApiKey: {
+    doc: 'The API key used for Tinymce',
+    env: 'TINYMCE_API_KEY',
+    format: String,
+    default: '',
   },
 }
