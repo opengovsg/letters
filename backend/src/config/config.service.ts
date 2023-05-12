@@ -21,4 +21,8 @@ export class ConfigService {
   get isDevEnv(): boolean {
     return this.config.get('environment') === 'development'
   }
+
+  findOneById(id: string): string {
+    return JSON.stringify(this.get(id as Path<ConfigSchema>))
+  }
 }
