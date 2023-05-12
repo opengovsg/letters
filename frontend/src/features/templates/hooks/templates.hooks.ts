@@ -12,7 +12,7 @@ export const useTemplateId = (): { templateId: number } => {
 
 export const useGetTemplateById = (templateId: number) => {
   const { data, isLoading } = useQuery(['templates'], () =>
-    api.url(`/templates/${templateId}`).get().json<GetTemplateDto>()
+    api.url(`/templates/${templateId}`).get().json<GetTemplateDto>(),
   )
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

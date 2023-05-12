@@ -3,7 +3,7 @@ import saveAs from 'file-saver'
 import { GetLetterPublicDto } from '~shared/dtos/get-letter.dto'
 
 export const convertJsonToCsvString = (
-  bulkGeneratedResponse: GetLetterPublicDto[]
+  bulkGeneratedResponse: GetLetterPublicDto[],
 ) => {
   return [
     ['publicId', 'createdAt'],
