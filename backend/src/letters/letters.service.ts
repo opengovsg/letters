@@ -60,17 +60,10 @@ export class LettersService {
 
     const validationResult = this.lettersValidationService.validateBulk(
       template.fields,
-      createBulkLetterDto.letterParamMaps,
+      letterParamMaps,
     )
-    if (!validationResult.success) {
-      const response = validationResult.errors
-        ? {
-            message: validationResult.message,
-            details: validationResult.errors,
-          }
-        : { message: validationResult.message }
-      throw new BadRequestException(response)
-    }
+    if (!validationResult.success)
+      throw new BadRequestException(validationResult)
 
     const renderedLetters = this.lettersRenderingService.bulkRender(
       template.html,

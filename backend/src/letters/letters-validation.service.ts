@@ -11,23 +11,26 @@ class ValidationResult {
 
 @Injectable()
 export class LettersValidationService {
-  validateBulk(template: string[], params: LetterParamMaps): ValidationResult {
+  validateBulk(
+    fields: string[],
+    LetterParamMaps: LetterParamMaps,
+  ): ValidationResult {
     const errorArray = []
 
-    if (params.length >= BULK_MAX_ROW_LENGTH) {
+    if (LetterParamMaps.length >= BULK_MAX_ROW_LENGTH) {
       return {
         success: false,
         message: 'Number of rows exceeded max length of bulk create',
       }
     }
 
-    for (let i = 0; i < params.length; i++) {
-      const obj = params[i]
-      // If object has an attribute that doesn't exist in the template
-      for (const key in obj) {
+    for (let i = 0; i < LetterParamMaps.length; i++) {
+      const LetterParamMap = LetterParamMaps[i]
+      // If key in LetterParamMap doesn't exist in the template
+      for (const key in LetterParamMap) {
         if (
-          Object.prototype.hasOwnProperty.call(obj, key) &&
-          !template.includes(key)
+          Object.prototype.hasOwnProperty.call(LetterParamMap, key) &&
+          !fields.includes(key)
         ) {
           errorArray.push({
             id: i,
@@ -36,21 +39,16 @@ export class LettersValidationService {
           })
         }
       }
-      for (const attr of template) {
-        // If object does not have the attribute in the template
-        if (!Object.prototype.hasOwnProperty.call(obj, attr)) {
+      for (const field of fields) {
+        // If LetterParamMap does not have field in the template, or field is empty
+        if (
+          !Object.prototype.hasOwnProperty.call(LetterParamMap, field) ||
+          LetterParamMap[field] === ''
+        ) {
           errorArray.push({
             id: i,
-            param: attr,
+            param: field,
             message: 'Missing param',
-          })
-        }
-        // If the object has the attribute, but is empty
-        if (obj[attr] === '') {
-          errorArray.push({
-            id: i,
-            param: attr,
-            message: 'Field is empty',
           })
         }
       }
