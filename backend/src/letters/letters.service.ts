@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, EntityManager, Repository } from 'typeorm'
 
@@ -13,6 +17,7 @@ import { BatchesService } from '../batches/batches.service'
 import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersRenderingService } from './letters-rendering.service'
+import { LettersValidationService } from './letters-validation.service'
 
 @Injectable()
 export class LettersService {
@@ -22,6 +27,7 @@ export class LettersService {
     private readonly templatesService: TemplatesService,
     private readonly batchesService: BatchesService,
     private readonly lettersRenderingService: LettersRenderingService,
+    private readonly lettersValidationService: LettersValidationService,
     private dataSource: DataSource,
   ) {}
 
@@ -51,7 +57,21 @@ export class LettersService {
     const { templateId, letterParamMaps } = createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
-    // TODO: validation logic
+
+    const validationResult = this.lettersValidationService.validateBulk(
+      template.fields,
+      createBulkLetterDto.letterParamMaps,
+    )
+    if (!validationResult.success) {
+      const response = validationResult.errors
+        ? {
+            message: validationResult.message,
+            details: validationResult.errors,
+          }
+        : { message: validationResult.message }
+      throw new BadRequestException(response)
+    }
+
     const renderedLetters = this.lettersRenderingService.bulkRender(
       template.html,
       letterParamMaps,
