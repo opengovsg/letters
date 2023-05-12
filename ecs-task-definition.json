@@ -59,6 +59,10 @@
         {
           "name": "DD_TAGS",
           "valueFrom": "letters-<ENV>-dd-tags"
+        },
+        {
+          "name": "POSTMANGOVSG_API_KEY",
+          "valueFrom": "letters-<ENV>-postman-api-key"
         }
       ],
       "logConfiguration": {
