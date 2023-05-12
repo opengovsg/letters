@@ -4,7 +4,7 @@ import { Button } from '@opengovsg/design-system-react'
 import { ToggleCard, ToggleCardProps } from './ToggleCard'
 
 interface CompletionCsvCardProps extends ToggleCardProps {
-  onCompletion?: () => void
+  onCompletion: () => void
 }
 
 export const CompletionCsvCard = ({

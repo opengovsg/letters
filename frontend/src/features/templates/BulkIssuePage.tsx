@@ -11,7 +11,7 @@ import { useCardIndex } from './hooks/useCardIndex'
 
 export const BulkIssuePage = (): JSX.Element => {
   const { templateId } = useTemplateId()
-  const { name } = useGetTemplateById(templateId)
+  const { template } = useGetTemplateById(templateId)
   const navigate = useNavigate()
 
   const [currIndex, setCurrIndex, handleNext, handlePrev] = useCardIndex(0)
@@ -24,7 +24,7 @@ export const BulkIssuePage = (): JSX.Element => {
 
   return (
     <VStack alignItems="left" spacing="0px">
-      <TemplateHeader templateName={name} />
+      <TemplateHeader templateName={template?.name} />
       <VStack pt={16} spacing={8} align={'center'}>
         <HStack spacing={8}>
           {steps.map((text, i) => (
@@ -41,6 +41,7 @@ export const BulkIssuePage = (): JSX.Element => {
         <SampleCsvCard
           shouldDisplay={currIndex === 0}
           onCompletion={handleNext}
+          templateFields={template?.fields}
         />
         <UploadCsvCard
           shouldDisplay={currIndex === 1}
