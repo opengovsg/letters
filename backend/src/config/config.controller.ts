@@ -6,10 +6,10 @@ import {
   UseGuards,
 } from '@nestjs/common'
 
-import { AuthGuard } from '../auth/auth.guard'
+// import { AuthGuard } from '../auth/auth.guard'
 import { ConfigService } from './config.service'
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('config')
 export class ConfigController {
   constructor(private readonly configService: ConfigService) {}
