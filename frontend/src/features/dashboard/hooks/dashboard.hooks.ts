@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { api } from '~lib/api'
-import { GetTemplateDto } from '~shared/dtos/get-template.dto'
+import { GetTemplateDto } from '~shared/dtos/templates.dto'
 
 export const useGetTemplates = () => {
   const { data, isLoading } = useQuery(['templates'], () =>
