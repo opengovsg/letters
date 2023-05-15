@@ -9,11 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common'
 
-import { GetLetterPublicDto } from '~shared/dtos/get-letter.dto'
 import {
   CreateBulkLetterDto,
   CreateLetterDto,
   GetLetterDto,
+  GetLetterPublicDto,
   UpdateLetterDto,
 } from '~shared/dtos/letters.dto'
 

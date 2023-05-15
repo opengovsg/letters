@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 
 import { publicQueryKeys } from '~constants/query-keys'
 import { api } from '~lib/api'
-import { GetLetterPublicDto } from '~shared/dtos/get-letter.dto'
+import { GetLetterPublicDto } from '~shared/dtos/letters.dto'
 
 export const useLetterPublicId = (): { letterPublicId: string } => {
   const { letterPublicId } = useParams<{ letterPublicId: string }>()
