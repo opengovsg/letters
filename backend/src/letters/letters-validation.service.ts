@@ -13,23 +13,23 @@ class ValidationResult {
 export class LettersValidationService {
   validateBulk(
     fields: string[],
-    LetterParamMaps: LetterParamMaps,
+    letterParamMaps: LetterParamMaps,
   ): ValidationResult {
     const errorArray = []
 
-    if (LetterParamMaps.length >= BULK_MAX_ROW_LENGTH) {
+    if (letterParamMaps.length >= BULK_MAX_ROW_LENGTH) {
       return {
         success: false,
         message: 'Number of rows exceeded max length of bulk create',
       }
     }
 
-    for (let i = 0; i < LetterParamMaps.length; i++) {
-      const LetterParamMap = LetterParamMaps[i]
-      // If key in LetterParamMap doesn't exist in the template
-      for (const key in LetterParamMap) {
+    for (let i = 0; i < letterParamMaps.length; i++) {
+      const letterParamMap = letterParamMaps[i]
+      // If key in letterParamMap doesn't exist in the template
+      for (const key in letterParamMap) {
         if (
-          Object.prototype.hasOwnProperty.call(LetterParamMap, key) &&
+          Object.prototype.hasOwnProperty.call(letterParamMap, key) &&
           !fields.includes(key)
         ) {
           errorArray.push({
@@ -40,10 +40,10 @@ export class LettersValidationService {
         }
       }
       for (const field of fields) {
-        // If LetterParamMap does not have field in the template, or field is empty
+        // If letterParamMap does not have field in the template, or field is empty
         if (
-          !Object.prototype.hasOwnProperty.call(LetterParamMap, field) ||
-          LetterParamMap[field] === ''
+          !Object.prototype.hasOwnProperty.call(letterParamMap, field) ||
+          letterParamMap[field] === ''
         ) {
           errorArray.push({
             id: i,
