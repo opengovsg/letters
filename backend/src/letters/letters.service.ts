@@ -13,12 +13,16 @@ import { BatchesService } from '../batches/batches.service'
 import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersRenderingService } from './letters-rendering.service'
+import { ConfigService } from "../config/config.service";
+import { LinkShortenterService } from "../external-services/link-shortenter.service";
 
 @Injectable()
 export class LettersService {
   @InjectRepository(Letter)
   private repository: Repository<Letter>
   constructor(
+    private readonly linkShortenterService: LinkShortenterService,
+    private readonly configService: ConfigService,
     private readonly templatesService: TemplatesService,
     private readonly batchesService: BatchesService,
     private readonly lettersRenderingService: LettersRenderingService,
@@ -37,9 +41,12 @@ export class LettersService {
     let created
     if (Array.isArray(toCreate)) {
       created = this.repository.create(toCreate as Partial<Letter>[])
-      console.log(created)
+      for (let letter of created) {
+        letter.shortLink = await this.linkShortenterService.generateShortLink(this.getPublicLetterURL(letter))
+      }
     } else {
       created = this.repository.create(toCreate as Partial<Letter>)
+      created.shortLink = await this.linkShortenterService.generateShortLink(this.getPublicLetterURL(created))
     }
     return entityManager.save(created)
   }
@@ -109,5 +116,9 @@ export class LettersService {
 
   remove(id: number) {
     return `This action removes a #${id} letter`
+  }
+
+  private getPublicLetterURL(letter: Partial<Letter>): string {
+    return `${this.configService.get('domainName')}/letters/${letter.publicId}`
   }
 }

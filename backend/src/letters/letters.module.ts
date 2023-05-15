@@ -9,6 +9,8 @@ import { LettersController } from './letters.controller'
 import { LettersService } from './letters.service'
 import { LettersRenderingService } from './letters-rendering.service'
 import { ValidationService } from './letters-validation.service'
+import {ExternalServicesModule} from "../external-services/external-services.module";
+import {LinkShortenterService} from "../external-services/link-shortenter.service";
 
 @Module({
   imports: [
@@ -16,9 +18,10 @@ import { ValidationService } from './letters-validation.service'
     AuthModule,
     BatchesModule,
     TemplatesModule,
+    ExternalServicesModule
   ],
   controllers: [LettersController],
-  providers: [LettersService, ValidationService, LettersRenderingService],
+  providers: [LettersService, ValidationService, LettersRenderingService, LinkShortenterService],
   exports: [LettersService, TypeOrmModule],
 })
 export class LettersModule {}

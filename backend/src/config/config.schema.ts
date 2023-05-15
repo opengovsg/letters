@@ -40,6 +40,9 @@ export interface ConfigSchema {
     host: string
     port: number
   }
+  gogovsgApiKey: string
+  gogovsgApiEndpoint: string
+  domainName: string
   health: { heapSizeThreshold: number; rssThreshold: number }
 }
 
@@ -220,6 +223,24 @@ export const schema: Schema<ConfigSchema> = {
       format: 'port',
       default: 1025,
     },
+  },
+  gogovsgApiKey: {
+    doc: 'The API key used to manage shortLinks from GoGovSG API',
+    env: 'GOGOVSG_API_KEY',
+    format: String,
+    default: '',
+  },
+  gogovsgApiEndpoint: {
+    doc: 'The GoGovSG API Endpoint',
+    env: 'GOGOVSG_API_ENDPOINT',
+    format: String,
+    default: '',
+  },
+  domainName: {
+    doc: 'The domain name including the protocol',
+    env: 'DOMAIN_NAME',
+    format: String,
+    default: 'http://localhost:3000',
   },
   health: {
     heapSizeThreshold: {

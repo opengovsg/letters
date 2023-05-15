@@ -113,11 +113,23 @@
         },
         {
           "name": "DD_SERVICE",
-          "valueFrom": "letters-<ENV>-dd-service"
+        "valueFrom": "letters-<ENV>-dd-service"
         },
         {
           "name": "DD_TAGS",
           "valueFrom": "letters-<ENV>-dd-tags"
+        },
+        {
+          "name": "DOMAIN_NAME",
+          "valueFrom": "letters-<ENV>-domain-name"
+        },
+        {
+          "name": "GO_API_KEY",
+          "valueFrom": "letters-<ENV>-go-api-key"
+        },
+        {
+          "name": "GO_API_ENDPOINT",
+          "valueFrom": "letters-<ENV>-go-api-endpoint"
         }
       ],
       "logConfiguration": {
