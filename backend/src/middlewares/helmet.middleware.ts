@@ -29,7 +29,7 @@ export class HelmetMiddleware implements NestMiddleware {
             'https://fonts.googleapis.com',
           ],
           scriptSrcAttr: ["'none'"],
-          scriptSrc: ["'self'"],
+          scriptSrc: ["'self'", 'https://cdn.tiny.cloud'],
           upgradeInsecureRequests: config.isDevEnv ? null : [],
         },
       },
