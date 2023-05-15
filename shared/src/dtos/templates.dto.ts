@@ -1,8 +1,8 @@
-import { IsDefined, IsString } from 'class-validator'
+import { IsArray, IsDefined, IsString } from 'class-validator'
 
 export class CreateTemplateDto {
   @IsDefined()
-  @IsString()
+  @IsArray()
   fields: string[]
   @IsDefined()
   @IsString()
@@ -25,4 +25,4 @@ export class GetTemplateDto {
   updatedAt: string
 }
 
-export class UpdateTemplateDto {}
+export class UpdateTemplateDto { }
