@@ -3,7 +3,7 @@ import { Flex, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useGetTemplates } from '../hooks/dashboard.hooks'
 import { TemplateCard } from './TemplateCard'
 
-export const DashboardBody = () => {
+export const TemplatesBody = () => {
   const { templates, isTemplatesLoading } = useGetTemplates()
   return (
     <Flex flexDir="row" flex="1">

@@ -20,19 +20,20 @@ export class CreateBulkLetterDto {
   letterParamMaps: LetterParamMaps
 }
 
-export class GetLetterDto {
-  id: number
-  batchId: number
-  publicId: string
-  templateId: number
-  userId: number
-  issuedLetter: string
-  shortLink: string
-  createdAt: string
-}
-
 export class GetLetterPublicDto {
   publicId: string
   issuedLetter: string
   createdAt: Date
+}
+
+export class GetLetterDto {
+  templateName: string
+  publicId: string
+  issuedLetter: string
+  createdAt: Date
+}
+
+export class GetLettersDto {
+  letters: GetLetterDto[]
+  count: number
 }
