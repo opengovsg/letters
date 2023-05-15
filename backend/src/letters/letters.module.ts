@@ -8,7 +8,7 @@ import { TemplatesModule } from '../templates/templates.module'
 import { LettersController } from './letters.controller'
 import { LettersService } from './letters.service'
 import { LettersRenderingService } from './letters-rendering.service'
-import { ValidationService } from './letters-validation.service'
+import { LettersValidationService } from './letters-validation.service'
 
 @Module({
   imports: [
@@ -18,7 +18,11 @@ import { ValidationService } from './letters-validation.service'
     TemplatesModule,
   ],
   controllers: [LettersController],
-  providers: [LettersService, ValidationService, LettersRenderingService],
+  providers: [
+    LettersService,
+    LettersValidationService,
+    LettersRenderingService,
+  ],
   exports: [LettersService, TypeOrmModule],
 })
 export class LettersModule {}
