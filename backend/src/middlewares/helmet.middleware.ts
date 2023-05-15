@@ -9,6 +9,7 @@ export class HelmetMiddleware implements NestMiddleware {
 
   constructor(private config: ConfigService) {
     this.middleware = helmet({
+      crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
