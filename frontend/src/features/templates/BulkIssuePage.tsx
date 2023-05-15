@@ -42,6 +42,7 @@ export const BulkIssuePage = (): JSX.Element => {
           shouldDisplay={currIndex === 0}
           onCompletion={handleNext}
           templateFields={template?.fields}
+          templateName={template?.name}
         />
         <UploadCsvCard
           shouldDisplay={currIndex === 1}

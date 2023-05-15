@@ -3,7 +3,7 @@ import saveAs from 'file-saver'
 import { GetLetterPublicDto } from '~shared/dtos/get-letter.dto'
 
 export const convertJsonToCsvString = (
-  bulkGeneratedResponse: GetLetterPublicDto[],
+  bulkGeneratedResponse: GetLetterPublicDto[]
 ) => {
   return [
     ['publicId', 'createdAt'],
@@ -11,11 +11,15 @@ export const convertJsonToCsvString = (
   ]
 }
 
-export const convertFieldToCsv = (csvStringArray?: string[]) => {
+export const convertCsvStringToCsv = (
+  templateName: string,
+  csvStringArray?: string[]
+) => {
+  const csvName = `${templateName} (Sample).csv`
   if (csvStringArray) {
     const blob = new Blob([csvStringArray.join(',')], {
       type: 'text/csv;charset=utf-8',
     })
-    saveAs(blob, 'Discharge Memo.csv')
+    saveAs(blob, csvName)
   }
 }
