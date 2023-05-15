@@ -23,7 +23,6 @@ export const SampleCsvCard = ({
       <Button
         isDisabled={!!templateFields && !!templateName}
         onClick={() => {
-          //TODO: Error handling if templateFields are null or templates
           if (templateFields && templateName) {
             convertCsvStringToCsv(templateName, templateFields)
             onCompletion()
