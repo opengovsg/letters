@@ -1,10 +1,7 @@
 import { Box, Spinner } from '@chakra-ui/react'
-import { Editor as TinymceReactEditor } from '@tinymce/tinymce-react'
+import { Editor as TinymceEditor } from '@tinymce/tinymce-react'
 
-import {
-  TinymceProvider,
-  useTinymce,
-} from '~features/tinymce/context/TinymceProvider'
+import { useTinymceApiKey } from '../hooks/tinymce.hooks'
 
 interface LetterViewerProps {
   html: string | undefined
@@ -13,19 +10,19 @@ interface LetterViewerProps {
   isInline?: boolean
 }
 
-const TinymceEditor = ({
+export const Editor = ({
   html,
   isLoading,
   isDisabled = false,
   isInline = false,
 }: LetterViewerProps): JSX.Element => {
-  const { tinymceApiKey } = useTinymce()
-  if (isLoading) {
+  const { tinymceApiKey } = useTinymceApiKey()
+  if (isLoading || !tinymceApiKey) {
     return <Spinner />
   }
   return (
     <Box border="1px" borderColor="grey.200" p={8} bg="white">
-      <TinymceReactEditor
+      <TinymceEditor
         apiKey={tinymceApiKey}
         initialValue={html}
         init={{
@@ -37,9 +34,3 @@ const TinymceEditor = ({
     </Box>
   )
 }
-
-export const Editor = (props: JSX.IntrinsicAttributes & LetterViewerProps) => (
-  <TinymceProvider>
-    <TinymceEditor {...props} />
-  </TinymceProvider>
-)
