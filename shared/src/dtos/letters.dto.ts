@@ -30,3 +30,9 @@ export class GetLetterDto {
   shortLink: string
   createdAt: string
 }
+
+export class GetLetterPublicDto {
+  publicId: string
+  issuedLetter: string
+  createdAt: Date
+}

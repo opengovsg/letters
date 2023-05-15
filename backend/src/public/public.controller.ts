@@ -2,7 +2,7 @@ import { Controller, Get, NotFoundException, Param } from '@nestjs/common'
 import { mapLetterToPublicDto } from 'core/dto-mappers/letter.dto-mapper'
 import { LettersService } from 'letters/letters.service'
 
-import { GetLetterPublicDto } from '~shared/dtos/get-letter.dto'
+import { GetLetterPublicDto } from '~shared/dtos/letters.dto'
 
 @Controller('public')
 export class PublicController {
