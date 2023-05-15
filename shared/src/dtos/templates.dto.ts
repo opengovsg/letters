@@ -25,4 +25,4 @@ export class GetTemplateDto {
   updatedAt: string
 }
 
-export class UpdateTemplateDto { }
+export class UpdateTemplateDto {}
