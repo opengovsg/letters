@@ -30,6 +30,7 @@ const TinymceEditor = ({
         initialValue={html}
         init={{
           inline: isInline,
+          content_css_cors: true,
         }}
         disabled={isDisabled}
       />
