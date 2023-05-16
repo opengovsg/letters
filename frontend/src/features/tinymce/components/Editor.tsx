@@ -23,13 +23,13 @@ export const Editor = ({
   // tinymce not enabled
   if (!tinymceApiKey) {
     return (
-      <Box border="1px" borderColor="grey.200" p={8} bg="white">
+      <Box border="1px" borderColor="grey.200" bg="white">
         <div dangerouslySetInnerHTML={{ __html: html }}></div>
       </Box>
     )
   }
   return (
-    <Box border="1px" borderColor="grey.200" p={8} bg="white">
+    <Box border="1px" borderColor="grey.200" bg="white">
       <TinymceEditor
         apiKey={tinymceApiKey}
         initialValue={html}
