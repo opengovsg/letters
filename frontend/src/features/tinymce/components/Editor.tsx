@@ -16,9 +16,17 @@ export const Editor = ({
   isDisabled = false,
   isInline = false,
 }: LetterViewerProps): JSX.Element => {
-  const { tinymceApiKey } = useTinymceApiKey()
-  if (isLoading || !tinymceApiKey) {
+  const { tinymceApiKey, isLoadingTinymceApiKey } = useTinymceApiKey()
+  if (isLoading || !html) {
     return <Spinner />
+  }
+  // tinymce not enabled
+  if (!isLoadingTinymceApiKey && !tinymceApiKey) {
+    return (
+      <Box border="1px" borderColor="grey.200" p={8} bg="white">
+        <div dangerouslySetInnerHTML={{ __html: html }}></div>
+      </Box>
+    )
   }
   return (
     <Box border="1px" borderColor="grey.200" p={8} bg="white">
