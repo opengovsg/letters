@@ -1,7 +1,7 @@
 import { CardHeader } from '@chakra-ui/react'
 import { Button } from '@opengovsg/design-system-react'
 
-import { convertCsvStringToCsv } from '~/utils/CsvParser'
+import { arrToCsv } from '~utils/csvUtils'
 
 import { ToggleCard, ToggleCardProps } from './ToggleCard'
 
@@ -21,10 +21,10 @@ export const SampleCsvCard = ({
     <ToggleCard {...toggleCardProps}>
       <CardHeader>Download the sample .CSV file</CardHeader>
       <Button
-        isDisabled={!!templateFields && !!templateName}
+        isDisabled={!templateFields || !templateName}
         onClick={() => {
           if (templateFields && templateName) {
-            convertCsvStringToCsv(templateName, templateFields)
+            arrToCsv(`${templateName} Sample.csv`, templateFields)
             onCompletion()
           }
         }}
