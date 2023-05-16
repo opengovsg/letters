@@ -1,8 +1,12 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 
+import { initDatadog } from '~lib/monitoring'
+
 import App from './app'
 import * as serviceWorker from './serviceWorker'
+
+initDatadog()
 
 const root = createRoot(document.getElementById('root') as HTMLElement)
 root.render(
