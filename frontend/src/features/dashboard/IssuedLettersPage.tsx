@@ -1,6 +1,7 @@
 import { Table, TableContainer, Td, Th, Tr, VStack } from '@chakra-ui/react'
 import { Link, Pagination, Tag } from '@opengovsg/design-system-react'
 import { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 
 import { useGetLetters } from '~features/dashboard/hooks/dashboard.hooks'
 
@@ -37,12 +38,15 @@ export const IssuedLettersPage = (): JSX.Element => {
           </Tr>
           {letters
             ? letters.map((letter) => {
-                const link = `letters.gov.sg/letters/${letter.publicId}` // TODO: fix link
+                const link = `/letters/${letter.publicId}`
+                const linkWithHost = `${document.location.host}${link}`
                 return (
                   <Tr key={letter.publicId}>
                     <Td>{letter.templateName}</Td>
                     <Td>
-                      <Link href={link}>{link}</Link>
+                      <Link as={RouterLink} to={link}>
+                        {linkWithHost}
+                      </Link>
                     </Td>
                     <Td>TODO: shared with</Td>
                     <Td>
