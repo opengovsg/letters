@@ -29,14 +29,7 @@ export const IssuedLettersPage = (): JSX.Element => {
     <VStack spacing="1rem" px="16px" py="1rem" align="center" w="100%">
       <TableContainer w="100%">
         <Table variant="simple">
-          <Tr
-            backgroundColor="interaction.main-subtle.default"
-            textColor="interaction.main.default"
-            textStyle="subhead-2"
-            textTransform="none"
-            fontWeight="500"
-            fontSize="14px"
-          >
+          <Tr backgroundColor="interaction.main-subtle.default">
             <HeaderCell>Template</HeaderCell>
             <HeaderCell>Link</HeaderCell>
             <HeaderCell>Shared with</HeaderCell>
