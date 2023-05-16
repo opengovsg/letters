@@ -37,3 +37,9 @@ export class GetLettersDto {
   letters: GetLetterDto[]
   count: number
 }
+
+export class GetLetterPublicDto {
+  publicId: string
+  issuedLetter: string
+  createdAt: Date
+}
