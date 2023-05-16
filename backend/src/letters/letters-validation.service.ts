@@ -1,28 +1,35 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 
 import { BULK_MAX_ROW_LENGTH } from '~shared/constants/letters'
 import { LetterParamMaps } from '~shared/dtos/letters.dto'
 
-import { CustomBulkError } from '../types/errors'
+class ValidationResult {
+  success: boolean
+  message: string
+  errors?: object[]
+}
 
 @Injectable()
-export class ValidationService {
-  bulkValidation(jsonStream: LetterParamMaps, fields: string) {
-    // Length validation
-    if (jsonStream.length >= BULK_MAX_ROW_LENGTH) {
-      throw new BadRequestException(
-        'Number of rows exceeded max length of bulk create',
-      )
+export class LettersValidationService {
+  validateBulk(
+    fields: string[],
+    letterParamMaps: LetterParamMaps,
+  ): ValidationResult {
+    const errorArray = []
+
+    if (letterParamMaps.length >= BULK_MAX_ROW_LENGTH) {
+      return {
+        success: false,
+        message: 'Number of rows exceeded max length of bulk create',
+      }
     }
 
-    // Field & attribution validation
-    const errorArray = []
-    for (let i = 0; i < jsonStream.length; i++) {
-      const obj = jsonStream[i]
-      // If object has an attribute that doesn't exist in the template
-      for (const key in obj) {
+    for (let i = 0; i < letterParamMaps.length; i++) {
+      const letterParamMap = letterParamMaps[i]
+      // If key in letterParamMap doesn't exist in the template
+      for (const key in letterParamMap) {
         if (
-          Object.prototype.hasOwnProperty.call(obj, key) &&
+          Object.prototype.hasOwnProperty.call(letterParamMap, key) &&
           !fields.includes(key)
         ) {
           errorArray.push({
@@ -32,27 +39,31 @@ export class ValidationService {
           })
         }
       }
-      for (const attr of fields) {
-        // If object does not have the attribute in the template
-        if (!Object.prototype.hasOwnProperty.call(obj, attr)) {
+      for (const field of fields) {
+        // If letterParamMap does not have field in the template, or field is empty
+        if (
+          !Object.prototype.hasOwnProperty.call(letterParamMap, field) ||
+          letterParamMap[field] === ''
+        ) {
           errorArray.push({
             id: i,
-            param: attr,
+            param: field,
             message: 'Missing param',
-          })
-        }
-        // If the object has the attribute, but is empty
-        if (obj[attr] === '') {
-          errorArray.push({
-            id: i,
-            param: attr,
-            message: 'Field is empty',
           })
         }
       }
     }
-    if (errorArray.length > 0) {
-      throw new CustomBulkError('Malformed bulk create object', errorArray)
+
+    if (errorArray.length === 0)
+      return {
+        success: true,
+        message: 'Validation Success',
+      }
+
+    return {
+      success: false,
+      message: 'Malformed bulk create object',
+      errors: errorArray,
     }
   }
 }
