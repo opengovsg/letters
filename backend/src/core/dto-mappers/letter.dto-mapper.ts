@@ -1,9 +1,18 @@
-import { GetLetterPublicDto } from '~shared/dtos/letters.dto'
+import { GetLetterDto, GetLetterPublicDto } from '~shared/dtos/letters.dto'
 
 import { Letter } from '../../database/entities'
 
 export const mapLetterToPublicDto = (letter: Letter): GetLetterPublicDto => {
   return {
+    publicId: letter.publicId,
+    createdAt: letter.createdAt,
+    issuedLetter: letter.issuedLetter,
+  }
+}
+
+export const mapLetterToDto = (letter: Letter): GetLetterDto => {
+  return {
+    templateName: letter.template.name,
     publicId: letter.publicId,
     createdAt: letter.createdAt,
     issuedLetter: letter.issuedLetter,

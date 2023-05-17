@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom'
 
 import { useAdminAuth } from '~features/auth/context/AdminProtectedContext'
 
-import { DashboardBody } from './components/DashboardBody'
+import { TemplatesBody } from './components/TemplatesBody'
 
-export const DashboardPage = (): JSX.Element => {
+export const TemplatesPage = (): JSX.Element => {
   const { adminUser } = useAdminAuth()
 
   return (
     <VStack alignItems="left" spacing="0px">
       <VStack pt={16} spacing={8} align={'center'}>
         <Box>
-          <DashboardBody />
+          <TemplatesBody />
         </Box>
       </VStack>
     </VStack>
