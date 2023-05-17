@@ -2,13 +2,14 @@ import { Navigate, RouteObject } from 'react-router-dom'
 
 import { PublicLayout } from '~/layouts/PublicLayout'
 import { routes } from '~constants/routes'
+import { LandingPage } from '~features/landing/LandingPage'
 import { ErrorPage } from '~features/public/ErrorPage'
 import { LetterPublicPage } from '~features/public/LetterPublicPage'
 
 export const publicRoutes: RouteObject[] = [
   {
     index: true,
-    element: <Navigate to={routes.public.letters} />,
+    element: <LandingPage />,
   },
   {
     path: `${routes.public.letters}/:letterPublicId`,

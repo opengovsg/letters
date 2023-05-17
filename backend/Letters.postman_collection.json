@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "eecfa9fb-6881-4abf-b3e3-25b1dce247ac",
+		"name": "Letters",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27371917"
+	},
+	"item": [
+		{
+			"name": "GET auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@open.gov.sg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET verify",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"381298\",\n    \"email\": \"test@open.gov.sg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/verify",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST templates",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"html\": \"this is sample template\",\n    \"name\": \"sample template {{ placeholder1 }}\",\n    \"thumbnailS3Path\": \"s3path\",\n    \"fields\": [\"placeholder1\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/templates",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"templates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET templates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/templates",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"templates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST letters bulk",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"templateId\": 5,\n    \"letterParamMaps\": [\n        {\n            \"name\": \"First Last\",\n            \"date\": \"Mon 8 May, 2023\",\n            \"addressƒ\": \"Marina Parade\"\n        },\n        {\n            \"name\": \"Some Name\",\n            \"date\": \"Mon 8 May, 2023\",\n            \"addressƒ\": \"Marina Parade\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/letters/bulks",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"letters",
+						"bulks"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:3000",
+			"type": "default"
+		}
+	]
+}
