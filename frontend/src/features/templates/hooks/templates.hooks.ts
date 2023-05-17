@@ -1,4 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
+
+import { api } from '~lib/api'
+import { GetTemplateDto } from '~shared/dtos/templates.dto'
 
 export const useTemplateId = (): { templateId: number } => {
   const { templateId } = useParams()
@@ -7,7 +11,10 @@ export const useTemplateId = (): { templateId: number } => {
 }
 
 export const useGetTemplateById = (templateId: number) => {
-  // TODO: insert react query call here
-  console.log(`getting template for ${templateId}`)
-  return { name: 'Certificate of Participation IMDA' }
+  const { data, isLoading } = useQuery(['templates'], () =>
+    api.url(`/templates/${templateId}`).get().json<GetTemplateDto>(),
+  )
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return { template: data!, isTemplatesLoading: isLoading }
 }
