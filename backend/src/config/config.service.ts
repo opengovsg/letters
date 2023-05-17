@@ -5,9 +5,9 @@ import { CONFIG_ACCESSIBLE_BY_FRONTEND } from '~shared/constants/config'
 
 import { ConfigSchema, schema } from './config.schema'
 
-// AWS param store does not support empty values, so we use a string placeholder of `'undefined'`
-// If param store value is defined as `'undefined'`, we treat it as undefined and return the default value
-const PLACEHOLDER_UNDEFINED = 'undefined'
+// AWS param store does not support empty values, so we use a string placeholder of `'VALUE_NOT_SET'`
+// If param store value is defined as `'VALUE_NOT_SET'`, we treat it as undefined and return the default value
+const PLACEHOLDER_UNDEFINED = 'VALUE_NOT_SET'
 
 @Injectable()
 export class ConfigService {
