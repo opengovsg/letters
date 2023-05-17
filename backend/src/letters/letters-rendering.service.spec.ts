@@ -30,6 +30,22 @@ describe('LettersRenderingService', () => {
       expect(result.issuedLetter).toEqual('<p>Dear Alice, your ID is 123.</p>')
       expect(result.fieldValues).toEqual('{"name":"Alice","id":"123"}')
     })
+
+    it('should not throw error if letterParamMap has additional params not in HTML', () => {
+      // We expect no error to be thrown as the error-throwing is handled at the validation level
+      const html = '<p>Hello, {{name}}!</p>'
+      const letterParamMap = { name: 'John', date: '01/01/2010' } // date not in html
+
+      expect(() => service.render(html, letterParamMap)).not.toThrowError()
+    })
+
+    it('should not throw error if letterParamMap does not contain param in HTML', () => {
+      // We expect no error to be thrown as the error-throwing is handled at the validation level
+      const html = '<p>Hello, {{name}}!</p>'
+      const letterParamMap = {} // date not in html
+
+      expect(() => service.render(html, letterParamMap)).not.toThrowError()
+    })
   })
 
   describe('bulkRender', () => {
