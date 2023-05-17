@@ -138,7 +138,7 @@
       }
     }
   ],
-  "family": "application-server",
+  "family": "letters-<ENV>-ecs",
   "networkMode": "awsvpc",
   "volumes": [],
   "placementConstraints": [],
