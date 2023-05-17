@@ -98,8 +98,23 @@ export class LettersService {
     })
   }
 
-  findAll() {
-    return `This action returns all letters`
+  findAndCount(userId: number, limit: number, offset: number) {
+    return this.repository.findAndCount({
+      select: {
+        template: {
+          name: true,
+        },
+      },
+      relations: {
+        template: true,
+      },
+      where: { userId },
+      take: limit,
+      skip: offset,
+      order: {
+        createdAt: 'DESC',
+      },
+    })
   }
 
   async findOneByPublicId(publicId: string) {
