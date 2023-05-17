@@ -49,6 +49,10 @@
           "valueFrom": "letters-<ENV>-session-secret"
         },
         {
+          "name": "OTP_SECRET",
+          "valueFrom": "letters-<ENV>-otp-secret"
+        },
+        {
           "name": "DD_API_KEY",
           "valueFrom": "letters-<ENV>-dd-api-key"
         },
