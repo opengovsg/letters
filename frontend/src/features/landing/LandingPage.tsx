@@ -49,7 +49,7 @@ export const LandingPage = (): JSX.Element => {
               Trusted e-letters from the Singapore Government
             </Text>
             <Text>
-              {`An a e-letter platform for Singapore Government agencies to easily create, issue and track the issuance of letters. Also enables citizens to easily receive Government issued letters.`}
+              {`Letters is an e-letter platform for Singapore Government to easily create and track the issuance of personalised letters to citizens on trusted and legitimate letters.gov.sg links.`}
             </Text>
             <Link href={BETA_SIGNUP} isExternal>
               <Button
@@ -83,12 +83,12 @@ export const LandingPage = (): JSX.Element => {
           <FeatureGridItem
             image={LegitmacySvg}
             title="Ensures legitimacy"
-            description="E-letters are designed to be authentic and only be accessible on a .gov.sg link."
+            description="Letters are hosted .gov.sg link making it legitimate and trustworthy than easily forgeable paper letters."
           />
           <FeatureGridItem
             image={SaveTimeSvg}
             title="Helps you save time"
-            description="Reusable templates enable you to generate and send thousands of letters in one go. "
+            description="Easily generate thousands of letters in minutes and send to anyone using tools from the OGP suite."
           />
           <FeatureGridItem
             image={CostSavingsSvg}
