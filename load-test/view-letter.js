@@ -17,7 +17,6 @@ import { sleep } from 'k6'
  * Run this script using `k6 run load-test.js`.
  */
 // k6 run --env MY_CONFIG_FILE=uat.json view-letter.js
-const NUM_VUS = 100
 let myOptions = JSON.parse(open(__ENV.MY_CONFIG_FILE))
 console.log(myOptions)
 export const options = {
