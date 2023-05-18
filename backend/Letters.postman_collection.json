@@ -133,6 +133,46 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "public letter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/public/letters/{{Letter public Id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"letters",
+						"{{Letter public Id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
@@ -140,6 +180,10 @@
 			"key": "baseUrl",
 			"value": "localhost:3000",
 			"type": "default"
+		},
+		{
+			"key": "Letter public Id",
+			"value": "<replace witha a public letter id>"
 		}
 	]
 }
