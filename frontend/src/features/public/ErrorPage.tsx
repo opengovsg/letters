@@ -12,7 +12,12 @@ export const ErrorPage = (): JSX.Element => {
           justify="center"
         >
           <Image src={NotFoundSvg} aria-hidden w={{ base: '80%', md: '40%' }} />
-          <VStack align="stretch" spacing={8} ml={{ base: 0, md: 8 }}>
+          <VStack
+            align="stretch"
+            spacing={8}
+            ml={{ base: 0, md: 8 }}
+            maxW={360}
+          >
             <Text textAlign="center">This link is not available.</Text>
             <Text textAlign="center">
               Please double check your link or contact the agency who has given
