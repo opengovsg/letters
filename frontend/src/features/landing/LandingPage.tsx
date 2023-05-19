@@ -116,7 +116,7 @@ export const LandingPage = (): JSX.Element => {
             </Text>
             <Text>
               <Text>
-                <Text as="span">{`Highway is part of the `}</Text>
+                <Text as="span">{`Letters is part of the `}</Text>
                 <Text fontWeight="bold" as="span">
                   Open Government Products Suite
                 </Text>
