@@ -7,13 +7,14 @@ import {
   HStack,
   Image,
   Link,
+  Stack,
 } from '@chakra-ui/react'
 import { BxsHelpCircle, IconButton } from '@opengovsg/design-system-react'
 import { Link as RouterLink } from 'react-router-dom'
 
-// import LogoSvg from '~/assets/Logo.svg'
+import LogoSvg from '~/assets/Logo.svg'
 import { useIsDesktop } from '~/hooks/useIsDesktop'
-import { USER_GUIDE } from '~shared/constants/links'
+import { BETA_SIGNUP, USER_GUIDE } from '~shared/constants/links'
 
 type PublicHeaderLinkProps = {
   label: string
@@ -77,9 +78,10 @@ export const PublicHeader = (props: FlexProps): JSX.Element => {
       {...props}
     >
       <RouterLink to={'/'}>
-        {/* TODO: replace heading with Logo */}
-        {/* <Image src={LogoSvg} /> */}
-        <Heading>Letters</Heading>
+        <Stack direction="row" spacing={4}>
+          <Image src={LogoSvg} />
+          <Heading>Letters</Heading>
+        </Stack>
       </RouterLink>
       <HStack
         textStyle="subhead-1"
@@ -88,9 +90,9 @@ export const PublicHeader = (props: FlexProps): JSX.Element => {
         {PUBLIC_HEADER_LINKS.map((link, index) => (
           <PublicHeaderLink key={index} {...link} />
         ))}
-        <RouterLink to="/admin/login">
-          <Button>Log in</Button>
-        </RouterLink>
+        <Link href={BETA_SIGNUP} isExternal>
+          <Button>Sign up</Button>
+        </Link>
       </HStack>
     </Flex>
   )

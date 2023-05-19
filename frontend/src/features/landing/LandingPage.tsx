@@ -10,17 +10,15 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { BiRightArrowAlt } from 'react-icons/bi'
-import { Link as RouterLink } from 'react-router-dom'
 
 import { AppFooter } from '~/app/AppFooter'
-// TODO: replace assets
-import FileHandoverSvg from '~/assets/landing/OgpSuite.svg'
-import EndToEndEncryptionSvg from '~/assets/landing/OgpSuite.svg'
+import ELettersSvg from '~/assets/ELetters.svg'
+import CostSavingsSvg from '~/assets/landing/CostSavings.svg'
+import LegitmacySvg from '~/assets/landing/Legitimacy.svg'
 import OgpSuiteSvg from '~/assets/landing/OgpSuite.svg'
-import PersonalizedLinksSvg from '~/assets/landing/OgpSuite.svg'
-import TrackSubmissionsSvg from '~/assets/landing/OgpSuite.svg'
-import { routes } from '~/constants/routes'
+import SaveTimeSvg from '~/assets/landing/SaveTime.svg'
 import { useIsDesktop } from '~/hooks/useIsDesktop'
+import { BETA_SIGNUP } from '~shared/constants/links'
 
 import { FeatureGridItem } from './components/FeatureGridItem'
 import { LandingSection } from './components/LandingSection'
@@ -36,33 +34,34 @@ export const LandingPage = (): JSX.Element => {
         <Stack
           direction={{ base: 'column', md: 'row' }}
           align="left"
-          spacing={{ base: '1.5rem', md: '3.125rem' }}
+          spacing={{ base: '1.5rem', md: '3.125rem', lg: '4.125rem' }}
         >
           <Flex flexDir="column" flex={1}>
             <Text
               textStyle={{
                 base: 'responsive-display.heavy',
                 md: 'responsive-display.heavy-480',
-                lg: 'responsive-display.heavy-600',
+                lg: 'responsive-display.heavy-480',
               }}
+              pt="2rem"
               pb="2rem"
             >
-              Send letters to citizens in minutes
+              Trusted e-letters from the Singapore Government
             </Text>
             <Text>
-              {`Create and send letters to citizens quickly, at zero cost and no onboarding.`}
+              {`Letters is an e-letter platform for Singapore Government to easily create and track the issuance of personalised letters to citizens on trusted and legitimate letters.gov.sg links.`}
             </Text>
-            <RouterLink to={routes.admin.login}>
+            <Link href={BETA_SIGNUP} isExternal>
               <Button
                 w={isDesktop ? 'unset' : 'full'}
                 mt="2.5rem"
                 rightIcon={<BiRightArrowAlt />}
               >
-                Create your template today
+                Sign up for our beta
               </Button>
-            </RouterLink>
+            </Link>
           </Flex>
-          <Image src={FileHandoverSvg} />
+          <Image src={ELettersSvg} />
         </Stack>
       </LandingSection>
       <LandingSection bg="grey.50">
@@ -82,19 +81,19 @@ export const LandingPage = (): JSX.Element => {
           mt="4rem"
         >
           <FeatureGridItem
-            image={TrackSubmissionsSvg}
-            title="Verified via GoGovSG"
-            description="Letters can be easily verified by citizens as government links"
+            image={LegitmacySvg}
+            title="Ensures legitimacy"
+            description="Letters are hosted .gov.sg link making it legitimate and trustworthy than easily forgeable paper letters."
           />
           <FeatureGridItem
-            image={EndToEndEncryptionSvg}
-            title="Bulk creation"
-            description="Send out one, two or many letters at one go!"
+            image={SaveTimeSvg}
+            title="Helps you save time"
+            description="Easily generate thousands of letters in minutes and send to anyone using tools from the OGP suite."
           />
           <FeatureGridItem
-            image={PersonalizedLinksSvg}
-            title="Template personalisation"
-            description="Reuse the same letter templates"
+            image={CostSavingsSvg}
+            title="Enables cost-savings"
+            description="Cut down on printing and postage expenses by switching from paper letters to e-letters."
           />
         </SimpleGrid>
       </LandingSection>
@@ -117,7 +116,7 @@ export const LandingPage = (): JSX.Element => {
             </Text>
             <Text>
               <Text>
-                <Text as="span">{`Highway is part of the `}</Text>
+                <Text as="span">{`Letters is part of the `}</Text>
                 <Text fontWeight="bold" as="span">
                   Open Government Products Suite
                 </Text>
