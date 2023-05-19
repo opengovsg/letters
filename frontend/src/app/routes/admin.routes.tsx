@@ -4,7 +4,8 @@ import { routes } from '~/constants/routes'
 import { AdminLayout } from '~/layouts/AdminLayout'
 import { AdminProtectedRoute } from '~features/auth/context/AdminProtectedRoute'
 import { LoginPage } from '~features/auth/LoginPage'
-import { DashboardPage } from '~features/dashboard/DashboardPage'
+import { IssuedLettersPage } from '~features/dashboard/IssuedLettersPage'
+import { TemplatesPage } from '~features/dashboard/TemplatesPage'
 import { BulkIssuePage } from '~features/templates/BulkIssuePage'
 
 export const adminRoutes: RouteObject[] = [
@@ -26,7 +27,7 @@ export const adminRoutes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <DashboardPage />,
+        element: <TemplatesPage />,
       },
     ],
   },
@@ -40,7 +41,7 @@ export const adminRoutes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <DashboardPage />,
+        element: <IssuedLettersPage />,
       },
     ],
   },

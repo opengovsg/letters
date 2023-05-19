@@ -4,6 +4,7 @@ import { TerminusModule } from '@nestjs/terminus'
 
 import { AuthModule } from './auth/auth.module'
 import { BatchesModule } from './batches/batches.module'
+import { ConfigModule } from './config/config.module'
 import { HealthModule } from './health/health.module'
 import { LettersModule } from './letters/letters.module'
 import { MailerModule } from './mailer/mailer.module'
@@ -21,6 +22,7 @@ const apiModules = [
   TemplatesModule,
   BatchesModule,
   PublicModule,
+  ConfigModule,
 ]
 
 @Module({

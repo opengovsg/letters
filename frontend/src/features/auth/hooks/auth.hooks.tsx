@@ -1,3 +1,4 @@
+import { datadogRum } from '@datadog/browser-rum'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '~/lib/api'
@@ -14,6 +15,12 @@ export const useAdminUser = () => {
     ['admin-who-am-i'],
     () => api.get('/auth/whoami').json<WhoAmIResponseDto>(),
   )
+  if (data?.id && data?.email) {
+    datadogRum.setUser({
+      id: data.id.toString(),
+      email: data.email,
+    })
+  }
   return { adminUser: data, isLoadingAdminUser: isLoading }
 }
 

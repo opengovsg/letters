@@ -3,12 +3,12 @@ import { Flex, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useGetTemplates } from '../hooks/dashboard.hooks'
 import { TemplateCard } from './TemplateCard'
 
-export const DashboardBody = () => {
+export const TemplatesBody = () => {
   const { templates, isTemplatesLoading } = useGetTemplates()
   return (
     <Flex flexDir="row" flex="1">
       <Wrap px={10} flex="1" spacing="30px" py={10}>
-        {templates || !isTemplatesLoading ? (
+        {!isTemplatesLoading && templates.length > 0 ? (
           templates.map((template, index) => (
             <WrapItem key={index}>
               <TemplateCard

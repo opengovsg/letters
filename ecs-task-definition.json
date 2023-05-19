@@ -49,6 +49,10 @@
           "valueFrom": "letters-<ENV>-session-secret"
         },
         {
+          "name": "OTP_SECRET",
+          "valueFrom": "letters-<ENV>-otp-secret"
+        },
+        {
           "name": "DD_API_KEY",
           "valueFrom": "letters-<ENV>-dd-api-key"
         },
@@ -63,6 +67,10 @@
         {
           "name": "POSTMANGOVSG_API_KEY",
           "valueFrom": "letters-<ENV>-postman-api-key"
+        },
+        {
+          "name": "TINYMCE_API_KEY",
+          "valueFrom": "letters-<ENV>-tinymce-api-key"
         }
       ],
       "logConfiguration": {
@@ -134,14 +142,16 @@
       }
     }
   ],
-  "family": "application-server",
+  "family": "letters-<ENV>-ecs",
   "networkMode": "awsvpc",
   "volumes": [],
   "placementConstraints": [],
   "runtimePlatform": {
     "operatingSystemFamily": "LINUX"
   },
-  "requiresCompatibilities": ["FARGATE"],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
   "taskRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/letters-<ENV>-ecs-task-role",
   "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/letters-<ENV>-ecs-task-exec-role",
   "cpu": "512",

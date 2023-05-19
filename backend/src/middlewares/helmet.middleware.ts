@@ -9,27 +9,29 @@ export class HelmetMiddleware implements NestMiddleware {
 
   constructor(private config: ConfigService) {
     this.middleware = helmet({
+      crossOriginEmbedderPolicy: { policy: 'credentialless' },
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
           baseUri: ["'self'"],
           blockAllMixedContent: [],
-          connectSrc: ["'self'"],
-          workerSrc: [],
+          connectSrc: ["'self'", 'https://*.browser-intake-datadoghq.com'],
+          workerSrc: ['blob:'],
           // for google fonts
           fontSrc: ["'self'", 'https://fonts.gstatic.com'],
           frameSrc: [],
           frameAncestors: ["'none'"],
-          imgSrc: ["'self'", 'data:'],
+          imgSrc: ["'self'", 'data:', 'https://file.go.gov.sg'],
           objectSrc: ["'none'"],
           // for google fonts
           styleSrc: [
             "'self'",
             "'unsafe-inline'",
             'https://fonts.googleapis.com',
+            'https://cdn.tiny.cloud',
           ],
           scriptSrcAttr: ["'none'"],
-          scriptSrc: ["'self'"],
+          scriptSrc: ["'self'", 'https://cdn.tiny.cloud'],
           upgradeInsecureRequests: config.isDevEnv ? null : [],
         },
       },
