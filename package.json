@@ -20,7 +20,8 @@
     "coverage": "npm run on-backend -- test:cov && cat backend/coverage/lcov.info > lcov.info",
     "cz": "git-cz",
     "start": "npm --prefix backend start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "version": "auto-changelog -p && git add CHANGELOG.md"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.5.1",
@@ -45,6 +46,7 @@
     }
   },
   "dependencies": {
+    "auto-changelog": "^2.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0"
   }
