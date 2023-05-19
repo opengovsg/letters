@@ -12,6 +12,7 @@ import {
   CreateLetterDto,
   UpdateLetterDto,
 } from '~shared/dtos/letters.dto'
+import { sanitizeHtml } from '~shared/util/html-sanitizer'
 
 import { BatchesService } from '../batches/batches.service'
 import { Letter } from '../database/entities'
@@ -32,22 +33,27 @@ export class LettersService {
   ) {}
 
   async create(createLetterDto: CreateLetterDto): Promise<Letter> {
-    const letter = this.repository.create(createLetterDto)
+    const sanitizedCreateLetterDto = this.sanitizeLetter(createLetterDto)
+    const letter = this.repository.create(sanitizedCreateLetterDto)
     return await this.repository.save(letter)
   }
 
-  async createWithTransaction(
-    toCreate: CreateLetterDto | CreateLetterDto[],
+  private async createWithTransaction(
+    createLetterDtos: CreateLetterDto[],
     entityManager: EntityManager,
-  ): Promise<Letter | Letter[]> {
-    let created
-    if (Array.isArray(toCreate)) {
-      created = this.repository.create(toCreate as Partial<Letter>[])
-      console.log(created)
-    } else {
-      created = this.repository.create(toCreate as Partial<Letter>)
+  ): Promise<Letter[]> {
+    const sanitizedCreateLetterDtos = createLetterDtos.map((createLetterDto) =>
+      this.sanitizeLetter(createLetterDto),
+    )
+    const letters = this.repository.create(sanitizedCreateLetterDtos)
+    return entityManager.save(letters)
+  }
+
+  private sanitizeLetter(createLetterDto: CreateLetterDto): CreateLetterDto {
+    return {
+      ...createLetterDto,
+      issuedLetter: sanitizeHtml(createLetterDto.issuedLetter),
     }
-    return entityManager.save(created)
   }
 
   async bulkCreate(
@@ -90,10 +96,10 @@ export class LettersService {
         }),
       ) as CreateLetterDto[]
 
-      const letters = (await this.createWithTransaction(
+      const letters = await this.createWithTransaction(
         lettersDto,
         entityManager,
-      )) as Letter[]
+      )
       return letters
     })
   }
