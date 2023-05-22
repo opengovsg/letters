@@ -36,10 +36,9 @@ export class AuthController {
       res.status(HttpStatus.OK).json({ message: 'OTP sent' })
     } catch (error) {
       this.logger.error(error)
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message:
-          'We could not send your OTP to this email address. Please try again later or contact us if the problem persists.',
-      })
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Error mailing OTP, please try again later.' })
     }
   }
 
