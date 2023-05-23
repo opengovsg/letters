@@ -9,6 +9,7 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
+  Heading,
   Spacer,
   Text,
   useControllableState,
@@ -53,10 +54,10 @@ export const BulkIssueDrawer = (): JSX.Element => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Issue {template?.name}</DrawerHeader>
-          <DrawerBody>
+          <DrawerBody padding={8}>
             <FormControl isInvalid={!!error}>
               <VStack spacing={4} align="stretch">
-                <Text>Upload the completed .CSV file</Text>
+                <Heading size="sm">Upload the completed .CSV file</Heading>
                 <Attachment
                   onChange={(file) => {
                     setFile(file)
@@ -68,18 +69,19 @@ export const BulkIssueDrawer = (): JSX.Element => {
                   isInvalid={!!error}
                 />
                 <FormErrorMessage>{error}</FormErrorMessage>
+                <Spacer />
                 <Flex justify="space-between">
                   <Button
-                    flex={1}
+                    flex="auto"
                     variant="outline"
                     isDisabled={!template?.name || !template?.fields}
                     onClick={downloadSample}
                   >
-                    Download CSV
+                    Download Sample CSV
                   </Button>
                   <Spacer />
                   <Button
-                    flex={1}
+                    flex="auto"
                     isDisabled={!(parsedArr.length > 0)}
                     isLoading={isLoading}
                     type="submit"
