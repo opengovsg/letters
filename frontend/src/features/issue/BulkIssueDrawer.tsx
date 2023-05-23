@@ -18,13 +18,14 @@ import { Attachment } from '@opengovsg/design-system-react'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
+import { arrToCsv } from '~utils/csvUtils'
+
 import {
   useCreateBulkLetterMutation,
   useGetTemplateById,
   useTemplateId,
-} from '~features/templates/hooks/templates.hooks'
-import useParseCsv from '~features/templates/hooks/useParseCsv'
-import { arrToCsv } from '~utils/csvUtils'
+} from './hooks/templates.hooks'
+import useParseCsv from './hooks/useParseCsv'
 
 export const BulkIssueDrawer = (): JSX.Element => {
   const { templateId } = useTemplateId()
