@@ -15,7 +15,7 @@ export const useTemplateId = (): { templateId: number } => {
 }
 
 export const useGetTemplateById = (templateId: number) => {
-  const { data, isLoading } = useQuery(['templates'], () =>
+  const { data, isLoading } = useQuery(['templates', templateId], () =>
     api.url(`/templates/${templateId}`).get().json<GetTemplateDto>(),
   )
 
