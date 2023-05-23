@@ -9,8 +9,8 @@ const useParseCsv = () => {
   const [error, setError] = useState<string>('')
 
   const parseCsv = async (file?: File | undefined): Promise<void> => {
-    if (!file) return
     setError('') // reset error
+    if (!file) return
     try {
       const parsedData = await csvToJsonArr(file)
       if (parsedData.length === 0) {
@@ -25,6 +25,8 @@ const useParseCsv = () => {
   return {
     parsedArr,
     error,
+    setError,
+
     parseCsv,
   }
 }
