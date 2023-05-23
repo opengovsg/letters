@@ -9,6 +9,28 @@ jobs:
     name: Build, Test, Lint
     uses: ./.github/workflows/build.yml
 
+  deploy-uat:
+    name: Deploy to UAT
+    needs: [build]
+    if: github.ref_name == 'uat'
+    uses: opengovsg/deploy/.github/workflows/deploy.yml@latest
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID_STAGING }}
+      aws-role-arn: ${{ secrets.AWS_ROLE_ARN_STAGING }}
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-ecr-repo: ${{ secrets.ECR_REPO }}
+      fly-org-name: ${{ secrets.ORG_NAME_UAT }}
+      fly-app-name: ${{ secrets.APP_NAME_UAT }}
+      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
+    with:
+      env: "uat"
+      image-tag: ghactions-${{ github.ref_name }}-${{ github.sha }}
+      ecs-cluster-name: "letters-uat-ecs"
+      ecs-service-name: "letters-uat-ecs-service"
+      ecs-container-name: "app-server"
+      codedeploy-application: "letters-uat-ecs-app"
+      codedeploy-deployment-group: "letters-uat-ecs-dg"
+
   deploy-staging:
     name: Deploy to Staging
     needs: [build]
