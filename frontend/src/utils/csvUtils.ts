@@ -1,4 +1,5 @@
 import saveAs from 'file-saver'
+import { parse } from 'papaparse'
 
 export const jsonArrToCsvString = (
   jsonArr: { [key: string]: string }[],
@@ -38,4 +39,18 @@ export const jsonArrToCsv = (
 export const arrToCsv = (csvName: string, strArr: string[]): void => {
   const csvString = arrToCsvString(strArr)
   return csvStringToCsv(csvName, csvString)
+}
+
+export const csvToJsonArr = async (file: File): Promise<unknown[]> => {
+  return new Promise((resolve, reject) => {
+    parse(file, {
+      header: true,
+      complete: (results) => {
+        resolve(results.data)
+      },
+      error: (error) => {
+        reject(error)
+      },
+    })
+  })
 }
