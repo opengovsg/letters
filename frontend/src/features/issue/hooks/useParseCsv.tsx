@@ -26,7 +26,6 @@ const useParseCsv = () => {
     parsedArr,
     error,
     setError,
-
     parseCsv,
   }
 }
