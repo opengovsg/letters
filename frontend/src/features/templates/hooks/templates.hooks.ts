@@ -1,7 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import { api } from '~lib/api'
+import {
+  CreateBulkLetterDto,
+  GetLetterPublicDto,
+} from '~shared/dtos/letters.dto'
 import { GetTemplateDto } from '~shared/dtos/templates.dto'
 
 export const useTemplateId = (): { templateId: number } => {
@@ -17,4 +21,34 @@ export const useGetTemplateById = (templateId: number) => {
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return { template: data!, isTemplatesLoading: isLoading }
+}
+
+export const useCreateBulkLetterMutation = ({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?: (res: GetLetterPublicDto[]) => void
+  onError?: () => void
+} = {}) => {
+  const queryClient = useQueryClient()
+
+  return useMutation(
+    async (body: CreateBulkLetterDto): Promise<GetLetterPublicDto[]> => {
+      return await api
+        .url(`/letters/bulks`)
+        .post(body)
+        .json<GetLetterPublicDto[]>()
+    },
+    {
+      onSuccess: async (res: GetLetterPublicDto[]) => {
+        // invalidate letters dashboard queries
+        await queryClient.invalidateQueries(['letters'])
+        onSuccess?.(res)
+      },
+      onError: (e) => {
+        console.log('error', JSON.stringify(e))
+        onError?.()
+      },
+    },
+  )
 }
