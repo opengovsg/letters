@@ -75,7 +75,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
                     isDisabled={!template?.name || !template?.fields}
                     onClick={downloadSample}
                   >
-                    Download
+                    Download CSV
                   </Button>
                   <Spacer />
                   <Button
@@ -86,7 +86,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={handleSubmit}
                   >
-                    Issue
+                    Generate Letters
                   </Button>
                 </Flex>
               </VStack>
