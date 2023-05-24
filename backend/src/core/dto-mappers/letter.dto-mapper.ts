@@ -30,7 +30,7 @@ export const mapLetterToGetBulkLettersDto = (
 ): GetBulkLettersDto[] => {
   return letters.map((letter, index) => ({
     shortLink: letter.shortLink,
-    createdAt: letter.createdAt,
+    createdAt: letter.createdAt.toDateString(),
     ...letterParams[index],
   }))
 }
