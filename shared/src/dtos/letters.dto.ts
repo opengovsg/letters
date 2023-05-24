@@ -54,3 +54,9 @@ export class GetLettersDto {
   letters: GetLetterDto[]
   count: number
 }
+
+export class GetBulkLettersDto {
+    shortLink: string;
+    createdAt: Date;
+    [key: string]: any;
+}
