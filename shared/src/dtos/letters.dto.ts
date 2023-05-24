@@ -56,7 +56,7 @@ export class GetLettersDto {
 }
 
 export class GetBulkLettersDto {
-    shortLink: string;
-    createdAt: Date;
-    [key: string]: any;
+  shortLink: string
+  createdAt: Date;
+  [key: string]: any
 }
