@@ -1,8 +1,10 @@
-import { VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
 import { Editor } from '~features/tinymce/components/Editor'
+import { convertHtmlToPdf } from '~utils/htmlUtils'
 
 import {
   useGetLetterByPublicId,
@@ -14,6 +16,12 @@ export const LetterPublicPage = (): JSX.Element => {
   const { letter, isLetterLoading } = useGetLetterByPublicId({
     letterPublicId,
   })
+
+  const handleDownload = () => {
+    if (letter && letter.issuedLetter) {
+      void convertHtmlToPdf(letter.issuedLetter, `${letterPublicId}.pdf`)
+    }
+  }
 
   if (!isLetterLoading && !letter) {
     return <Navigate to={`/${routes.public.error}`} />
@@ -27,6 +35,7 @@ export const LetterPublicPage = (): JSX.Element => {
           isDisabled={true}
           isInline={true}
         />
+        <Button onClick={handleDownload}>Download as .PDF</Button>
       </VStack>
     </VStack>
   )
