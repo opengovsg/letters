@@ -17,7 +17,7 @@ export class LettersValidationService {
   ): ValidationResult {
     const errorArray = []
 
-    if (letterParamMaps.length >= BULK_MAX_ROW_LENGTH) {
+    if (letterParamMaps.length > BULK_MAX_ROW_LENGTH) {
       return {
         success: false,
         message: 'Number of rows exceeded max length of bulk create',
