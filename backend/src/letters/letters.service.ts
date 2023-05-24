@@ -43,7 +43,6 @@ export class LettersService {
     let created
     if (Array.isArray(toCreate)) {
       created = this.repository.create(toCreate as Partial<Letter>[])
-      console.log(created)
     } else {
       created = this.repository.create(toCreate as Partial<Letter>)
     }
