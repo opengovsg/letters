@@ -13,7 +13,6 @@ import {
   FormErrorMessage,
   Heading,
   HStack,
-  Image,
   Spacer,
   Table,
   TableContainer,
