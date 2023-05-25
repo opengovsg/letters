@@ -22,6 +22,7 @@ export const LetterPublicPage = (): JSX.Element => {
     <VStack alignItems="left" spacing="0px">
       <VStack padding={16} spacing={8} align={'center'}>
         <Editor
+          letterPublicId={letterPublicId}
           html={letter?.issuedLetter}
           isLoading={isLetterLoading}
           isDisabled={true}
