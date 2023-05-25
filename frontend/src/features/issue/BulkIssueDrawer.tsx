@@ -246,7 +246,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
           variant="warning"
           useMarkdown
           marginTop={5}
-          //  icon={LightBulb}
+          icon={<Image src={LightBulb} />}
         >
           You can send out these letters through
           [Postman](https://postman.gov.sg/)
