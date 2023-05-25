@@ -20,6 +20,23 @@ export class CreateBulkLetterDto {
   letterParamMaps: LetterParamMaps
 }
 
+export enum BulkLetterValidationResultErrorMessage {
+  INVALID_ATTRIBUTE = 'Invalid attribute in param',
+  MISSING_PARAM = 'Missing param',
+}
+
+export class BulkLetterValidationResultError {
+  id: number
+  param: string
+  message: BulkLetterValidationResultErrorMessage
+}
+
+export class BulkLetterValidationResultDto {
+  success: boolean
+  message: string
+  errors?: BulkLetterValidationResultError[]
+}
+
 export class GetLetterPublicDto {
   publicId: string
   issuedLetter: string

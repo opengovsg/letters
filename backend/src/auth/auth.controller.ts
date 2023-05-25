@@ -8,6 +8,7 @@ import {
   Res,
   Session,
 } from '@nestjs/common'
+import { AxiosError } from '@nestjs/terminus/dist/errors/axios.error'
 import { Request, Response } from 'express'
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 
@@ -37,8 +38,10 @@ export class AuthController {
     } catch (error) {
       this.logger.error(error)
       res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json({ message: (error as Record<string, string>).message })
+        .status(
+          ((error as AxiosError).response as Record<string, number>).status,
+        )
+        .json({ message: 'Error mailing OTP, please try again later.' })
     }
   }
 
