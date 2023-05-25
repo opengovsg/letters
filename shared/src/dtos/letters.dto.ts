@@ -58,5 +58,5 @@ export class GetLettersDto {
 export class GetBulkLettersDto {
   shortLink: string
   createdAt: Date;
-  [key: string]: any
+  [key: string]: string | Date; // using `| Date` to allow TS to have a Date field sibling to the dynamic ones
 }
