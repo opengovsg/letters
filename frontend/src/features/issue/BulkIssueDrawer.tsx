@@ -30,8 +30,9 @@ import { BiChevronRight, BiLeftArrowAlt } from 'react-icons/bi'
 import { MdError } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
-import CheckMark from '~/assets/CheckMark.svg'
-import LightBulb from '~/assets/LightBulb.svg'
+import { ReactComponent as CheckMark } from '~/assets/CheckMark.svg'
+import { ReactComponent as CsvIcon } from '~/assets/CsvIcon.svg'
+import { ReactComponent as LightBulb } from '~/assets/LightBulb.svg'
 import { routes } from '~constants/routes'
 import { useToast } from '~hooks/useToast'
 import {
@@ -221,7 +222,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
     return (
       <>
         <HStack direction="row" spacing={2}>
-          <Image src={CheckMark} />
+          <CheckMark />
           <Heading size="sm">
             {bulkLetters.length} {pluraliseIfNeeded(bulkLetters, 'letter')}{' '}
             generated
@@ -230,13 +231,14 @@ export const BulkIssueDrawer = (): JSX.Element => {
         <Box
           bg="#F9F9F9"
           w="100%"
-          paddingTop={20}
           height="200"
           color="black"
           marginTop="5"
-          style={{ textAlign: 'center' }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
         >
-          CSV Icon
+          <CsvIcon />
         </Box>
         <Box bg="#DDEAFF" w="100%" p={4} color="black" fontWeight="500">
           {`${template.name}[COMPLETED].csv`}
@@ -246,7 +248,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
           variant="warning"
           useMarkdown
           marginTop={5}
-          icon={<Image src={LightBulb} />}
+          icon={<LightBulb />}
         >
           You can send out these letters through
           [Postman](https://postman.gov.sg/)
