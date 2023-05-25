@@ -54,3 +54,9 @@ export class GetLettersDto {
   letters: GetLetterDto[]
   count: number
 }
+
+export class GetBulkLettersDto {
+  shortLink: string
+  createdAt: Date;
+  [key: string]: string | Date // using `| Date` to allow TS to have a Date field sibling to the dynamic ones
+}
