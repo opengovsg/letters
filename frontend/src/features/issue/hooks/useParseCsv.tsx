@@ -8,7 +8,7 @@ const useParseCsv = () => {
   )
   const [error, setError] = useState<string>('')
 
-  const parseCsv = async (file?: File | undefined): Promise<void> => {
+  const parseCsv = async (file?: File): Promise<void> => {
     setError('') // reset error
     if (!file) return
     try {

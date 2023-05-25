@@ -1,8 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
+import { WretchError } from 'wretch/types'
 
 import { api } from '~lib/api'
 import {
+  BulkLetterValidationResultDto,
+  BulkLetterValidationResultError,
   CreateBulkLetterDto,
   GetLetterPublicDto,
 } from '~shared/dtos/letters.dto'
@@ -28,7 +31,7 @@ export const useCreateBulkLetterMutation = ({
   onError,
 }: {
   onSuccess?: (res: GetLetterPublicDto[]) => void
-  onError?: () => void
+  onError?: (errors: BulkLetterValidationResultError[]) => void
 } = {}) => {
   const queryClient = useQueryClient()
 
@@ -45,9 +48,10 @@ export const useCreateBulkLetterMutation = ({
         await queryClient.invalidateQueries(['letters'])
         onSuccess?.(res)
       },
-      onError: (e) => {
-        console.log('error', JSON.stringify(e))
-        onError?.()
+      onError: (e: WretchError) => {
+        const err = e.json as BulkLetterValidationResultDto
+        if (!err.errors) return
+        onError?.(err.errors)
       },
     },
   )
