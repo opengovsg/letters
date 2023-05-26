@@ -65,7 +65,6 @@ export const BulkIssueDrawer = (): JSX.Element => {
 
   const { mutateAsync, isLoading } = useCreateBulkLetterMutation({
     onSuccess: (res) => {
-      console.log(JSON.stringify(res))
       setBulkLetters(res)
       setUploadCsvErrors([])
       setIsUploadSuccess(true)
