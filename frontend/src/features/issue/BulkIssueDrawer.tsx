@@ -80,7 +80,6 @@ export const BulkIssueDrawer = (): JSX.Element => {
   })
   const { parsedArr, parseCsv, error: parseCsvError } = useParseCsv()
   const [file, setFile] = useControllableState<File | undefined>({})
-  const [uploadSuccess, setUploadSuccess] = useState(true)
 
   const onClose = () =>
     navigate(`/${routes.admin.index}/${routes.admin.templates}`)
