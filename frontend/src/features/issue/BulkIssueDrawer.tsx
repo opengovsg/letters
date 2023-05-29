@@ -40,6 +40,7 @@ import {
   GetBulkLettersDto,
 } from '~shared/dtos/letters.dto'
 import { arrToCsv, jsonArrToCsv } from '~utils/csvUtils'
+import { pluraliseIfNeeded } from '~utils/stringUtils'
 
 import {
   useCreateBulkLetterMutation,
@@ -55,19 +56,18 @@ export const BulkIssueDrawer = (): JSX.Element => {
   const [uploadCsvErrors, setUploadCsvErrors] = useState<
     BulkLetterValidationResultError[]
   >([])
-  const [isUploadSuccess, setIsUploadSuccess] = useState(false)
   const [bulkLetters, setBulkLetters] = useState<GetBulkLettersDto[]>([])
   const navigate = useNavigate()
   const toast = useToast()
 
-  const pluraliseIfNeeded = (collection: any[], singular: string): string =>
-    collection.length > 1 ? `${singular}s` : singular
-
-  const { mutateAsync, isLoading } = useCreateBulkLetterMutation({
+  const {
+    mutateAsync,
+    isLoading,
+    isSuccess: isUploadSuccess,
+  } = useCreateBulkLetterMutation({
     onSuccess: (res) => {
       setBulkLetters(res)
       setUploadCsvErrors([])
-      setIsUploadSuccess(true)
       toast({
         title: `${res.length} ${pluraliseIfNeeded(res, 'letter')} created`,
         status: 'success',
