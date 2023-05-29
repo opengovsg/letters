@@ -1,13 +1,23 @@
-import { Box, Flex, GridItem, GridProps, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  GridItem,
+  GridProps,
+  Heading,
+  Image,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { AppFooter } from '~/app/AppFooter'
+import ELetters from '~/assets/ELetters.svg'
+import LogoSvg from '~/assets/Logo.svg'
 import { useIsDesktop } from '~hooks/useIsDesktop'
 import { AppGrid } from '~templates/AppGrid'
 
 import { LoginForm, LoginFormInputs } from './components/LoginForm'
-import { LoginImageSvgr } from './components/LoginImageSvgr'
 import { OtpForm, OtpFormInputs } from './components/OtpForm'
 import { useAdminAuth } from './context/AdminProtectedContext'
 import {
@@ -69,12 +79,12 @@ const FooterGridArea: FC<PropsWithChildren> = ({ children }) => (
 const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) => (
   <GridItem
     display={{ base: 'none', md: 'flex' }}
-    gridColumn={{ md: '1 / 13', lg: '2 / 6' }}
+    gridColumn={{ md: '1 / 13', lg: '1 / 6' }}
     h={{ md: '20.5rem', lg: 'auto' }}
     pt={{ base: '1.5rem', md: '2.5rem', lg: '3rem' }}
     pb={{ lg: '3rem' }}
     flexDir="column"
-    alignItems={{ base: 'center', lg: 'flex-end' }}
+    alignItems={{ base: 'center', lg: 'center' }}
     justifyContent="center"
   >
     {children}
@@ -123,33 +133,17 @@ export const LoginPage = (): JSX.Element => {
     <BackgroundBox>
       <BaseGridLayout flex={1}>
         <NonMobileSidebarGridArea>
-          <LoginImageSvgr maxW="100%" aria-hidden />
+          <Text textStyle="h1" color="white">
+            Trusted e-letters from the Singapore Government
+          </Text>
+          <Image maxW="100%" maxH="100%" src={ELetters} />
         </NonMobileSidebarGridArea>
         <LoginGridArea>
           <Box minH={{ base: 'auto', lg: '17.25rem' }} w="100%">
-            <Flex mb={{ base: '2.5rem', lg: 0 }} flexDir="column">
-              <Text
-                display={{ base: 'none', lg: 'initial' }}
-                textStyle="responsive-heading.heavy-1280"
-                mb="2.5rem"
-              >
-                Scaffold a starter project in minutes
-              </Text>
-              <Box display={{ base: 'initial', lg: 'none' }}>
-                <Box mb={{ base: '0.75rem', lg: '1.5rem' }}>
-                  <Text textStyle="h3">Starter Kit</Text>
-                </Box>
-                <Text
-                  textStyle={{
-                    base: 'responsive-heading.heavy',
-                    md: 'responsive-heading.heavy-480',
-                    lg: 'responsive-heading.heavy-1280',
-                  }}
-                >
-                  Scaffold a starter project in minutes
-                </Text>
-              </Box>
-            </Flex>
+            <Stack direction="row" spacing={4}>
+              <Image src={LogoSvg} maxW="10rem" mb="2.5rem" />
+              <Heading>Letters</Heading>
+            </Stack>
             {!email ? (
               <LoginForm onSubmit={handleSendOtp} />
             ) : (
@@ -168,10 +162,7 @@ export const LoginPage = (): JSX.Element => {
         bg={{ base: 'base.canvas.brandLight', lg: 'transparent' }}
       >
         <FooterGridArea>
-          <AppFooter
-            variant={{ lg: 'compact' }}
-            colorMode={isDesktop ? 'dark' : 'light'}
-          />
+          <AppFooter variant={{ lg: 'compact' }} colorMode={'light'} />
         </FooterGridArea>
       </BaseGridLayout>
     </BackgroundBox>
