@@ -1,4 +1,9 @@
-import { GetLetterDto, GetLetterPublicDto } from '~shared/dtos/letters.dto'
+import {
+  GetBulkLettersDto,
+  GetLetterDto,
+  GetLetterPublicDto,
+  LetterParamMaps,
+} from '~shared/dtos/letters.dto'
 
 import { Letter } from '../../database/entities'
 
@@ -17,4 +22,15 @@ export const mapLetterToDto = (letter: Letter): GetLetterDto => {
     createdAt: letter.createdAt,
     issuedLetter: letter.issuedLetter,
   }
+}
+
+export const mapLetterToGetBulkLettersDto = (
+  letterParams: LetterParamMaps,
+  letters: Letter[],
+): GetBulkLettersDto[] => {
+  return letters.map((letter, index) => ({
+    shortLink: letter.shortLink,
+    createdAt: letter.createdAt,
+    ...letterParams[index],
+  }))
 }

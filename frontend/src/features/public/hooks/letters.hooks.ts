@@ -23,7 +23,7 @@ export const useGetLetterByPublicId = ({
         .url(`/public/letters/${letterPublicId}`)
         .get()
         .json<GetLetterPublicDto>(),
-    { enabled: !!letterPublicId },
+    { enabled: !!letterPublicId, retry: false },
   )
   return { letter: data, isLetterLoading: isLoading }
 }

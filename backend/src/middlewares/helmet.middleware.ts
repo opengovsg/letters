@@ -15,7 +15,11 @@ export class HelmetMiddleware implements NestMiddleware {
           defaultSrc: ["'self'"],
           baseUri: ["'self'"],
           blockAllMixedContent: [],
-          connectSrc: ["'self'", 'https://*.browser-intake-datadoghq.com'],
+          connectSrc: [
+            "'self'",
+            'https://*.browser-intake-datadoghq.com',
+            'https://file.go.gov.sg',
+          ],
           workerSrc: ['blob:'],
           // for google fonts
           fontSrc: ["'self'", 'https://fonts.gstatic.com'],
