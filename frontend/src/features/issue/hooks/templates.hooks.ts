@@ -7,7 +7,7 @@ import {
   BulkLetterValidationResultDto,
   BulkLetterValidationResultError,
   CreateBulkLetterDto,
-  GetLetterPublicDto,
+  GetBulkLettersDto,
 } from '~shared/dtos/letters.dto'
 import { GetTemplateDto } from '~shared/dtos/templates.dto'
 
@@ -30,20 +30,20 @@ export const useCreateBulkLetterMutation = ({
   onSuccess,
   onError,
 }: {
-  onSuccess?: (res: GetLetterPublicDto[]) => void
+  onSuccess?: (res: GetBulkLettersDto[]) => void
   onError?: (errors: BulkLetterValidationResultError[]) => void
 } = {}) => {
   const queryClient = useQueryClient()
 
   return useMutation(
-    async (body: CreateBulkLetterDto): Promise<GetLetterPublicDto[]> => {
+    async (body: CreateBulkLetterDto): Promise<GetBulkLettersDto[]> => {
       return await api
         .url(`/letters/bulks`)
         .post(body)
-        .json<GetLetterPublicDto[]>()
+        .json<GetBulkLettersDto[]>()
     },
     {
-      onSuccess: async (res: GetLetterPublicDto[]) => {
+      onSuccess: async (res: GetBulkLettersDto[]) => {
         // invalidate letters dashboard queries
         await queryClient.invalidateQueries(['letters'])
         onSuccess?.(res)
