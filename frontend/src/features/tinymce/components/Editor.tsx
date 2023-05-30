@@ -10,6 +10,12 @@ interface LetterViewerProps {
   isInline?: boolean
 }
 
+interface TemplateEditorProps {
+  html: string | undefined
+  onContentChange?: React.Dispatch<React.SetStateAction<string>>
+  isDisabled?: boolean
+}
+
 export const Editor = ({
   html,
   isLoading,
@@ -40,5 +46,39 @@ export const Editor = ({
         disabled={isDisabled}
       />
     </Box>
+  )
+}
+
+export const TemplateEditor = ({
+  html,
+  onContentChange,
+  isDisabled = false,
+}: TemplateEditorProps): JSX.Element => {
+  const { tinymceApiKey, isLoadingTinymceApiKey } = useTinymceApiKey()
+  if (isLoadingTinymceApiKey || !html) {
+    return <Spinner />
+  }
+  if (!tinymceApiKey) {
+    return (
+      <Box border="1px" borderColor="grey.200" bg="white">
+        <div dangerouslySetInnerHTML={{ __html: html }}></div>
+      </Box>
+    )
+  }
+
+  const handleEditorChange = (content: string) => {
+    if (onContentChange) onContentChange(content)
+  }
+
+  return (
+    <TinymceEditor
+      apiKey={tinymceApiKey}
+      initialValue={html}
+      init={{
+        plugins: 'image code',
+      }}
+      disabled={isDisabled}
+      onEditorChange={handleEditorChange}
+    />
   )
 }
