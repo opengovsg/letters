@@ -17,6 +17,7 @@ import {
 } from '~shared/dtos/letters.dto'
 
 import { DownloadCsv } from './BulkIssueDrawer/DownloadCsv'
+import { PreviewTemplate } from './BulkIssueDrawer/PreviewTemplate'
 import { UploadCsvErrorCard } from './BulkIssueDrawer/UploadCsvErrorCard'
 import { UploadCsvErrorsTable } from './BulkIssueDrawer/UploadCsvErrorsTable'
 import { UploadCsvForm } from './BulkIssueDrawer/UploadCsvForm'
@@ -26,6 +27,8 @@ export const BulkIssueDrawer = (): JSX.Element => {
   const { templateId } = useTemplateId()
   const { template } = useGetTemplateById(templateId)
   const navigate = useNavigate()
+
+  const [isPreviewTemplate, setIsPreviewTemplate] = useState(true)
 
   const [isShowUploadCsvErrors, setIsShowUploadCsvErrors] = useState(false)
   const [uploadCsvErrors, setUploadCsvErrors] = useState<
@@ -45,7 +48,9 @@ export const BulkIssueDrawer = (): JSX.Element => {
           <DrawerCloseButton />
           <DrawerHeader>Issue {template?.name}</DrawerHeader>
           <DrawerBody padding={8}>
-            {isShowDownloadCsv ? (
+            {isPreviewTemplate ? (
+              <PreviewTemplate onToggle={() => setIsPreviewTemplate(false)} />
+            ) : isShowDownloadCsv ? (
               <DownloadCsv
                 bulkLetters={bulkLetters}
                 onDownload={() => {
