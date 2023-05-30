@@ -1,0 +1,58 @@
+name: E2E Tests
+on:
+  workflow_call:
+
+jobs:
+  test-e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: letters_test
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - run: npm ci
+      - name: Compile shared code for dependents
+        run: npm run --prefix shared build
+      - name: Install E2E test dependencies
+        run: npm --prefix e2e ci
+      - name: Run Playwright tests
+        run: npm run test:e2e
+        env:
+          DB_NAME: letters_test
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USERNAME: test
+          DB_PASSWORD: test
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: e2e/test-results/
+          retention-days: 7
