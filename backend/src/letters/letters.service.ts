@@ -12,12 +12,12 @@ import {
   CreateLetterDto,
   UpdateLetterDto,
 } from '~shared/dtos/letters.dto'
-import { sanitizeHtml } from '~shared/util/html-sanitizer'
 
 import { BatchesService } from '../batches/batches.service'
 import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersRenderingService } from './letters-rendering.service'
+import { LettersSanitizationService } from './letters-sanitization.service'
 import { LettersValidationService } from './letters-validation.service'
 
 @Injectable()
@@ -29,11 +29,13 @@ export class LettersService {
     private readonly batchesService: BatchesService,
     private readonly lettersRenderingService: LettersRenderingService,
     private readonly lettersValidationService: LettersValidationService,
+    private readonly lettersSanitizationService: LettersSanitizationService,
     private dataSource: DataSource,
   ) {}
 
   async create(createLetterDto: CreateLetterDto): Promise<Letter> {
-    const sanitizedCreateLetterDto = this.sanitizeLetter(createLetterDto)
+    const sanitizedCreateLetterDto =
+      this.lettersSanitizationService.sanitizeLetter(createLetterDto)
     const letter = this.repository.create(sanitizedCreateLetterDto)
     return await this.repository.save(letter)
   }
@@ -43,17 +45,10 @@ export class LettersService {
     entityManager: EntityManager,
   ): Promise<Letter[]> {
     const sanitizedCreateLetterDtos = createLetterDtos.map((createLetterDto) =>
-      this.sanitizeLetter(createLetterDto),
+      this.lettersSanitizationService.sanitizeLetter(createLetterDto),
     )
     const letters = this.repository.create(sanitizedCreateLetterDtos)
     return entityManager.save(letters)
-  }
-
-  private sanitizeLetter(createLetterDto: CreateLetterDto): CreateLetterDto {
-    return {
-      ...createLetterDto,
-      issuedLetter: sanitizeHtml(createLetterDto.issuedLetter),
-    }
   }
 
   async bulkCreate(

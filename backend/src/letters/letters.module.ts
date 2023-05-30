@@ -8,6 +8,7 @@ import { TemplatesModule } from '../templates/templates.module'
 import { LettersController } from './letters.controller'
 import { LettersService } from './letters.service'
 import { LettersRenderingService } from './letters-rendering.service'
+import { LettersSanitizationService } from './letters-sanitization.service'
 import { LettersValidationService } from './letters-validation.service'
 
 @Module({
@@ -22,6 +23,7 @@ import { LettersValidationService } from './letters-validation.service'
     LettersService,
     LettersValidationService,
     LettersRenderingService,
+    LettersSanitizationService,
   ],
   exports: [LettersService, TypeOrmModule],
 })
