@@ -10,6 +10,8 @@ import {
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import TemplatePreviewFallback from '~/assets/TemplatePreviewFallback.svg'
+
 type TemplateCardProps = {
   name: string
   thumbnailS3Path: string
@@ -35,26 +37,31 @@ export const TemplateCard = (templateCardProps: TemplateCardProps) => {
             }
           : {}
       }
-      padding={5}
       width={240}
       height={zoom ? 330 : 270}
       onMouseEnter={handleMouseHover}
       onMouseLeave={handleMouseHover}
     >
-      <Flex justifyContent="center">
+      <Flex justifyContent="center" background="#F8F9F9" paddingTop={5}>
         <Image
           src={templateCardProps.thumbnailS3Path}
           width={170}
           height={170}
+          fallbackSrc={TemplatePreviewFallback}
+          borderTopRadius={'10px'}
         />
       </Flex>
-      <CardHeader>
+      <CardHeader marginLeft={5} marginRight={5}>
         <Heading size="20px">
           <Text noOfLines={2}>{templateCardProps.name}</Text>
         </Heading>
       </CardHeader>
       {zoom && (
-        <Button onClick={() => navigate(`${templateCardProps.id}/issue`)}>
+        <Button
+          onClick={() => navigate(`${templateCardProps.id}/issue`)}
+          marginLeft={5}
+          marginRight={5}
+        >
           Issue Letter
         </Button>
       )}
