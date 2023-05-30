@@ -1,15 +1,21 @@
 import {
+  Divider,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
+  Heading,
+  HStack,
+  Text,
   VStack,
 } from '@chakra-ui/react'
+import { Button } from '@opengovsg/design-system-react'
 import { useState } from 'react'
+import { BiLeftArrowAlt, BiX } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
+import { IconButton } from '~components/IconButton'
 import { routes } from '~constants/routes'
 import {
   BulkLetterValidationResultError,
@@ -45,8 +51,33 @@ export const BulkIssueDrawer = (): JSX.Element => {
     <Drawer size="lg" isOpen placement="right" onClose={onClose}>
       <DrawerOverlay>
         <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Issue {template?.name}</DrawerHeader>
+          <DrawerHeader style={{ paddingTop: '20px' }}>
+            {isPreviewTemplate ? (
+              <HStack>
+                <IconButton onClick={onClose}>
+                  <BiX size="1.5rem" />
+                </IconButton>
+                <Heading size="md">{template?.name}</Heading>
+              </HStack>
+            ) : (
+              <HStack>
+                <IconButton onClick={() => setIsPreviewTemplate(true)}>
+                  <BiLeftArrowAlt size="1.5rem" />
+                </IconButton>
+                <VStack alignItems="left" spacing={0}>
+                  <Heading size="md">Issue {template?.name}</Heading>
+                  <Button
+                    variant="link"
+                    padding={0}
+                    onClick={() => setIsPreviewTemplate(true)}
+                  >
+                    <Text fontSize="xs">View template</Text>
+                  </Button>
+                </VStack>
+              </HStack>
+            )}
+          </DrawerHeader>
+          <Divider />
           <DrawerBody padding={8}>
             {isPreviewTemplate ? (
               <PreviewTemplate onToggle={() => setIsPreviewTemplate(false)} />
