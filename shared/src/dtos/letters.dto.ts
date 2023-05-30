@@ -55,8 +55,8 @@ export class GetLettersDto {
   count: number
 }
 
-export class GetBulkLettersDto {
-  shortLink: string
+export class GetBulkLetterDto {
+  publicId: string
   createdAt: string;
   [key: string]: string
 }

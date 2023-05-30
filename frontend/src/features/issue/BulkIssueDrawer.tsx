@@ -37,7 +37,7 @@ import { useToast } from '~hooks/useToast'
 import {
   BulkLetterValidationResultError,
   BulkLetterValidationResultErrorMessage,
-  GetBulkLettersDto,
+  GetBulkLetterDto,
 } from '~shared/dtos/letters.dto'
 import { arrToCsv, jsonArrToCsv } from '~utils/csvUtils'
 import { pluraliseIfNeeded } from '~utils/stringUtils'
@@ -56,7 +56,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
   const [uploadCsvErrors, setUploadCsvErrors] = useState<
     BulkLetterValidationResultError[]
   >([])
-  const [bulkLetters, setBulkLetters] = useState<GetBulkLettersDto[]>([])
+  const [bulkLetters, setBulkLetters] = useState<GetBulkLetterDto[]>([])
   const navigate = useNavigate()
   const toast = useToast()
 
@@ -92,7 +92,15 @@ export const BulkIssueDrawer = (): JSX.Element => {
   }
 
   const handleDownloadCsv = () => {
-    jsonArrToCsv(`${template.name}[COMPLETED].csv`, bulkLetters)
+    const bulkLettersWithLink = bulkLetters.map((letter) => {
+      const { publicId, createdAt, ...letterParams } = letter
+      return {
+        ...letterParams,
+        'Date of Issue': createdAt,
+        'Letter Link': `${document.location.host}/letters/${publicId}`,
+      }
+    })
+    jsonArrToCsv(`${template.name}[COMPLETED].csv`, bulkLettersWithLink)
     onClose()
   }
 

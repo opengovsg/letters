@@ -1,5 +1,5 @@
 import {
-  GetBulkLettersDto,
+  GetBulkLetterDto,
   GetLetterDto,
   GetLetterPublicDto,
   LetterParamMaps,
@@ -24,13 +24,13 @@ export const mapLetterToDto = (letter: Letter): GetLetterDto => {
   }
 }
 
-export const mapLetterToGetBulkLettersDto = (
+export const mapLetterToGetBulkLetterDto = (
   letterParams: LetterParamMaps,
   letters: Letter[],
-): GetBulkLettersDto[] => {
+): GetBulkLetterDto[] => {
   return letters.map((letter, index) => ({
     ...letterParams[index],
     createdAt: letter.createdAt.toDateString(),
-    shortLink: letter.shortLink,
+    publicId: letter.publicId,
   }))
 }
