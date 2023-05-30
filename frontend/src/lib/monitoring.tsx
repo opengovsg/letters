@@ -15,13 +15,12 @@ export function initDatadog() {
     trackResources: true,
     trackLongTasks: true,
     defaultPrivacyLevel: 'mask-user-input',
-    // TODO: connect RUM and traces after datadog tracing is set up
-    // https://docs.datadoghq.com/real_user_monitoring/connect_rum_and_traces/?tab=browserrum
-    // allowedTracingUrls: [
-    //   'https://api.example.com',
-    //   /https:\/\/.*\.my-api-domain\.com/,
-    //   (url) => url.startsWith('https://api.example.com'),
-    // ],
+    allowedTracingUrls: [
+      'https://letters-stg.beta.gov.sg', // TODO: remove after migrating out of beta.gov.sg
+      'https://letters.beta.gov.sg', // TODO: remove after migrating out of beta.gov.sg
+      'https://staging.letters.gov.sg',
+      'https://letters.gov.sg',
+    ],
   })
   datadogRum.startSessionReplayRecording()
 }
