@@ -1,6 +1,10 @@
 import { datadogRum } from '@datadog/browser-rum'
 
 export function initDatadog() {
+  if (datadogRum.getInitConfiguration()) {
+    // Skip if datadog RUM has already been initialized
+    return
+  }
   datadogRum.init({
     applicationId: 'fccfa971-0a5c-4c78-b340-344b104c8b9b',
     clientToken: 'pub5e264a96230b8d2f4ee90bfe8a481f4e',
@@ -23,5 +27,9 @@ export function initDatadog() {
     //   (url) => url.startsWith('https://api.example.com'),
     // ],
   })
-  datadogRum.startSessionReplayRecording()
+  /**
+   * Note: we do not start the session replay recording here.
+   * Starting and stopping it are left to the admin and public routes respectively
+   * for greater control over when to capture replay recordings.
+   */
 }

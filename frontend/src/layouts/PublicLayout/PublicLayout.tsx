@@ -1,4 +1,5 @@
 import { Box, Flex, Heading, Image, Stack, VStack } from '@chakra-ui/react'
+import { datadogRum } from '@datadog/browser-rum'
 import { Link as RouterLink, Outlet } from 'react-router-dom'
 
 import { AppFooter } from '~/app/AppFooter'
@@ -6,6 +7,8 @@ import LogoSvg from '~/assets/Logo.svg'
 import { routes } from '~constants/routes'
 
 export const PublicLayout = () => {
+  // Disable datadog RUM session replays for public pages
+  datadogRum.stopSessionReplayRecording()
   return (
     <VStack minWidth="100%" align="stretch" spacing={0}>
       <Flex
