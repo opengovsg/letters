@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useIsDesktop } from '~hooks/useIsDesktop'
-import { isGovSgEmail } from '~shared/decorators/is-gov-sg-email'
+import { isGovSgOrWhitelistedEmail } from '~shared/decorators/is-gov-sg-or-whitelisted-email'
 
 const schema = z.object({
   email: z
@@ -18,8 +18,9 @@ const schema = z.object({
     .trim()
     .min(1, 'Please enter an email address.')
     .email({ message: 'Please enter a valid email address.' })
-    .refine(isGovSgEmail, {
-      message: 'Please sign in with a gov.sg email address.',
+    .refine(isGovSgOrWhitelistedEmail, {
+      message:
+        'Please sign in with a gov.sg or valid whitelisted email address.',
     }),
 })
 
@@ -54,7 +55,7 @@ export const LoginForm = ({ onSubmit }: LoginFormProps): JSX.Element => {
         mb="2.5rem"
       >
         <FormLabel
-          description="Only available for use by public officers with a gov.sg email"
+          description="Only available for use by public officers with a gov.sg or whitelisted email"
           htmlFor="email"
           fontSize={{ base: '1.125rem', lg: '1rem' }}
         >

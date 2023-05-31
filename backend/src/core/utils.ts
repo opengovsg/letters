@@ -29,5 +29,5 @@ const customAlphabet = (alphabet: string, size: number) =>
 
 const ALPHABET =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-const ID_LENGTH = 16
+const ID_LENGTH = 32
 export const generatePublicId = customAlphabet(ALPHABET, ID_LENGTH)
