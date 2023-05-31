@@ -1,8 +1,8 @@
 import { jsPDF } from 'jspdf'
 
 // Pixel ratios of width to height of A4 letters
-const WIDTH_A4 = 794
-const HEIGHT_A4 = 1122
+export const WIDTH_A4 = 794
+export const HEIGHT_A4 = 1122
 
 // Additional wrapper div to resize contents of letters
 const resizeToA4Dimensions = (

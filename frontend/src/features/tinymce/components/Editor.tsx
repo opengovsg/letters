@@ -2,6 +2,7 @@ import { Box, Spinner } from '@chakra-ui/react'
 import { Editor as TinymceEditor } from '@tinymce/tinymce-react'
 
 import { sanitizeHtml } from '~shared/util/html-sanitizer'
+import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import { useTinymceApiKey } from '../hooks/tinymce.hooks'
 
@@ -26,13 +27,25 @@ export const Editor = ({
   // tinymce not enabled
   if (!tinymceApiKey) {
     return (
-      <Box border="1px" borderColor="grey.200" bg="white">
+      <Box
+        border="1px"
+        borderColor="grey.200"
+        bg="white"
+        minWidth={WIDTH_A4}
+        minHeight={HEIGHT_A4}
+      >
         <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
       </Box>
     )
   }
   return (
-    <Box border="1px" borderColor="grey.200" bg="white">
+    <Box
+      border="1px"
+      borderColor="grey.200"
+      bg="white"
+      minWidth={WIDTH_A4}
+      minHeight={HEIGHT_A4}
+    >
       <TinymceEditor
         apiKey={tinymceApiKey}
         initialValue={cleanHtml}
