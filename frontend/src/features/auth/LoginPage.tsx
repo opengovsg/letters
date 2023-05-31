@@ -53,7 +53,7 @@ const BaseGridLayout = (props: GridProps) => (
 // Grid area styling for the login form.
 const LoginGridArea: FC<PropsWithChildren> = ({ children }) => (
   <GridItem
-    gridColumn={{ base: '1 / 5', md: '2 / 12', lg: '7 / 12' }}
+    gridColumn={{ base: '1 / 5', md: '2 / 12', lg: '8 / 12' }}
     py="4rem"
     display="flex"
     alignItems={{ base: 'initial', lg: 'center' }}
@@ -79,13 +79,13 @@ const FooterGridArea: FC<PropsWithChildren> = ({ children }) => (
 const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) => (
   <GridItem
     display={{ base: 'none', md: 'flex' }}
-    gridColumn={{ md: '1 / 13', lg: '1 / 6' }}
+    gridColumn={{ md: '2 / 12', lg: '2 / 7' }}
     h={{ md: '20.5rem', lg: 'auto' }}
     pt={{ base: '1.5rem', md: '2.5rem', lg: '3rem' }}
     pb={{ lg: '3rem' }}
     flexDir="column"
-    alignItems={{ base: 'center', lg: 'center' }}
-    justifyContent="center"
+    alignItems={{ base: 'center', lg: 'start' }}
+    justifyContent={{ base: 'start', lg: 'center' }}
   >
     {children}
   </GridItem>
@@ -131,12 +131,12 @@ export const LoginPage = (): JSX.Element => {
 
   return (
     <BackgroundBox>
-      <BaseGridLayout flex={1}>
+      <BaseGridLayout flex={1} bg="white">
         <NonMobileSidebarGridArea>
-          <Text textStyle="h1" color="white">
+          <Text textStyle="h1" marginBottom="10">
             Trusted e-letters from the Singapore Government
           </Text>
-          <Image maxW="100%" maxH="100%" src={ELetters} />
+          <Image maxW="80%" maxH="100%" src={ELetters} />
         </NonMobileSidebarGridArea>
         <LoginGridArea>
           <Box minH={{ base: 'auto', lg: '17.25rem' }} w="100%">
@@ -158,9 +158,7 @@ export const LoginPage = (): JSX.Element => {
           </Box>
         </LoginGridArea>
       </BaseGridLayout>
-      <BaseGridLayout
-        bg={{ base: 'base.canvas.brandLight', lg: 'transparent' }}
-      >
+      <BaseGridLayout bg="white">
         <FooterGridArea>
           <AppFooter variant={{ lg: 'compact' }} colorMode={'light'} />
         </FooterGridArea>
