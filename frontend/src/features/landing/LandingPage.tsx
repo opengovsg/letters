@@ -10,6 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { BiRightArrowAlt } from 'react-icons/bi'
+import { Link as RouterLink } from 'react-router-dom'
 
 import { AppFooter } from '~/app/AppFooter'
 import ELettersSvg from '~/assets/ELetters.svg'
@@ -18,7 +19,6 @@ import LegitmacySvg from '~/assets/landing/Legitimacy.svg'
 import OgpSuiteSvg from '~/assets/landing/OgpSuite.svg'
 import SaveTimeSvg from '~/assets/landing/SaveTime.svg'
 import { useIsDesktop } from '~/hooks/useIsDesktop'
-import { BETA_SIGNUP } from '~shared/constants/links'
 
 import { FeatureGridItem } from './components/FeatureGridItem'
 import { LandingSection } from './components/LandingSection'
@@ -51,15 +51,15 @@ export const LandingPage = (): JSX.Element => {
             <Text>
               {`Letters is a platform for Singapore Government agencies to easily create and track the issuance of personalised official e-letters to citizens via letters.gov.sg links.`}
             </Text>
-            <Link href={BETA_SIGNUP} isExternal>
+            <RouterLink to="/admin/login">
               <Button
                 w={isDesktop ? 'unset' : 'full'}
                 mt="2.5rem"
                 rightIcon={<BiRightArrowAlt />}
               >
-                Sign up for our beta
+                Issue letters
               </Button>
-            </Link>
+            </RouterLink>
           </Flex>
           <Image src={ELettersSvg} />
         </Stack>

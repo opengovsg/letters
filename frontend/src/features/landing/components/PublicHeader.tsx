@@ -90,9 +90,9 @@ export const PublicHeader = (props: FlexProps): JSX.Element => {
         {PUBLIC_HEADER_LINKS.map((link, index) => (
           <PublicHeaderLink key={index} {...link} />
         ))}
-        <Link href={BETA_SIGNUP} isExternal>
-          <Button>Sign up</Button>
-        </Link>
+        <RouterLink to="/admin/login">
+          <Button>Login</Button>
+        </RouterLink>
       </HStack>
     </Flex>
   )
