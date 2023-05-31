@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useIsDesktop } from '~hooks/useIsDesktop'
+import { CONTACT_US } from '~shared/constants/links'
 import { isGovSgOrWhitelistedEmail } from '~shared/decorators/is-gov-sg-or-whitelisted-email'
 
 const schema = z.object({
@@ -81,7 +82,7 @@ export const LoginForm = ({ onSubmit }: LoginFormProps): JSX.Element => {
         >
           Sign in
         </Button>
-        <Link>Have a question?</Link>
+        <Link href={CONTACT_US}>Have a question?</Link>
       </Stack>
     </form>
   )
