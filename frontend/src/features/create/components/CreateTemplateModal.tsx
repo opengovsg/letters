@@ -21,7 +21,7 @@ import { useCreateTemplateMutation } from '../hooks/create.hooks'
 interface CreateTemplateModalProps {
   isOpen: boolean
   onClose: () => void
-  content: string
+  templateContent: string
 }
 
 interface FormData {
@@ -31,7 +31,7 @@ interface FormData {
 export const CreateTemplateModal = ({
   isOpen,
   onClose,
-  content,
+  templateContent,
 }: CreateTemplateModalProps) => {
   const navigate = useNavigate()
   const { mutateAsync, isLoading } = useCreateTemplateMutation()
@@ -45,7 +45,7 @@ export const CreateTemplateModal = ({
     const fields = []
     const regex = /\{\{([^{}]+)\}\}/g
     let match
-    while ((match = regex.exec(content)) !== null) {
+    while ((match = regex.exec(templateContent)) !== null) {
       fields.push(match[1])
     }
     return fields
@@ -59,7 +59,7 @@ export const CreateTemplateModal = ({
     await mutateAsync({
       name: data.templateName.trim(),
       fields: getFields(),
-      html: content,
+      html: templateContent,
       thumbnailS3Path: 'TODO',
     })
     onClose()

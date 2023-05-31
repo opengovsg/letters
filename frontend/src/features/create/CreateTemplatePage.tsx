@@ -12,11 +12,11 @@ import { CreateTemplateModal } from './components/CreateTemplateModal'
 
 export const CreateTemplatePage = (): JSX.Element => {
   const navigate = useNavigate()
-  const [content, setContent] = useState('')
+  const [templateContent, setTemplateContent] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Box>
+    <Box h="100%" display="flex" flexDirection="column">
       <HStack w="full" justify="space-between" px={2} py={6}>
         <HStack alignItems="center">
           <IconButton
@@ -43,12 +43,12 @@ export const CreateTemplatePage = (): JSX.Element => {
       </HStack>
       <TemplateEditor
         html="<h1>This is a sample header</h1>You can add {{keywords}} enclosed in {{curly}} braces"
-        onContentChange={setContent}
+        onContentChange={setTemplateContent}
       />
       <CreateTemplateModal
         isOpen={isOpen}
         onClose={onClose}
-        content={content}
+        templateContent={templateContent}
       />
     </Box>
   )

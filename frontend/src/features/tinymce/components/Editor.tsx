@@ -76,6 +76,7 @@ export const TemplateEditor = ({
       initialValue={html}
       init={{
         plugins: 'image code',
+        height: '100%',
       }}
       disabled={isDisabled}
       onEditorChange={handleEditorChange}
