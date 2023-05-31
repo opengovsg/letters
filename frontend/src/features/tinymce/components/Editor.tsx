@@ -75,8 +75,10 @@ export const TemplateEditor = ({
       apiKey={tinymceApiKey}
       initialValue={html}
       init={{
-        plugins: 'image code',
+        plugins: 'image code table help link',
         height: '100%',
+        toolbar:
+          'undo redo | bold italic underline | blocks fontfamily fontsizeinput | link image table',
       }}
       disabled={isDisabled}
       onEditorChange={handleEditorChange}
