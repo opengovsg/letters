@@ -1,6 +1,8 @@
 import { Box, Spinner } from '@chakra-ui/react'
 import { Editor as TinymceEditor } from '@tinymce/tinymce-react'
 
+import { sanitizeHtml } from '~shared/util/html-sanitizer'
+
 import { useTinymceApiKey } from '../hooks/tinymce.hooks'
 
 interface LetterViewerProps {
@@ -20,11 +22,12 @@ export const Editor = ({
   if (isLoading || isLoadingTinymceApiKey || !html) {
     return <Spinner />
   }
+  const cleanHtml = sanitizeHtml(html)
   // tinymce not enabled
   if (!tinymceApiKey) {
     return (
       <Box border="1px" borderColor="grey.200" bg="white">
-        <div dangerouslySetInnerHTML={{ __html: html }}></div>
+        <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
       </Box>
     )
   }
@@ -32,7 +35,7 @@ export const Editor = ({
     <Box border="1px" borderColor="grey.200" bg="white">
       <TinymceEditor
         apiKey={tinymceApiKey}
-        initialValue={html}
+        initialValue={cleanHtml}
         init={{
           inline: isInline,
           content_css_cors: true,
