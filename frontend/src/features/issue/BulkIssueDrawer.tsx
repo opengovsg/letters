@@ -51,7 +51,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
     <Drawer size="lg" isOpen placement="right" onClose={onClose}>
       <DrawerOverlay>
         <DrawerContent>
-          <DrawerHeader style={{ paddingTop: '20px' }}>
+          <DrawerHeader paddingTop="1.25rem">
             {isPreviewTemplate ? (
               <HStack>
                 <IconButton onClick={onClose}>
