@@ -31,6 +31,18 @@ describe('LettersRenderingService', () => {
       expect(result.fieldValues).toEqual('{"name":"Alice","id":"123"}')
     })
 
+    it('if two of the same placeholders exist in the HTML, both should be replaced', () => {
+      const html = '<p>Dear {{name}}, your name is {{name}}.</p>'
+      const letterParamMap = { name: 'Alice' }
+
+      const result: RenderedLetter = service.render(html, letterParamMap)
+
+      expect(result.issuedLetter).toEqual(
+        '<p>Dear Alice, your name is Alice.</p>',
+      )
+      expect(result.fieldValues).toEqual('{"name":"Alice"}')
+    })
+
     it('should not throw error if letterParamMap has additional params not in HTML', () => {
       // We expect no error to be thrown as the error-throwing is handled at the validation level
       const html = '<p>Hello, {{name}}!</p>'
