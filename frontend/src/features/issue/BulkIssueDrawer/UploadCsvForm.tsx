@@ -83,16 +83,16 @@ export const UploadCsvForm = ({
         <Spacer />
         <Flex justify="space-between">
           <Button
-            flex="auto"
+            flex="1"
             variant="outline"
             isDisabled={!template?.name || !template?.fields}
             onClick={downloadSample}
           >
             Download Sample CSV
           </Button>
-          <Spacer />
+          <Spacer maxW="0.5rem" />
           <Button
-            flex="auto"
+            flex="1"
             isDisabled={
               !(parsedArr.length > 0) ||
               !!parseCsvError ||
