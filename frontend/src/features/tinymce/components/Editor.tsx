@@ -31,8 +31,8 @@ export const Editor = ({
         border="1px"
         borderColor="grey.200"
         bg="white"
-        minWidth={WIDTH_A4}
-        minHeight={HEIGHT_A4}
+        minWidth={{ md: WIDTH_A4 }}
+        minHeight={{ md: HEIGHT_A4 }}
       >
         <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
       </Box>
@@ -43,8 +43,8 @@ export const Editor = ({
       border="1px"
       borderColor="grey.200"
       bg="white"
-      minWidth={WIDTH_A4}
-      minHeight={HEIGHT_A4}
+      minWidth={{ md: WIDTH_A4 }}
+      minHeight={{ md: HEIGHT_A4 }}
     >
       <TinymceEditor
         apiKey={tinymceApiKey}
