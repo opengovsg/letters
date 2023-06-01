@@ -33,7 +33,7 @@ export const Editor = ({
     )
   }
   return (
-    <Box border="1px" borderColor="grey.200" bg="white" {...styleProps}>
+    <Box {...styleProps} border="1px" borderColor="grey.200" bg="white">
       <TinymceEditor
         apiKey={tinymceApiKey}
         initialValue={cleanHtml}
