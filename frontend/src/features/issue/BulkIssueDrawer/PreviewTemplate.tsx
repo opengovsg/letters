@@ -1,4 +1,4 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, Flex, VStack } from '@chakra-ui/react'
 import { Button } from '@opengovsg/design-system-react'
 
 import { Editor } from '~features/tinymce/components/Editor'
@@ -15,13 +15,25 @@ export const PreviewTemplate = ({
   const { templateId } = useTemplateId()
   const { template, isTemplatesLoading } = useGetTemplateById(templateId)
   return (
-    <VStack spacing={8} alignItems="center" justifyContent="center">
-      <Box w="85%">
+    <>
+      <Box padding={8} flex="1" overflowY="auto" paddingBottom="6rem">
+        {/* paddingBottom height to account for sticky button */}
         <Editor html={template?.html} isLoading={isTemplatesLoading} />
       </Box>
-      <Button w="full" onClick={onToggle}>
-        Issue letter
-      </Button>
-    </VStack>
+      <Box
+        position="fixed"
+        bottom={0}
+        background="white"
+        paddingX={8}
+        paddingY={4}
+        borderTop="1px"
+        width="100%"
+        borderColor="gray.100"
+      >
+        <Button width="100%" onClick={onToggle}>
+          Issue letter
+        </Button>
+      </Box>
+    </>
   )
 }
