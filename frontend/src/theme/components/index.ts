@@ -1,1 +1,3 @@
-export const components = {}
+import { Button } from './Button'
+
+export const components = { Button }
