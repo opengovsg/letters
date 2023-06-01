@@ -42,7 +42,7 @@ export const DownloadCsv = ({
   }
 
   return (
-    <>
+    <Box padding={8}>
       <HStack direction="row" spacing={2}>
         <CheckMark />
         <Heading size="sm">
@@ -83,6 +83,6 @@ export const DownloadCsv = ({
       >
         Download File
       </Button>
-    </>
+    </Box>
   )
 }
