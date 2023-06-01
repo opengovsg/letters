@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Flex,
   FormControl,
@@ -10,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { Attachment } from '@opengovsg/design-system-react'
 
+import { ReactComponent as CsvIcon } from '~/assets/CsvIcon.svg'
 import {
   useCreateBulkLetterMutation,
   useGetTemplateById,
@@ -68,31 +70,46 @@ export const UploadCsvForm = ({
     <FormControl isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}>
       <VStack spacing={4} align="stretch">
         <Heading size="sm">Upload the completed .CSV file</Heading>
-        <Attachment
-          onChange={(file) => {
-            reset()
-            setFile(file)
-            void parseCsv(file)
-          }}
-          accept={'.csv'}
-          value={file}
-          name={'fileInput'}
-          isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}
-        />
+        <VStack align="stretch" spacing={0}>
+          {file && (
+            <Box
+              bg="#F9F9F9"
+              w="100%"
+              height="150"
+              color="black"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <CsvIcon />
+            </Box>
+          )}
+          <Attachment
+            onChange={(file) => {
+              reset()
+              setFile(file)
+              void parseCsv(file)
+            }}
+            accept={'.csv'}
+            value={file}
+            name={'fileInput'}
+            isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}
+          />
+        </VStack>
         <FormErrorMessage>{parseCsvError}</FormErrorMessage>
         <Spacer />
         <Flex justify="space-between">
           <Button
-            flex="auto"
+            flex="1"
             variant="outline"
             isDisabled={!template?.name || !template?.fields}
             onClick={downloadSample}
           >
             Download Sample CSV
           </Button>
-          <Spacer />
+          <Spacer maxW="0.5rem" />
           <Button
-            flex="auto"
+            flex="1"
             isDisabled={
               !(parsedArr.length > 0) ||
               !!parseCsvError ||

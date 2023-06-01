@@ -1,12 +1,11 @@
-import { Box, Spinner } from '@chakra-ui/react'
+import { Box, BoxProps, Spinner } from '@chakra-ui/react'
 import { Editor as TinymceEditor } from '@tinymce/tinymce-react'
 
 import { sanitizeHtml } from '~shared/util/html-sanitizer'
-import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import { useTinymceApiKey } from '../hooks/tinymce.hooks'
 
-interface LetterViewerProps {
+interface EditorProps extends BoxProps {
   html: string | undefined
   isLoading: boolean
   isDisabled?: boolean
@@ -18,7 +17,8 @@ export const Editor = ({
   isLoading,
   isDisabled = false,
   isInline = false,
-}: LetterViewerProps): JSX.Element => {
+  ...styleProps
+}: EditorProps): JSX.Element => {
   const { tinymceApiKey, isLoadingTinymceApiKey } = useTinymceApiKey()
   if (isLoading || isLoadingTinymceApiKey || !html) {
     return <Spinner />
@@ -27,25 +27,13 @@ export const Editor = ({
   // tinymce not enabled
   if (!tinymceApiKey) {
     return (
-      <Box
-        border="1px"
-        borderColor="grey.200"
-        bg="white"
-        minWidth={{ md: WIDTH_A4 }}
-        minHeight={{ md: HEIGHT_A4 }}
-      >
+      <Box {...styleProps} border="1px" borderColor="grey.200" bg="white">
         <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
       </Box>
     )
   }
   return (
-    <Box
-      border="1px"
-      borderColor="grey.200"
-      bg="white"
-      minWidth={{ md: WIDTH_A4 }}
-      minHeight={{ md: HEIGHT_A4 }}
-    >
+    <Box {...styleProps} border="1px" borderColor="grey.200" bg="white">
       <TinymceEditor
         apiKey={tinymceApiKey}
         initialValue={cleanHtml}

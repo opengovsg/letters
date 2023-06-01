@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
 import { Editor } from '~features/tinymce/components/Editor'
-import { convertHtmlToPdf } from '~utils/htmlUtils'
+import { convertHtmlToPdf, HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import {
   useGetLetterByPublicId,
@@ -34,6 +34,8 @@ export const LetterPublicPage = (): JSX.Element => {
           isLoading={isLetterLoading}
           isDisabled={true}
           isInline={true}
+          minWidth={{ md: WIDTH_A4 }}
+          minHeight={{ md: HEIGHT_A4 }}
         />
         <Button onClick={handleDownload}>Download as .PDF</Button>
       </VStack>

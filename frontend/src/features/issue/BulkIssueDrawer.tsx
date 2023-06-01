@@ -51,7 +51,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
     <Drawer size="lg" isOpen placement="right" onClose={onClose}>
       <DrawerOverlay>
         <DrawerContent>
-          <DrawerHeader style={{ paddingTop: '20px' }}>
+          <DrawerHeader paddingTop="1.25rem">
             {isPreviewTemplate ? (
               <HStack>
                 <IconButton onClick={onClose}>
@@ -78,7 +78,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
             )}
           </DrawerHeader>
           <Divider />
-          <DrawerBody padding={8}>
+          <DrawerBody padding={0}>
             {isPreviewTemplate ? (
               <PreviewTemplate onToggle={() => setIsPreviewTemplate(false)} />
             ) : isShowDownloadCsv ? (
@@ -95,7 +95,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
                 onClose={() => setIsShowUploadCsvErrors(false)}
               />
             ) : (
-              <VStack spacing={8} alignItems="stretch">
+              <VStack padding={8} spacing={8} alignItems="stretch">
                 <UploadCsvErrorCard
                   uploadCsvErrors={uploadCsvErrors}
                   onToggle={() => setIsShowUploadCsvErrors(true)}
