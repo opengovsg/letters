@@ -17,7 +17,7 @@ export class LettersRenderingService {
     for (const key in letterParamMap) {
       const value = letterParamMap[key]
       const placeHolder = `${this.PLACE_HOLDER_PREFIX}${key}${this.PLACE_HOLDER_SUFFIX}`
-      html = html.replace(placeHolder, value)
+      html = html.replaceAll(placeHolder, value)
     }
     return { issuedLetter: html, fieldValues: JSON.stringify(letterParamMap) }
   }

@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   HStack,
   Table,
@@ -42,7 +43,7 @@ export const UploadCsvErrorsTable = ({
   }
 
   return (
-    <>
+    <Box padding={8}>
       <HStack>
         <Button
           variant="clear"
@@ -83,6 +84,6 @@ export const UploadCsvErrorsTable = ({
           })}
         </Table>
       </TableContainer>
-    </>
+    </Box>
   )
 }

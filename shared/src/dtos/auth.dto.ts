@@ -1,6 +1,6 @@
-import { IsGovSgEmail } from '../decorators/is-gov-sg-email'
+import { IsGovSgOrWhitelistedEmail } from '../decorators/is-gov-sg-or-whitelisted-email'
 export class GenerateOtpDto {
-  @IsGovSgEmail({
+  @IsGovSgOrWhitelistedEmail({
     message: 'This does not appear to be a gov.sg email address',
   })
   email: string

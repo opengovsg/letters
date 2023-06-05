@@ -38,9 +38,10 @@ export const TemplateCard = (templateCardProps: TemplateCardProps) => {
           : {}
       }
       width={240}
-      height={zoom ? 330 : 270}
+      height={270}
       onMouseEnter={handleMouseHover}
       onMouseLeave={handleMouseHover}
+      onClick={() => navigate(`${templateCardProps.id}/issue`)}
     >
       <Flex justifyContent="center" background="#F8F9F9" paddingTop={5}>
         <Image
@@ -56,15 +57,6 @@ export const TemplateCard = (templateCardProps: TemplateCardProps) => {
           <Text noOfLines={2}>{templateCardProps.name}</Text>
         </Heading>
       </CardHeader>
-      {zoom && (
-        <Button
-          onClick={() => navigate(`${templateCardProps.id}/issue`)}
-          marginLeft={5}
-          marginRight={5}
-        >
-          Issue Letter
-        </Button>
-      )}
     </Card>
   )
 }

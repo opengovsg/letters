@@ -7,6 +7,7 @@ import { Batch, Letter, Template } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersService } from './letters.service'
 import { LettersRenderingService } from './letters-rendering.service'
+import { LettersSanitizationService } from './letters-sanitization.service'
 import { LettersValidationService } from './letters-validation.service'
 
 describe('LettersService', () => {
@@ -19,6 +20,7 @@ describe('LettersService', () => {
         TemplatesService,
         BatchesService,
         LettersRenderingService,
+        LettersSanitizationService,
         LettersValidationService,
         { provide: DataSource, useValue: {} },
         { provide: getRepositoryToken(Letter), useValue: {} },
