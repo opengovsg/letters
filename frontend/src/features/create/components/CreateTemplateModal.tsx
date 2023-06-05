@@ -1,6 +1,7 @@
 import {
   Button,
   FormControl,
+  FormErrorMessage,
   Input,
   Modal,
   ModalBody,
@@ -9,7 +10,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -34,7 +34,12 @@ export const CreateTemplateModal = ({
   templateContent,
 }: CreateTemplateModalProps) => {
   const navigate = useNavigate()
-  const { mutateAsync, isLoading } = useCreateTemplateMutation()
+  const { mutateAsync, isLoading } = useCreateTemplateMutation({
+    onSuccess: () => {
+      onClose()
+      navigate(`/admin/${routes.admin.templates}`)
+    },
+  })
   const {
     handleSubmit,
     register,
@@ -52,7 +57,8 @@ export const CreateTemplateModal = ({
   }
 
   const validateName = (value: string) => {
-    return value.trim() !== ''
+    if (value.trim() === '') return 'Template name cannot be empty.'
+    return true
   }
 
   const onSubmit = async (data: FormData): Promise<void> => {
@@ -62,8 +68,6 @@ export const CreateTemplateModal = ({
       html: templateContent,
       thumbnailS3Path: 'TODO',
     })
-    onClose()
-    navigate(`/admin/${routes.admin.templates}`)
   }
 
   return (
@@ -74,28 +78,23 @@ export const CreateTemplateModal = ({
           <ModalHeader>Add Template Name</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl isRequired>
+            <FormControl isRequired isInvalid={!!errors.templateName}>
               <Input
                 {...register('templateName', {
                   required: true,
                   validate: validateName,
                 })}
               />
-              {errors.templateName && (
-                <Text color="red">This field is required.</Text>
-              )}
+              <FormErrorMessage>
+                {errors.templateName && errors.templateName.message}
+              </FormErrorMessage>
             </FormControl>
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" onClick={onClose} border={0}>
               Cancel
             </Button>
-            <Button
-              isLoading={isLoading}
-              color="#005DEA"
-              textColor="white"
-              type="submit"
-            >
+            <Button isLoading={isLoading} type="submit">
               Save Template
             </Button>
           </ModalFooter>
