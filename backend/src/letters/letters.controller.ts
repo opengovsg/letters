@@ -14,7 +14,7 @@ import {
 import {
   CreateBulkLetterDto,
   CreateLetterDto,
-  GetBulkLettersDto,
+  GetBulkLetterDto,
   GetLettersDto,
   UpdateLetterDto,
 } from '~shared/dtos/letters.dto'
@@ -23,7 +23,7 @@ import { AuthGuard } from '../auth/auth.guard'
 import { CurrentUser } from '../core/decorators/current-user.decorator'
 import {
   mapLetterToDto,
-  mapLetterToGetBulkLettersDto,
+  mapLetterToGetBulkLetterDto,
   mapLetterToPublicDto,
 } from '../core/dto-mappers/letter.dto-mapper'
 import { User } from '../database/entities'
@@ -43,9 +43,9 @@ export class LettersController {
   async bulk(
     @CurrentUser() user: User,
     @Body() bulkRequest: CreateBulkLetterDto,
-  ): Promise<GetBulkLettersDto[]> {
+  ): Promise<GetBulkLetterDto[]> {
     const letters = await this.lettersService.bulkCreate(user.id, bulkRequest)
-    return mapLetterToGetBulkLettersDto(bulkRequest.letterParamMaps, letters)
+    return mapLetterToGetBulkLetterDto(bulkRequest.letterParamMaps, letters)
   }
 
   @Get()

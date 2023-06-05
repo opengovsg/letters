@@ -1,10 +1,10 @@
 import { validate } from 'class-validator'
 
-import { IsGovSgEmail } from '../is-gov-sg-email'
+import { IsGovSgOrWhitelistedEmail } from '../is-gov-sg-or-whitelisted-email'
 
-describe('IsGovSgEmail', () => {
+describe('IsGovSgOrWhitelistedEmail', () => {
   class TestClass {
-    @IsGovSgEmail()
+    @IsGovSgOrWhitelistedEmail()
     email: unknown
   }
 
