@@ -1,7 +1,7 @@
 import { Box, Flex, VStack } from '@chakra-ui/react'
 import { Button } from '@opengovsg/design-system-react'
 
-import { Editor } from '~features/tinymce/components/Editor'
+import { LetterViewer } from '~features/generate/components/LetterViewer'
 
 import { useGetTemplateById, useTemplateId } from '../hooks/templates.hooks'
 
@@ -18,7 +18,7 @@ export const PreviewTemplate = ({
     <>
       <Box padding={8} flex="1" overflowY="auto" paddingBottom="6rem">
         {/* paddingBottom height to account for sticky button */}
-        <Editor html={template?.html} isLoading={isTemplatesLoading} />
+        <LetterViewer html={template?.html} isLoading={isTemplatesLoading} />
       </Box>
       <Box
         position="fixed"

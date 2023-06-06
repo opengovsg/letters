@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { ReactComponent as SaveIcon } from '~/assets/SaveIcon.svg'
 import { routes } from '~constants/routes'
+import { TemplateEditor } from '~features/generate/components/TemplateEditor'
 
-import { TemplateEditor } from '../tinymce/components/Editor'
 import { CreateTemplateModal } from './components/CreateTemplateModal'
 
 export const CreateTemplatePage = (): JSX.Element => {
