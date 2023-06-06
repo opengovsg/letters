@@ -18,6 +18,7 @@ export class CreateBulkLetterDto {
   templateId: number
   @IsDefined()
   letterParamMaps: LetterParamMaps
+  passwords: string[]
 }
 
 export enum BulkLetterValidationResultErrorMessage {

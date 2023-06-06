@@ -2,12 +2,25 @@ import { useState } from 'react'
 
 import { csvToJsonArr } from '~utils/csvUtils'
 
+function extractPasswords(parsedData: unknown[]) {
+  const passwords: string[] = []
+  ;(parsedData as Record<string, string>[]).map((row) => {
+    passwords.push(row.Password)
+    delete row.Password
+  })
+  return passwords
+}
+
+function hasPasswordField(parsedData: unknown[]) {
+  return Object.hasOwn(parsedData[0] as Record<string, string>, 'Password')
+}
+
 const useParseCsv = () => {
   const [parsedArr, setParsedArr] = useState<Array<{ [key: string]: string }>>(
     [],
   )
   const [error, setError] = useState<string>('')
-  const [hasPasswordField, setHasPasswordField] = useState(false)
+  const [passwords, setPasswords] = useState<string[]>([])
 
   const parseCsv = async (file?: File): Promise<void> => {
     setError('') // reset error
@@ -16,10 +29,8 @@ const useParseCsv = () => {
       const parsedData = await csvToJsonArr(file)
       if (parsedData.length === 0) {
         setError('CSV does not contain any rows, please upload an updated .csv')
-      } else {
-        setHasPasswordField(
-          Object.hasOwn(parsedData[0] as Record<string, string>, 'Password'),
-        )
+      } else if (hasPasswordField(parsedData)) {
+        setPasswords(extractPasswords(parsedData))
       }
       setParsedArr(parsedData as Array<{ [key: string]: string }>)
     } catch (error) {
@@ -30,10 +41,10 @@ const useParseCsv = () => {
   return {
     parsedArr,
     error,
-    hasPasswordField,
+    passwords,
     setError,
     parseCsv,
-    setHasPasswordField,
+    setPasswords,
   }
 }
 
