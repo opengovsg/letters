@@ -46,7 +46,12 @@ export const UploadCsvForm = ({
   const [isPasswordProtected, setIsPasswordProtected] = useState(false)
 
   const toast = useToast()
-  const { parsedArr, parseCsv, error: parseCsvError } = useParseCsv()
+  const {
+    parsedArr,
+    parseCsv,
+    error: parseCsvError,
+    hasPasswordField,
+  } = useParseCsv()
 
   const { templateId } = useTemplateId()
   const { template } = useGetTemplateById(templateId)
@@ -77,8 +82,28 @@ export const UploadCsvForm = ({
     setIsPasswordProtected(event.target.checked)
   }
 
+  const getErrorMessage = (): string => {
+    let errorMessage = ''
+    if (parseCsvError) {
+      errorMessage = parseCsvError
+    } else if (!isPasswordProtected && hasPasswordField && file) {
+      errorMessage =
+        'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+    } else if (isPasswordProtected && !hasPasswordField && file) {
+      errorMessage =
+        'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+    }
+    return errorMessage
+  }
+
   return (
-    <FormControl isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}>
+    <FormControl
+      isInvalid={
+        !!parseCsvError ||
+        uploadCsvErrors.length > 0 ||
+        (file && hasPasswordField != isPasswordProtected)
+      }
+    >
       <VStack spacing={4} align="stretch">
         <Heading size="sm">Upload the completed .CSV file</Heading>
         <VStack align="stretch" spacing={0}>
@@ -107,7 +132,7 @@ export const UploadCsvForm = ({
             isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}
           />
         </VStack>
-        <FormErrorMessage>{parseCsvError}</FormErrorMessage>
+        <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
         <Flex justify="space-between">
           <Stack>
             <Text fontSize="24px" fontWeight="500">
@@ -141,7 +166,8 @@ export const UploadCsvForm = ({
             isDisabled={
               !(parsedArr.length > 0) ||
               !!parseCsvError ||
-              uploadCsvErrors.length > 0
+              uploadCsvErrors.length > 0 ||
+              (isPasswordProtected !== hasPasswordField && !!file)
             }
             isLoading={isLoading}
             type="submit"

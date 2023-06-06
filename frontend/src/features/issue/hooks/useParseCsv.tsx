@@ -7,6 +7,7 @@ const useParseCsv = () => {
     [],
   )
   const [error, setError] = useState<string>('')
+  const [hasPasswordField, setHasPasswordField] = useState(false)
 
   const parseCsv = async (file?: File): Promise<void> => {
     setError('') // reset error
@@ -15,6 +16,10 @@ const useParseCsv = () => {
       const parsedData = await csvToJsonArr(file)
       if (parsedData.length === 0) {
         setError('CSV does not contain any rows, please upload an updated .csv')
+      } else {
+        setHasPasswordField(
+          Object.hasOwn(parsedData[0] as Record<string, string>, 'Password'),
+        )
       }
       setParsedArr(parsedData as Array<{ [key: string]: string }>)
     } catch (error) {
@@ -25,8 +30,10 @@ const useParseCsv = () => {
   return {
     parsedArr,
     error,
+    hasPasswordField,
     setError,
     parseCsv,
+    setHasPasswordField,
   }
 }
 
