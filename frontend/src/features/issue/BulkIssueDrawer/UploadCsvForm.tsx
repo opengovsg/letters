@@ -6,10 +6,13 @@ import {
   FormErrorMessage,
   Heading,
   Spacer,
+  Stack,
+  Text,
   useControllableState,
   VStack,
 } from '@chakra-ui/react'
-import { Attachment } from '@opengovsg/design-system-react'
+import { Attachment, Switch } from '@opengovsg/design-system-react'
+import { useState } from 'react'
 
 import { ReactComponent as CsvIcon } from '~/assets/CsvIcon.svg'
 import {
@@ -40,6 +43,7 @@ export const UploadCsvForm = ({
   reset,
 }: UploadCsvFormProps): JSX.Element => {
   const [file, setFile] = useControllableState<File | undefined>({})
+  const [isPasswordProtected, setIsPasswordProtected] = useState(false)
 
   const toast = useToast()
   const { parsedArr, parseCsv, error: parseCsvError } = useParseCsv()
@@ -48,7 +52,10 @@ export const UploadCsvForm = ({
   const { template } = useGetTemplateById(templateId)
 
   const downloadSample = () => {
-    arrToCsv(`${template.name} Sample.csv`, template.fields)
+    const csvRows = isPasswordProtected
+      ? [...template.fields, 'Password']
+      : template.fields
+    arrToCsv(`${template.name} Sample.csv`, csvRows)
   }
 
   const { mutateAsync, isLoading } = useCreateBulkLetterMutation({
@@ -64,6 +71,10 @@ export const UploadCsvForm = ({
 
   const handleSubmit = async (): Promise<void> => {
     await mutateAsync({ templateId, letterParamMaps: parsedArr })
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsPasswordProtected(event.target.checked)
   }
 
   return (
@@ -97,6 +108,23 @@ export const UploadCsvForm = ({
           />
         </VStack>
         <FormErrorMessage>{parseCsvError}</FormErrorMessage>
+        <Flex justify="space-between">
+          <Stack>
+            <Text fontSize="24px" fontWeight="500">
+              Add password protection
+            </Text>
+            <Text fontSize="14px" fontWeight="400">
+              Create password that citizens would have to add before accessing
+              the letter.
+            </Text>
+          </Stack>
+          <Switch
+            size="lg"
+            colorScheme="green"
+            onChange={handleChange}
+            isChecked={isPasswordProtected}
+          ></Switch>
+        </Flex>
         <Spacer />
         <Flex justify="space-between">
           <Button
