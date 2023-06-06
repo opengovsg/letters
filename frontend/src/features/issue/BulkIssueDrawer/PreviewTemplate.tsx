@@ -1,7 +1,7 @@
 import { Box, Flex, VStack } from '@chakra-ui/react'
 import { Button } from '@opengovsg/design-system-react'
 
-import { LetterViewer } from '~features/generate/components/LetterViewer'
+import { LetterViewer } from '~features/editor/components/LetterViewer'
 
 import { useGetTemplateById, useTemplateId } from '../hooks/templates.hooks'
 

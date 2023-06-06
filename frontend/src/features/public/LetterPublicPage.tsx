@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
-import { LetterViewer } from '~features/generate/components/LetterViewer'
+import { LetterViewer } from '~features/editor/components/LetterViewer'
 import { convertHtmlToPdf, HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import {

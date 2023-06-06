@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { ReactComponent as SaveIcon } from '~/assets/SaveIcon.svg'
 import { routes } from '~constants/routes'
-import { TemplateEditor } from '~features/generate/components/TemplateEditor'
+import { TemplateEditor } from '~features/editor/components/TemplateEditor'
 
 import { CreateTemplateModal } from './components/CreateTemplateModal'
 
