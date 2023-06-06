@@ -35,4 +35,8 @@ export class ConfigService {
     if (!CONFIG_ACCESSIBLE_BY_FRONTEND.includes(id)) return
     return JSON.stringify(this.get(id as Path<ConfigSchema>))
   }
+
+  getTinymceApiKey(): string {
+    return JSON.stringify(this.config.get('tinymceApiKey'))
+  }
 }
