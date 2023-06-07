@@ -13,9 +13,8 @@ export class LettersValidationService {
   validateBulk(
     fields: string[],
     letterParamMaps: LetterParamMaps,
+    passwords: string[] | undefined,
   ): BulkLetterValidationResultDto {
-    const errorArray: BulkLetterValidationResultError[] = []
-
     if (letterParamMaps.length > BULK_MAX_ROW_LENGTH) {
       return {
         success: false,
@@ -23,37 +22,21 @@ export class LettersValidationService {
       }
     }
 
-    for (let i = 0; i < letterParamMaps.length; i++) {
-      const letterParamMap = letterParamMaps[i]
-      // If key in letterParamMap doesn't exist in the template
-      for (const key in letterParamMap) {
-        if (
-          Object.prototype.hasOwnProperty.call(letterParamMap, key) &&
-          !fields.includes(key)
-        ) {
-          errorArray.push({
-            id: i,
-            param: key,
-            message: BulkLetterValidationResultErrorMessage.INVALID_ATTRIBUTE,
-          })
-        }
-      }
-      for (const field of fields) {
-        // If letterParamMap does not have field in the template, or field is empty
-        if (
-          !Object.prototype.hasOwnProperty.call(letterParamMap, field) ||
-          letterParamMap[field] === ''
-        ) {
-          errorArray.push({
-            id: i,
-            param: field,
-            message: BulkLetterValidationResultErrorMessage.MISSING_PARAM,
-          })
-        }
-      }
+    const errors: BulkLetterValidationResultError[] = []
+
+    errors.push(
+      ...this.validateLetterParamsExistInTemplate(letterParamMaps, fields),
+    )
+
+    errors.push(
+      ...this.validateTemplateFieldsAreInLetterParams(letterParamMaps, fields),
+    )
+
+    if (passwords) {
+      errors.push(...this.validatePasswordsArePresent(passwords))
     }
 
-    if (errorArray.length === 0)
+    if (errors.length === 0)
       return {
         success: true,
         message: 'Validation Success',
@@ -62,7 +45,62 @@ export class LettersValidationService {
     return {
       success: false,
       message: 'Malformed bulk create object',
-      errors: errorArray,
+      errors: errors,
     }
+  }
+
+  private validateLetterParamsExistInTemplate(
+    letterParamMaps: LetterParamMaps,
+    fields: string[],
+  ): BulkLetterValidationResultError[] {
+    return letterParamMaps.flatMap((letterParamMap, index) =>
+      Object.keys(letterParamMap)
+        .filter((key) => !fields.includes(key))
+        .map((key) => ({
+          id: index,
+          param: key,
+          message: BulkLetterValidationResultErrorMessage.INVALID_ATTRIBUTE,
+        })),
+    )
+  }
+
+  private validateTemplateFieldsAreInLetterParams(
+    letterParamMaps: LetterParamMaps,
+    fields: string[],
+  ): BulkLetterValidationResultError[] {
+    return letterParamMaps.flatMap((letterParamMap, index) =>
+      fields
+        .filter((field) =>
+          this.fieldIsNotPopulatedInLetterParams(letterParamMap, field),
+        )
+        .map((field) => ({
+          id: index,
+          param: field,
+          message: BulkLetterValidationResultErrorMessage.MISSING_PARAM,
+        })),
+    )
+  }
+
+  private validatePasswordsArePresent(
+    passwords: string[],
+  ): BulkLetterValidationResultError[] {
+    return passwords
+      .map((password, initialIndex) => ({ password, initialIndex }))
+      .filter((password) => password.password === '')
+      .map((password) => ({
+        id: password.initialIndex,
+        param: 'Password',
+        message: BulkLetterValidationResultErrorMessage.MISSING_PARAM,
+      }))
+  }
+
+  private fieldIsNotPopulatedInLetterParams(
+    letterParamMap: { [key: string]: string },
+    field: string,
+  ): boolean {
+    return (
+      !Object.prototype.hasOwnProperty.call(letterParamMap, field) ||
+      letterParamMap[field] === ''
+    )
   }
 }

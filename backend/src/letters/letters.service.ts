@@ -55,14 +55,16 @@ export class LettersService {
     userId: number,
     createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const { templateId, letterParamMaps } = createBulkLetterDto
+    const { templateId, letterParamMaps, passwords } = createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
 
     const validationResult = this.lettersValidationService.validateBulk(
       template.fields,
       letterParamMaps,
+      passwords,
     )
+
     if (!validationResult.success)
       throw new BadRequestException(validationResult)
 
@@ -70,6 +72,7 @@ export class LettersService {
       template.html,
       letterParamMaps,
     )
+
     return await this.dataSource.transaction(async (entityManager) => {
       const createBatchDto = {
         userId,

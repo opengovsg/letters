@@ -70,7 +70,10 @@ export const UploadCsvForm = ({
   })
 
   const handleSubmit = async (): Promise<void> => {
-    await mutateAsync({ templateId, letterParamMaps: parsedArr, passwords })
+    const reqBody = isPasswordProtected
+      ? { templateId, letterParamMaps: parsedArr, passwords }
+      : { templateId, letterParamMaps: parsedArr }
+    await mutateAsync(reqBody)
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,10 +84,10 @@ export const UploadCsvForm = ({
     let errorMessage = ''
     if (parseCsvError) {
       errorMessage = parseCsvError
-    } else if (!isPasswordProtected && !!passwords && file) {
+    } else if (!isPasswordProtected && passwords.length > 0 && file) {
       errorMessage =
         'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
-    } else if (isPasswordProtected && !passwords && file) {
+    } else if (isPasswordProtected && passwords.length === 0 && file) {
       errorMessage =
         'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
     }
@@ -96,7 +99,7 @@ export const UploadCsvForm = ({
       isInvalid={
         !!parseCsvError ||
         uploadCsvErrors.length > 0 ||
-        (file && !!passwords != isPasswordProtected)
+        (file && passwords.length > 0 !== isPasswordProtected)
       }
     >
       <VStack spacing={4} align="stretch">
@@ -162,7 +165,7 @@ export const UploadCsvForm = ({
               !(parsedArr.length > 0) ||
               !!parseCsvError ||
               uploadCsvErrors.length > 0 ||
-              (isPasswordProtected !== !!passwords && !!file)
+              (isPasswordProtected !== passwords.length > 0 && !!file)
             }
             isLoading={isLoading}
             type="submit"

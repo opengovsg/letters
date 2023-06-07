@@ -3,9 +3,9 @@ import { useState } from 'react'
 import { csvToJsonArr } from '~utils/csvUtils'
 
 function extractPasswords(parsedData: unknown[]) {
-  const passwords: string[] = []
-  ;(parsedData as Record<string, string>[]).map((row) => {
-    passwords.push(row.Password)
+  const passwords: string[] = Array<string>(parsedData.length)
+  ;(parsedData as Record<string, string>[]).map((row, index) => {
+    passwords[index] = row.Password
     delete row.Password
   })
   return passwords
@@ -24,6 +24,7 @@ const useParseCsv = () => {
 
   const parseCsv = async (file?: File): Promise<void> => {
     setError('') // reset error
+    setPasswords([])
     if (!file) return
     try {
       const parsedData = await csvToJsonArr(file)
