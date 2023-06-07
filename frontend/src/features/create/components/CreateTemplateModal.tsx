@@ -47,11 +47,16 @@ export const CreateTemplateModal = ({
   } = useForm<FormData>()
 
   const getFields = (): string[] => {
-    const fields = []
+    const fields: string[] = []
     const regex = /\{\{([^{}]+)\}\}/g
     let match
     while ((match = regex.exec(templateContent)) !== null) {
-      fields.push(match[1])
+      const field = match[1].toString().toLowerCase()
+      templateContent = templateContent.replaceAll(
+        `{{${match[1]}}}`,
+        `{{${field}}}`,
+      )
+      if (!fields.includes(field)) fields.push(field)
     }
     return fields
   }
