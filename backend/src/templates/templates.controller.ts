@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 
+import { TEMPLATE_KEYWORD_REGEX } from '~shared/constants/regex'
 import {
   CreateTemplateDto,
   UpdateTemplateDto,
@@ -26,6 +27,16 @@ export class TemplatesController {
 
   @Post()
   async create(@Body() templateDto: CreateTemplateDto) {
+    templateDto.fields = [
+      ...new Set<string>(
+        templateDto.fields.map((field: string) => field.toLowerCase()),
+      ),
+    ]
+    templateDto.html = templateDto.html.replace(
+      TEMPLATE_KEYWORD_REGEX,
+      (match: string, keyword: string) => `{{${keyword.toLowerCase()}}}`,
+    )
+
     return await this.templatesService
       .create(templateDto)
       .then((c) => mapTemplateToDto(c))
