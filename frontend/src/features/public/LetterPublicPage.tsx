@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
-import { Editor } from '~features/tinymce/components/Editor'
+import { LetterViewer } from '~features/editor/components/LetterViewer'
 import { convertHtmlToPdf, HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import {
@@ -29,11 +29,9 @@ export const LetterPublicPage = (): JSX.Element => {
   return (
     <VStack alignItems="left" spacing="0px">
       <VStack padding={16} spacing={8} align={'center'}>
-        <Editor
+        <LetterViewer
           html={letter?.issuedLetter}
           isLoading={isLetterLoading}
-          isDisabled={true}
-          isInline={true}
           minWidth={{ md: WIDTH_A4 }}
           minHeight={{ md: HEIGHT_A4 }}
         />
