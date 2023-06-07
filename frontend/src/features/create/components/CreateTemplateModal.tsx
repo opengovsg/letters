@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
+import { TEMPLATE_KEYWORD_REGEX } from '~shared/constants/regex'
 
 import { useCreateTemplateMutation } from '../hooks/create.hooks'
 
@@ -48,9 +49,9 @@ export const CreateTemplateModal = ({
 
   const getFields = (): string[] => {
     const fields: string[] = []
-    const regex = /\{\{([^{}]+)\}\}/g
-    let match
-    while ((match = regex.exec(templateContent)) !== null) {
+    let match: RegExpExecArray | null
+
+    while ((match = TEMPLATE_KEYWORD_REGEX.exec(templateContent)) !== null) {
       const field = match[1].toString().toLowerCase()
       templateContent = templateContent.replaceAll(
         `{{${match[1]}}}`,
