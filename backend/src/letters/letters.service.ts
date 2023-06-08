@@ -99,6 +99,7 @@ export class LettersService {
           userId,
           templateId,
           shortLink: '',
+          isPasswordProtected: !!passwords,
         }),
       ) as CreateLetterDto[]
 
