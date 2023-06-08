@@ -21,7 +21,6 @@ import {
   useTemplateId,
 } from '~features/issue/hooks/templates.hooks'
 import useParseCsv from '~features/issue/hooks/useParseCsv'
-import { useToast } from '~hooks/useToast'
 import {
   BulkLetterValidationResultError,
   GetBulkLetterDto,
@@ -45,7 +44,6 @@ export const UploadCsvForm = ({
   const [file, setFile] = useControllableState<File | undefined>({})
   const [isPasswordProtected, setIsPasswordProtected] = useState(false)
 
-  const toast = useToast()
   const { parsedArr, parseCsv, error: parseCsvError, passwords } = useParseCsv()
 
   const { templateId } = useTemplateId()
@@ -59,13 +57,7 @@ export const UploadCsvForm = ({
   }
 
   const { mutateAsync, isLoading } = useCreateBulkLetterMutation({
-    onSuccess: (res: GetBulkLetterDto[]) => {
-      onSuccess(res)
-      toast({
-        title: `${res.length} ${pluraliseIfNeeded(res, 'letter')} created`,
-        status: 'success',
-      })
-    },
+    onSuccess,
     onError,
   })
 
