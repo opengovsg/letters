@@ -86,7 +86,6 @@ export class LettersService {
       const createBatchDto = {
         userId,
         templateId,
-        rawCsv: JSON.stringify(letterParamMaps),
       } as CreateBatchDto
 
       const batch = await this.batchesService.createWithTransaction(
