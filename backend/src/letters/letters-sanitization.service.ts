@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common'
 
-import { CreateLetterDto } from '~shared/dtos/letters.dto'
 import { sanitizeHtml } from '~shared/util/html-sanitizer'
+
+import { RenderedLetter } from './letters-rendering.service'
 
 @Injectable()
 export class LettersSanitizationService {
-  sanitizeLetter(createLetterDto: CreateLetterDto): CreateLetterDto {
+  sanitizeLetter(letter: RenderedLetter): RenderedLetter {
     return {
-      ...createLetterDto,
-      issuedLetter: sanitizeHtml(createLetterDto.issuedLetter),
+      ...letter,
+      issuedLetter: sanitizeHtml(letter.issuedLetter),
     }
   }
 }

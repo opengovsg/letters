@@ -16,6 +16,7 @@ import {
 import { BatchesService } from '../batches/batches.service'
 import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
+import { LettersEncryptionService } from './letters-encryption.service'
 import { LettersRenderingService } from './letters-rendering.service'
 import { LettersSanitizationService } from './letters-sanitization.service'
 import { LettersValidationService } from './letters-validation.service'
@@ -30,6 +31,7 @@ export class LettersService {
     private readonly lettersRenderingService: LettersRenderingService,
     private readonly lettersValidationService: LettersValidationService,
     private readonly lettersSanitizationService: LettersSanitizationService,
+    private readonly lettersEncryptionService: LettersEncryptionService,
     private dataSource: DataSource,
   ) {}
 
@@ -44,10 +46,7 @@ export class LettersService {
     createLetterDtos: CreateLetterDto[],
     entityManager: EntityManager,
   ): Promise<Letter[]> {
-    const sanitizedCreateLetterDtos = createLetterDtos.map((createLetterDto) =>
-      this.lettersSanitizationService.sanitizeLetter(createLetterDto),
-    )
-    const letters = this.repository.create(sanitizedCreateLetterDtos)
+    const letters = this.repository.create(createLetterDtos)
     return entityManager.save(letters)
   }
 
@@ -73,6 +72,16 @@ export class LettersService {
       letterParamMaps,
     )
 
+    const sanitizedLetters = renderedLetters.map((renderedLetter) =>
+      this.lettersSanitizationService.sanitizeLetter(renderedLetter),
+    )
+
+    const secureLetters = !passwords
+      ? sanitizedLetters
+      : sanitizedLetters.map((letter, i) =>
+          this.lettersEncryptionService.encryptLetters(letter, passwords[i]),
+        )
+
     return await this.dataSource.transaction(async (entityManager) => {
       const createBatchDto = {
         userId,
@@ -84,7 +93,7 @@ export class LettersService {
         createBatchDto,
         entityManager,
       )
-      const lettersDto = renderedLetters.map(
+      const lettersDto = secureLetters.map(
         (renderedLetter: Partial<Letter>) => ({
           ...renderedLetter,
           batchId: batch.id,
