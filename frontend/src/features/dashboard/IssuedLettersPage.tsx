@@ -31,10 +31,9 @@ export const IssuedLettersPage = (): JSX.Element => {
       <TableContainer w="100%">
         <Table variant="simple">
           <Tr backgroundColor="interaction.main-subtle.default">
-            <HeaderCell>Template</HeaderCell>
-            <HeaderCell>Link</HeaderCell>
-            <HeaderCell>Shared with</HeaderCell>
-            <HeaderCell>Status</HeaderCell>
+            <HeaderCell>Letter link</HeaderCell>
+            <HeaderCell>Issued on</HeaderCell>
+            <HeaderCell>Template used</HeaderCell>
           </Tr>
           {letters
             ? letters.map((letter) => {
@@ -42,16 +41,18 @@ export const IssuedLettersPage = (): JSX.Element => {
                 const linkWithHost = `${document.location.host}${link}`
                 return (
                   <Tr key={letter.publicId}>
-                    <Td>{letter.templateName}</Td>
                     <Td>
-                      <Link as={RouterLink} to={link}>
+                      <Link
+                        as={RouterLink}
+                        to={link}
+                        textDecoration="none"
+                        textColor="default"
+                      >
                         {linkWithHost}
                       </Link>
                     </Td>
-                    <Td>TODO: shared with</Td>
-                    <Td>
-                      <Tag colorScheme="gray">Sent</Tag>
-                    </Td>
+                    <Td>{letter.createdAt}</Td>
+                    <Td>{letter.templateName}</Td>
                   </Tr>
                 )
               })
