@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
 import { TEMPLATE_KEYWORD_REGEX } from '~shared/constants/regex'
+import { normalizeFields, normalizeHtmlKeywords } from '~shared/util/templates'
 
 import { useCreateTemplateMutation } from '../hooks/create.hooks'
 
@@ -51,15 +52,11 @@ export const CreateTemplateModal = ({
     const fields: string[] = []
     let match: RegExpExecArray | null
 
-    while ((match = TEMPLATE_KEYWORD_REGEX.exec(templateContent)) !== null) {
-      const field = match[1].toString().toLowerCase()
-      templateContent = templateContent.replaceAll(
-        `{{${match[1]}}}`,
-        `{{${field}}}`,
-      )
-      if (!fields.includes(field)) fields.push(field)
-    }
-    return fields
+    while ((match = TEMPLATE_KEYWORD_REGEX.exec(templateContent)) !== null)
+      if (!fields.includes(match[1])) fields.push(match[1])
+
+    const normalizedFields = normalizeFields(fields)
+    return normalizedFields
   }
 
   const validateName = (value: string) => {
@@ -71,7 +68,7 @@ export const CreateTemplateModal = ({
     await mutateAsync({
       name: data.templateName.trim(),
       fields: getFields(),
-      html: templateContent,
+      html: normalizeHtmlKeywords(templateContent),
       thumbnailS3Path: 'TODO',
     })
   }
