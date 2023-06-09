@@ -49,8 +49,7 @@ export class GetLetterPublicDto {
 export class GetLetterDto {
   templateName: string
   publicId: string
-  issuedLetter: string
-  createdAt: Date
+  createdAt: string
 }
 
 export class GetLettersDto {

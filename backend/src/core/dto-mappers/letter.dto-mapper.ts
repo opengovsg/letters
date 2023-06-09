@@ -19,8 +19,7 @@ export const mapLetterToDto = (letter: Letter): GetLetterDto => {
   return {
     templateName: letter.template.name,
     publicId: letter.publicId,
-    createdAt: letter.createdAt,
-    issuedLetter: letter.issuedLetter,
+    createdAt: letter.createdAt.toDateString(),
   }
 }
 
