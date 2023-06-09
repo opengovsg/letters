@@ -55,8 +55,7 @@ export const CreateTemplateModal = ({
     while ((match = TEMPLATE_KEYWORD_REGEX.exec(templateContent)) !== null)
       if (!fields.includes(match[1])) fields.push(match[1])
 
-    const normalizedFields = normalizeFields(fields)
-    return normalizedFields
+    return normalizeFields(fields)
   }
 
   const validateName = (value: string) => {

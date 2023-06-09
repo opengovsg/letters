@@ -17,7 +17,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "downlevelIteration": true
   },
   "include": ["src/**/*", ".storybook/**/*", "__mocks__/**/*"],
   "exclude": ["**/jest.config.ts"]
