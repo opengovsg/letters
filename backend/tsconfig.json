@@ -25,7 +25,10 @@
       "~shared/*": [
         "../../shared/build/*"
       ]
-    }
+    },
+    "lib": [
+      "ES2021.String", // https://stackoverflow.com/questions/63616486/property-replaceall-does-not-exist-on-type-string
+    ]
   },
   "ts-node": {
     "require": [

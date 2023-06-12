@@ -170,7 +170,7 @@ export const schema: Schema<ConfigSchema> = {
       doc: 'Name of email sender',
       env: 'OTP_SENDER_NAME',
       format: String,
-      default: 'Starter Kit',
+      default: 'Letters',
     },
     email: {
       doc: 'Email to send OTP emails from. If POSTMANGOVSG_API_KEY is set, ensure that this email is set to `donotreply@mail.postman.gov.sg`',

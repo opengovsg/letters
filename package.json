@@ -1,6 +1,6 @@
 {
   "name": "@opengovsg/ts-template",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "description": "A template for most TypeScript projects in OGP",
   "author": "Open Government Products, GovTech Singapore (https://open.gov.sg)",
   "license": "MIT",
@@ -16,6 +16,8 @@
     "lint": "npm run all \"npm:on-* lint\"",
     "lint:fix": "npm run all \"npm:on-* lint:fix\"",
     "test": "npm run all \"npm:on-* test\"",
+    "test:e2e": "npm run --prefix e2e e2e",
+    "test:e2e-headed": "npm run --prefix e2e e2e-headed",
     "build": "npm run on-shared build && npm run all \"npm:on-*end build\"",
     "coverage": "npm run on-backend -- test:cov && cat backend/coverage/lcov.info > lcov.info",
     "cz": "git-cz",

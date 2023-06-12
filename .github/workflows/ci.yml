@@ -9,6 +9,10 @@ jobs:
     name: Build, Test, Lint
     uses: ./.github/workflows/build.yml
 
+  test-e2e:
+    name: E2E Tests
+    uses: ./.github/workflows/e2e.yml
+
   deploy-staging:
     name: Deploy to Staging
     needs: [build]

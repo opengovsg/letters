@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-import { IsGovSgEmail } from '~shared/decorators/is-gov-sg-email'
+import { IsGovSgOrWhitelistedEmail } from '~shared/decorators/is-gov-sg-or-whitelisted-email'
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,7 +20,7 @@ export class User {
     unique: true,
     where: '"deletedAt" IS NULL',
   })
-  @IsGovSgEmail()
+  @IsGovSgOrWhitelistedEmail()
   email: string
 
   @CreateDateColumn({ type: 'timestamptz' })
