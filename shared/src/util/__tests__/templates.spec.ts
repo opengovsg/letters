@@ -1,31 +1,59 @@
-import { normalizeFields, normalizeHtmlKeywords } from '../templates'
+import {
+  convertFieldsToLowerCase,
+  deduplicateFields,
+  setHtmlKeywordsToLowerCase,
+} from '../templates'
 
-describe('Template Utils', () => {
-  describe('normalizeFields', () => {
-    it('should return an array with lowercase and unique values', () => {
-      const fields = ['Field1', 'field2', 'FIELD1', 'Field3']
-      const normalizedFields = normalizeFields(fields)
-      expect(normalizedFields).toEqual(['field1', 'field2', 'field3'])
-    })
-
-    it('should return an empty array if input is empty', () => {
-      const fields: string[] = []
-      const normalizedFields = normalizeFields(fields)
-      expect(normalizedFields).toEqual([])
-    })
+describe('convertFieldsToLowerCase', () => {
+  test('converts fields array to lowercase', () => {
+    const fields = ['Field1', 'FIELD2', 'field3']
+    const result = convertFieldsToLowerCase(fields)
+    expect(result).toEqual(['field1', 'field2', 'field3'])
   })
 
-  describe('normalizeHtmlKeywords', () => {
-    it('should replace HTML keywords with lowercase versions', () => {
-      const html = '<h1>{{KEYWORD1}}</h1><p>{{Keyword2}}</p>'
-      const normalizedHtml = normalizeHtmlKeywords(html)
-      expect(normalizedHtml).toEqual('<h1>{{keyword1}}</h1><p>{{keyword2}}</p>')
-    })
+  test('returns an empty array if input is empty', () => {
+    const fields: string[] = []
+    const result = convertFieldsToLowerCase(fields)
+    expect(result).toEqual([])
+  })
+})
 
-    it('should not modify the HTML if there are no keywords', () => {
-      const html = '<h1>This is a heading</h1><p>This is a paragraph</p>'
-      const normalizedHtml = normalizeHtmlKeywords(html)
-      expect(normalizedHtml).toEqual(html)
-    })
+describe('deduplicateFields', () => {
+  test('removes duplicate values from the fields array', () => {
+    const fields = ['field1', 'field2', 'field1', 'field2']
+    const result = deduplicateFields(fields)
+    expect(result).toEqual(['field1', 'field2'])
+  })
+
+  test('preserves the order of unique values', () => {
+    const fields = ['field1', 'field2', 'field1', 'field3', 'field2']
+    const result = deduplicateFields(fields)
+    expect(result).toEqual(['field1', 'field2', 'field3'])
+  })
+
+  test('returns an empty array if input is empty', () => {
+    const fields: string[] = []
+    const result = deduplicateFields(fields)
+    expect(result).toEqual([])
+  })
+})
+
+describe('setHtmlKeywordsToLowerCase', () => {
+  test('sets matched keywords in HTML to lowercase', () => {
+    const html = '<p>{{Keyword1}}</p><p>{{KEYWORD2}}</p>'
+    const result = setHtmlKeywordsToLowerCase(html)
+    expect(result).toEqual('<p>{{keyword1}}</p><p>{{keyword2}}</p>')
+  })
+
+  test('leaves HTML unchanged if no keywords are found', () => {
+    const html = '<p>Hello world</p>'
+    const result = setHtmlKeywordsToLowerCase(html)
+    expect(result).toEqual('<p>Hello world</p>')
+  })
+
+  test('returns an empty string if input is empty', () => {
+    const html = ''
+    const result = setHtmlKeywordsToLowerCase(html)
+    expect(result).toEqual('')
   })
 })

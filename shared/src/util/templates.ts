@@ -1,14 +1,14 @@
 import { TEMPLATE_KEYWORD_REGEX } from '../constants/regex'
 
-export const normalizeFields = (fields: string[]): string[] => {
-  return [
-    ...new Set<string>(fields.map((field: string) => field.toLowerCase())),
-  ]
-}
+export const convertFieldsToLowerCase = (fields: string[]): string[] =>
+  fields.map((field: string) => field.toLowerCase())
 
-export const normalizeHtmlKeywords = (html: string): string => {
-  return html.replace(
+export const deduplicateFields = (fields: string[]): string[] => [
+  ...new Set(fields),
+]
+
+export const setHtmlKeywordsToLowerCase = (html: string): string =>
+  html.replace(
     TEMPLATE_KEYWORD_REGEX,
     (match: string, keyword: string) => `{{${keyword.toLowerCase()}}}`,
   )
-}
