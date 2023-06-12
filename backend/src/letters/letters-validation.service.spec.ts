@@ -22,8 +22,14 @@ describe('LettersValidationService', () => {
 
     it('should validate passwords when they are enabled but none are set', () => {
       const passwords: string[] = ['']
+      const fields = ['field1']
+      const letterParamMaps: LetterParamMaps = [
+        {
+          field1: 'param1',
+        },
+      ]
 
-      const result = service.validateBulk([], [], passwords)
+      const result = service.validateBulk(fields, letterParamMaps, passwords)
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -34,8 +40,20 @@ describe('LettersValidationService', () => {
 
     it('should fail when one password is missing ', () => {
       const passwords: string[] = ['hunter2', '', 'hunter2']
+      const fields = ['field1']
+      const letterParamMaps: LetterParamMaps = [
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+      ]
 
-      const result = service.validateBulk([], [], passwords)
+      const result = service.validateBulk(fields, letterParamMaps, passwords)
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -44,10 +62,46 @@ describe('LettersValidationService', () => {
       ])
     })
 
+    it('should immediately fail the number passwords is not matching the number', () => {
+      const passwords: string[] = ['hunter2', 'hunter2', 'hunter2']
+      const fields = ['field1', 'field2', 'field3']
+      const letterParamMaps: LetterParamMaps = [
+        {
+          field1: 'param1',
+          field2: 'param2',
+          field3: 'param3',
+        },
+        {
+          field1: 'param1',
+          field2: 'param2',
+          field3: 'param3',
+        },
+      ]
+
+      const result = service.validateBulk(fields, letterParamMaps, passwords)
+
+      expect(result.success).toBe(false)
+      expect(result.message).toEqual(
+        'Number of passwords does not match number of letters',
+      )
+    })
+
     it('should succeed when all passwords are provided ', () => {
       const passwords: string[] = ['hunter2', 'hunter2', 'hunter2']
+      const fields = ['field1']
+      const letterParamMaps: LetterParamMaps = [
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+      ]
 
-      const result = service.validateBulk([], [], passwords)
+      const result = service.validateBulk(fields, letterParamMaps, passwords)
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -180,7 +234,7 @@ describe('LettersValidationService', () => {
 
   describe('validate Bulk', () => {
     it('should succeed when request data is valid', () => {
-      const passwords: string[] = ['hunter2', 'hunter2', 'hunter2']
+      const passwords: string[] = ['hunter2', 'hunter2']
       const fields = ['field1', 'field2', 'field3']
       const letterParamMaps: LetterParamMaps = [
         {
@@ -203,7 +257,7 @@ describe('LettersValidationService', () => {
     })
 
     it('should raise errors with correct ids and messages when request data is not valid', () => {
-      const passwords: string[] = ['hunter2', 'hunter2', '']
+      const passwords: string[] = ['hunter2', '']
       const fields = ['field1', 'field2', 'field3', 'field missing']
       const letterParamMaps: LetterParamMaps = [
         {
@@ -226,7 +280,7 @@ describe('LettersValidationService', () => {
         { id: 0, message: 'Missing param', param: 'field missing' },
         { id: 1, message: 'Missing param', param: 'field3' },
         { id: 1, message: 'Missing param', param: 'field missing' },
-        { id: 2, message: 'Missing param', param: 'Password' },
+        { id: 1, message: 'Missing param', param: 'Password' },
       ])
     })
   })

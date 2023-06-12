@@ -76,7 +76,7 @@ export class LettersService {
       this.lettersSanitizationService.sanitizeLetter(renderedLetter),
     )
 
-    const secureLetters = !passwords
+    const securedLetters = !passwords
       ? sanitizedLetters
       : sanitizedLetters.map((letter, i) =>
           this.lettersEncryptionService.encryptLetters(letter, passwords[i]),
@@ -92,9 +92,9 @@ export class LettersService {
         createBatchDto,
         entityManager,
       )
-      const lettersDto = secureLetters.map(
-        (renderedLetter: Partial<Letter>) => ({
-          ...renderedLetter,
+      const lettersDto = securedLetters.map(
+        (securedLetters: Partial<Letter>) => ({
+          ...securedLetters,
           batchId: batch.id,
           userId,
           templateId,

@@ -39,6 +39,6 @@ export const mapLetterToGetBulkLetterDto = (
     ? getBulkLetterDtos
     : getBulkLetterDtos.map((dtos, index) => ({
         ...dtos,
-        Password: passwords[index],
+        Password: passwords[index], // Capitalized as it is what the user expects
       }))
 }

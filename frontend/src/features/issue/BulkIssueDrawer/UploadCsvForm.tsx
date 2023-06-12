@@ -73,17 +73,17 @@ export const UploadCsvForm = ({
   }
 
   const getErrorMessage = (): string => {
-    let errorMessage = ''
+    if (!file) return ''
     if (parseCsvError) {
-      errorMessage = parseCsvError
-    } else if (!isPasswordProtected && passwords.length > 0 && file) {
-      errorMessage =
-        'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
-    } else if (isPasswordProtected && passwords.length === 0 && file) {
-      errorMessage =
-        'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+      return parseCsvError
     }
-    return errorMessage
+    if (!isPasswordProtected && passwords.length > 0) {
+      return 'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+    }
+    if (isPasswordProtected && passwords.length === 0) {
+      return 'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+    }
+    return ''
   }
 
   return (
@@ -154,10 +154,11 @@ export const UploadCsvForm = ({
           <Button
             flex="1"
             isDisabled={
+              !file ||
               !(parsedArr.length > 0) ||
               !!parseCsvError ||
               uploadCsvErrors.length > 0 ||
-              (isPasswordProtected !== passwords.length > 0 && !!file)
+              isPasswordProtected !== passwords.length > 0
             }
             isLoading={isLoading}
             type="submit"

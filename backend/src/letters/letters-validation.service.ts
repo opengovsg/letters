@@ -22,6 +22,13 @@ export class LettersValidationService {
       }
     }
 
+    if (passwords && letterParamMaps.length !== passwords?.length) {
+      return {
+        success: false,
+        message: 'Number of passwords does not match number of letters',
+      }
+    }
+
     const errors: BulkLetterValidationResultError[] = []
 
     errors.push(
@@ -45,7 +52,7 @@ export class LettersValidationService {
     return {
       success: false,
       message: 'Malformed bulk create object',
-      errors: errors,
+      errors,
     }
   }
 
