@@ -41,10 +41,7 @@ export const CreateTemplatePage = (): JSX.Element => {
           Save Template
         </Button>
       </HStack>
-      <TemplateEditor
-        html="<h1>This is a sample header</h1>You can add {{keywords}} enclosed in {{curly}} braces"
-        onContentChange={setTemplateContent}
-      />
+      <TemplateEditor onContentChange={setTemplateContent} />
       <CreateTemplateModal
         isOpen={isOpen}
         onClose={onClose}
