@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 
+import { TEMPLATE_KEYWORD_REGEX } from '~shared/constants/regex'
 import {
   CreateTemplateDto,
   UpdateTemplateDto,

@@ -15,6 +15,11 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
+import { TEMPLATE_KEYWORD_REGEX } from '~shared/constants/regex'
+import {
+  convertFieldsToLowerCase,
+  setHtmlKeywordsToLowerCase,
+} from '~shared/util/templates'
 
 import { useCreateTemplateMutation } from '../hooks/create.hooks'
 
@@ -47,13 +52,13 @@ export const CreateTemplateModal = ({
   } = useForm<FormData>()
 
   const getFields = (): string[] => {
-    const fields = []
-    const regex = /\{\{([^{}]+)\}\}/g
-    let match
-    while ((match = regex.exec(templateContent)) !== null) {
-      fields.push(match[1])
-    }
-    return fields
+    const fields: string[] = []
+    let match: RegExpExecArray | null
+
+    while ((match = TEMPLATE_KEYWORD_REGEX.exec(templateContent)) !== null)
+      if (!fields.includes(match[1])) fields.push(match[1])
+
+    return convertFieldsToLowerCase(fields)
   }
 
   const validateName = (value: string) => {
@@ -65,7 +70,7 @@ export const CreateTemplateModal = ({
     await mutateAsync({
       name: data.templateName.trim(),
       fields: getFields(),
-      html: templateContent,
+      html: setHtmlKeywordsToLowerCase(templateContent),
       thumbnailS3Path: 'TODO',
     })
   }
