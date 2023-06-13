@@ -59,7 +59,7 @@ export const CreateTemplateModal = ({
     while ((match = TEMPLATE_KEYWORD_REGEX.exec(templateContent)) !== null)
       if (!fields.includes(match[1])) fields.push(match[1])
 
-    return deduplicateFields(convertFieldsToLowerCase(fields))
+    return convertFieldsToLowerCase(fields)
   }
 
   const validateName = (value: string) => {
