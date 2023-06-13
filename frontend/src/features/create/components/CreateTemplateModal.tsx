@@ -18,7 +18,6 @@ import { routes } from '~constants/routes'
 import { TEMPLATE_KEYWORD_REGEX } from '~shared/constants/regex'
 import {
   convertFieldsToLowerCase,
-  deduplicateFields,
   setHtmlKeywordsToLowerCase,
 } from '~shared/util/templates'
 
