@@ -1,5 +1,4 @@
 import { Button, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
@@ -30,6 +29,7 @@ export const LetterPublicPage = (): JSX.Element => {
     <VStack alignItems="left" spacing="0px">
       <VStack padding={16} spacing={8} align={'center'}>
         <LetterViewer
+          letterPublicId={letterPublicId}
           html={letter?.issuedLetter}
           isLoading={isLetterLoading}
           minWidth={{ md: WIDTH_A4 }}
