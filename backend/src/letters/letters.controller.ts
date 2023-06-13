@@ -45,7 +45,11 @@ export class LettersController {
     @Body() bulkRequest: CreateBulkLetterDto,
   ): Promise<GetBulkLetterDto[]> {
     const letters = await this.lettersService.bulkCreate(user.id, bulkRequest)
-    return mapLetterToGetBulkLetterDto(bulkRequest.letterParamMaps, letters)
+    return mapLetterToGetBulkLetterDto(
+      bulkRequest.letterParamMaps,
+      letters,
+      bulkRequest.passwords,
+    )
   }
 
   @Get()

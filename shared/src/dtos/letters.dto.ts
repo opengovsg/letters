@@ -1,4 +1,4 @@
-import { IsDefined, IsNumber } from 'class-validator'
+import { IsArray, IsDefined, IsNumber, IsOptional } from 'class-validator'
 
 export class CreateLetterDto {
   userId: number
@@ -18,6 +18,9 @@ export class CreateBulkLetterDto {
   templateId: number
   @IsDefined()
   letterParamMaps: LetterParamMaps
+  @IsOptional()
+  @IsArray()
+  passwords?: string[]
 }
 
 export enum BulkLetterValidationResultErrorMessage {

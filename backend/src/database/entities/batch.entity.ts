@@ -24,9 +24,6 @@ export class Batch {
   @Column('int')
   userId: number
 
-  @Column('text')
-  rawCsv: string
-
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date
 }

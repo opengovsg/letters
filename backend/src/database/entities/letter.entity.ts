@@ -40,6 +40,9 @@ export class Letter {
   @Column('text')
   fieldValues: string
 
+  @Column('boolean')
+  isPasswordProtected: boolean
+
   @Column('text')
   shortLink: string
 

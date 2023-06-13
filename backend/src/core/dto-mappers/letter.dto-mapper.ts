@@ -27,10 +27,18 @@ export const mapLetterToDto = (letter: Letter): GetLetterDto => {
 export const mapLetterToGetBulkLetterDto = (
   letterParams: LetterParamMaps,
   letters: Letter[],
+  passwords?: string[],
 ): GetBulkLetterDto[] => {
-  return letters.map((letter, index) => ({
+  const getBulkLetterDtos = letters.map((letter, index) => ({
     ...letterParams[index],
     createdAt: letter.createdAt.toDateString(),
     publicId: letter.publicId,
   }))
+
+  return !passwords
+    ? getBulkLetterDtos
+    : getBulkLetterDtos.map((dtos, index) => ({
+        ...dtos,
+        Password: passwords[index], // Capitalized as it is what the user expects
+      }))
 }
