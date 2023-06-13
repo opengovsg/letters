@@ -80,7 +80,7 @@ export const CreateTemplateModal = ({
     return true
   }
 
-  function stripSpanTags(content: string) {
+  const stripSpanTags = (content: string) => {
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = content
     const spanElements = tempDiv.querySelectorAll('span')
