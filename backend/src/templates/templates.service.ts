@@ -6,20 +6,22 @@ import {
   CreateTemplateDto,
   UpdateTemplateDto,
 } from '~shared/dtos/templates.dto'
-import { sanitizeHtml } from '~shared/util/html-sanitizer'
 
 import { Template } from '../database/entities'
+import { TemplatesParsingService } from './templates-parsing.service'
 
 @Injectable()
 export class TemplatesService {
+  constructor(
+    private readonly templatesParsingService: TemplatesParsingService,
+  ) {}
+
   @InjectRepository(Template)
   private repository: Repository<Template>
   async create(createTemplateDto: CreateTemplateDto): Promise<Template> {
-    const sanitizedCreateTemplateDto = {
-      ...createTemplateDto,
-      html: sanitizeHtml(createTemplateDto.html),
-    }
-    const template = this.repository.create(sanitizedCreateTemplateDto)
+    const template = this.repository.create(
+      this.templatesParsingService.processTemplate(createTemplateDto),
+    )
     return await this.repository.save(template)
   }
 

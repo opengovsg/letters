@@ -1,5 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { FormEvent, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
@@ -39,29 +40,35 @@ export const LetterPublicPage = (): JSX.Element => {
   }
 
   return (
-    <VStack alignItems="left" spacing="0px">
-      {error && error.json?.statusCode === 401 ? (
-        <PasswordProtectedView
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          handleSubmit={handleSubmit}
-          error={error}
-          password={password}
-          setPassword={setPassword}
-          isLetterLoading={isLetterLoading}
-        />
-      ) : (
-        <VStack padding={16} spacing={8} align={'center'}>
-          <LetterViewer
-            html={letter?.issuedLetter}
-            isLoading={isLetterLoading}
-            minWidth={{ md: WIDTH_A4 }}
-            minHeight={{ md: HEIGHT_A4 }}
+    <>
+      <Helmet>
+        <meta name="robots" content="noindex" data-react-helmet="true" />
+      </Helmet>
+      <VStack alignItems="left" spacing="0px">
+        {error && error.json?.statusCode === 401 ? (
+          <PasswordProtectedView
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            handleSubmit={handleSubmit}
+            error={error}
+            password={password}
+            setPassword={setPassword}
+            isLetterLoading={isLetterLoading}
           />
-          {!isLetterLoading && (
-            <Button onClick={handleDownload}>Download as .PDF</Button>
-          )}
-        </VStack>
-      )}
-    </VStack>
+        ) : (
+          <VStack padding={16} spacing={8} align={'center'}>
+            <LetterViewer
+              letterPublicId={letterPublicId}
+              html={letter?.issuedLetter}
+              isLoading={isLetterLoading}
+              minWidth={{ md: WIDTH_A4 }}
+              minHeight={{ md: HEIGHT_A4 }}
+            />
+            {!isLetterLoading && (
+              <Button onClick={handleDownload}>Download as .PDF</Button>
+            )}
+          </VStack>
+        )}
+      </VStack>
+    </>
   )
 }
