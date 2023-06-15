@@ -23,11 +23,7 @@ export const getHtmlFields = (html: string) => {
   let match: RegExpExecArray | null
 
   while ((match = TEMPLATE_KEYWORD_REGEX.exec(html)) !== null)
-    if (
-      TEMPLATE_KEYWORD_CHAR_REGEX.test(match[1]) &&
-      !fields.includes(match[1])
-    )
-      fields.push(match[1])
+    if (!fields.includes(match[1])) fields.push(match[1])
 
   return convertFieldsToLowerCase(fields)
 }
