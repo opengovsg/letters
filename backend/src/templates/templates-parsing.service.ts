@@ -5,8 +5,8 @@ import { sanitizeHtml } from '~shared/util/html-sanitizer'
 import {
   convertFieldsToLowerCase,
   deduplicateFields,
+  getHtmlFields,
   isFieldsInvalid,
-  isHtmlKeywordsInvalid,
   setHtmlKeywordsToLowerCase,
 } from '~shared/util/templates'
 
@@ -19,7 +19,7 @@ export class TemplatesParsingService {
       convertFieldsToLowerCase(createTemplateDto.fields),
     )
 
-    const invalidHtml = isHtmlKeywordsInvalid(createTemplateDto.html)
+    const invalidHtml = isFieldsInvalid(getHtmlFields(createTemplateDto.html))
     if (invalidHtml)
       throw new BadRequestException(
         `Invalid html fields: ${invalidHtml.join(', ')}`,
