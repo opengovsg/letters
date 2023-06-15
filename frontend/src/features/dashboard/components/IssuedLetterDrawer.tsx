@@ -24,6 +24,22 @@ type IssuedLetterDrawerProp = UseDisclosureReturn & {
   letter?: GetLetterDto
 }
 
+type GridItemProp = {
+  heading: string
+  content: string | JSX.Element
+}
+
+const GridItem = ({ heading, content }: GridItemProp): JSX.Element => {
+  return (
+    <VStack alignItems="left">
+      <Heading size="xs" textColor="grey.500">
+        {heading}
+      </Heading>
+      {content}
+    </VStack>
+  )
+}
+
 export const IssuedLetterDrawer = ({
   onClose,
   isOpen,
@@ -47,46 +63,40 @@ export const IssuedLetterDrawer = ({
           <Divider />
           <DrawerBody paddingTop={8}>
             <SimpleGrid columns={2} gap={8}>
-              <VStack alignItems="left">
-                <Heading size="xs" textColor="grey.500">
-                  Letter link
-                </Heading>
-                <HStack maxW="full" alignItems="center">
-                  <Link
-                    as={RouterLink}
-                    to={`/letters/${letter.publicId}`}
-                    maxW="80%"
-                  >
-                    {letterPublicLink}
-                  </Link>
-                  <IconButton
-                    onClick={() => {
-                      void navigator.clipboard.writeText(letterPublicLink)
-                    }}
-                  >
-                    <BiCopy size="1.5rem" />
-                  </IconButton>
-                </HStack>
-              </VStack>
-              <VStack alignItems="left">
-                <Heading size="xs" textColor="grey.500">
-                  Issued on
-                </Heading>
-                <Text>{letter.createdAt}</Text>
-              </VStack>
-              <VStack alignItems="left">
-                <Heading size="xs" textColor="grey.500">
-                  Template used
-                </Heading>
-                <Text>{letter.templateName}</Text>
-              </VStack>
-              <VStack alignItems="left">
-                <Heading size="xs" textColor="grey.500">
-                  Password protected
-                </Heading>
-                {/* TODO: fix this */}
-                <Text>Disabled</Text>
-              </VStack>
+              <GridItem
+                heading="Letter link"
+                content={
+                  <HStack maxW="full" alignItems="center">
+                    <Link
+                      as={RouterLink}
+                      to={`/letters/${letter.publicId}`}
+                      maxW="80%"
+                    >
+                      {letterPublicLink}
+                    </Link>
+                    <IconButton
+                      onClick={() => {
+                        void navigator.clipboard.writeText(letterPublicLink)
+                      }}
+                    >
+                      <BiCopy size="1.5rem" />
+                    </IconButton>
+                  </HStack>
+                }
+              />
+              <GridItem
+                heading="Issued on"
+                content={<Text>{letter.createdAt}</Text>}
+              />
+              <GridItem
+                heading="Template used"
+                content={<Text>{letter.templateName}</Text>}
+              />
+              {/* TODO: fix this */}
+              <GridItem
+                heading="Password protection"
+                content={<Text>Disabled</Text>}
+              />
             </SimpleGrid>
           </DrawerBody>
         </DrawerContent>
