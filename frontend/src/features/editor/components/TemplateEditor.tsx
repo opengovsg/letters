@@ -17,7 +17,11 @@ export const TemplateEditor = ({
   const { tinymceApiKey, isLoadingTinymceApiKey } = useTinymceApiKey()
   if (isLoadingTinymceApiKey || !tinymceApiKey) return <Spinner />
 
-  const processKeyword = (keyword: string) => keyword.toLowerCase().trim()
+  const processKeyword = (keyword: string) =>
+    keyword
+      .replace(/&nbsp;/g, '')
+      .trim()
+      .toLowerCase()
 
   return (
     <TinymceEditor
