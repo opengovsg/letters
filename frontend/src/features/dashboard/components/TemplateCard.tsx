@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  CardHeader,
-  Flex,
-  Heading,
-  Image,
-  Text,
-} from '@chakra-ui/react'
+import { Card, CardHeader, Flex, Heading, Image, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -43,7 +35,12 @@ export const TemplateCard = (templateCardProps: TemplateCardProps) => {
       onMouseLeave={handleMouseHover}
       onClick={() => navigate(`${templateCardProps.id}/issue`)}
     >
-      <Flex justifyContent="center" background="#F8F9F9" paddingTop={5}>
+      <Flex
+        borderTopRadius={'inherit'}
+        justifyContent="center"
+        background="#F8F9F9"
+        paddingTop={5}
+      >
         <Image
           src={templateCardProps.thumbnailS3Path}
           width={170}
