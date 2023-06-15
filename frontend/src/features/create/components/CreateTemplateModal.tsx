@@ -15,10 +15,8 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
-import { TEMPLATE_KEYWORD_REGEX } from '~shared/constants/regex'
 import {
-  convertFieldsToLowerCase,
-  isHtmlKeywordsInvalid,
+  getHtmlFields,
   setHtmlKeywordsToLowerCase,
 } from '~shared/util/templates'
 
@@ -52,34 +50,6 @@ export const CreateTemplateModal = ({
     formState: { errors },
   } = useForm<FormData>()
 
-  const getFields = (): string[] => {
-    const fields: string[] = []
-    let match: RegExpExecArray | null
-
-    while ((match = TEMPLATE_KEYWORD_REGEX.exec(templateContent)) !== null)
-      if (!fields.includes(match[1])) fields.push(match[1])
-
-    return convertFieldsToLowerCase(fields)
-  }
-
-  const validateTemplate = (value: string) => {
-    if (value.trim() === '') return 'Template name cannot be empty.'
-
-    const invalidKeywords = isHtmlKeywordsInvalid(templateContent)
-
-    if (invalidKeywords) {
-      let errorMessage = 'The following keywords are invalid: '
-
-      invalidKeywords.forEach((field, index) => {
-        errorMessage += field
-        if (index !== invalidKeywords.length - 1) errorMessage += ', '
-      })
-      return errorMessage
-    }
-
-    return true
-  }
-
   const stripSpanTags = (content: string) => {
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = content
@@ -97,10 +67,14 @@ export const CreateTemplateModal = ({
   }
 
   const onSubmit = async (data: FormData): Promise<void> => {
+    const processedHtml = setHtmlKeywordsToLowerCase(
+      stripSpanTags(templateContent),
+    )
+
     await mutateAsync({
       name: data.templateName.trim(),
-      fields: getFields(),
-      html: setHtmlKeywordsToLowerCase(stripSpanTags(templateContent)),
+      fields: getHtmlFields(processedHtml),
+      html: processedHtml,
       thumbnailS3Path: 'TODO',
     })
   }
@@ -117,7 +91,10 @@ export const CreateTemplateModal = ({
               <Input
                 {...register('templateName', {
                   required: true,
-                  validate: validateTemplate,
+                  validate: (value) =>
+                    value.trim() === ''
+                      ? 'Template name cannot be empty.'
+                      : true,
                 })}
               />
               <FormErrorMessage>
