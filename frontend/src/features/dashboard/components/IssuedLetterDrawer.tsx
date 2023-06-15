@@ -9,8 +9,13 @@ import {
   Heading,
   HStack,
   Link,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   SimpleGrid,
   Text,
+  useDisclosure,
   UseDisclosureReturn,
   VStack,
 } from '@chakra-ui/react'
@@ -47,8 +52,24 @@ export const IssuedLetterDrawer = ({
   isOpen,
   letter,
 }: IssuedLetterDrawerProp): JSX.Element => {
+  const {
+    isOpen: isPopoverOpen,
+    onOpen: onPopoverOpen,
+    onClose: onPopoverClose,
+  } = useDisclosure()
+
   if (!letter) return <></>
   const letterPublicLink = getLetterPublicLink(letter.publicId)
+
+  const handleCopy = () => {
+    void navigator.clipboard.writeText(letterPublicLink)
+    onPopoverOpen()
+
+    setTimeout(() => {
+      // hide the popover after 1 second
+      onPopoverClose()
+    }, 1000)
+  }
 
   return (
     <Drawer size="lg" isOpen={isOpen} onClose={onClose}>
@@ -76,13 +97,23 @@ export const IssuedLetterDrawer = ({
                     >
                       {letterPublicLink}
                     </Link>
-                    <IconButton
-                      onClick={() => {
-                        void navigator.clipboard.writeText(letterPublicLink)
-                      }}
-                    >
-                      <BiCopy size="1.5rem" />
-                    </IconButton>
+                    <Box position="relative">
+                      <Popover isOpen={isPopoverOpen} placement="right-end">
+                        <IconButton onClick={handleCopy}>
+                          <PopoverTrigger>
+                            <BiCopy size="1.5rem" />
+                          </PopoverTrigger>
+                        </IconButton>
+                        <PopoverContent
+                          marginTop={12}
+                          maxWidth="30%"
+                          bg="grey.600"
+                          color="white"
+                        >
+                          <PopoverBody>Copied</PopoverBody>
+                        </PopoverContent>
+                      </Popover>
+                    </Box>
                   </HStack>
                 }
               />
@@ -94,7 +125,6 @@ export const IssuedLetterDrawer = ({
                 heading="Template used"
                 content={<Text>{letter.templateName}</Text>}
               />
-              {/* TODO: fix this */}
               <GridItem
                 heading="Password protection"
                 content={
