@@ -51,7 +51,7 @@ describe('LettersRenderingService', () => {
 
     it('should NOT decrypt a letter when the provided password is wrong (for a long letter)', () => {
       const letter =
-        '<p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p>'
+        '<p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p><p>Hello, {{name}}!</p>'
       const letterParamMap = JSON.stringify({ name: 'John' })
       const password = 'hunter2'
       const wrongPassword = 'This is the wrong password'
