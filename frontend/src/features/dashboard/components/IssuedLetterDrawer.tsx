@@ -1,4 +1,5 @@
 import {
+  Box,
   Divider,
   Drawer,
   DrawerBody,
@@ -17,6 +18,7 @@ import { BiCopy, BiLeftArrowAlt } from 'react-icons/bi'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { IconButton } from '~components/IconButton'
+import { LetterViewer } from '~features/editor/components/LetterViewer'
 import { GetLetterDto } from '~shared/dtos/letters.dto'
 import { getLetterPublicLink } from '~utils/linkUtils'
 
@@ -95,9 +97,26 @@ export const IssuedLetterDrawer = ({
               {/* TODO: fix this */}
               <GridItem
                 heading="Password protection"
-                content={<Text>Disabled</Text>}
+                content={
+                  <Text>
+                    {letter.isPasswordProtected ? 'Enabled' : 'Disabled'}
+                  </Text>
+                }
               />
             </SimpleGrid>
+            {!letter.isPasswordProtected && (
+              <Box py={8}>
+                <GridItem
+                  heading="Preview"
+                  content={
+                    <LetterViewer
+                      isLoading={false}
+                      html={letter.issuedLetter}
+                    />
+                  }
+                />
+              </Box>
+            )}
           </DrawerBody>
         </DrawerContent>
       </DrawerOverlay>

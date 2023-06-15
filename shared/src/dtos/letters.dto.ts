@@ -50,6 +50,8 @@ export class GetLetterDto {
   templateName: string
   publicId: string
   createdAt: string
+  issuedLetter: string
+  isPasswordProtected: boolean
 }
 
 export class GetLettersDto {
