@@ -11,7 +11,7 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
 
   return (
     <Box bg="gray.100" w="full">
-      <Flex align="stretch" w="full">
+      <Flex align="stretch" w="full" minH="admin-content-min-height">
         <Box
           bg="grey.50"
           borderRight="1px"

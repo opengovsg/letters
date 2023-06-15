@@ -9,7 +9,7 @@ export const AdminLayout = () => {
   return (
     <VStack minWidth="100%" align="stretch" spacing={0}>
       <Navbar />
-      <Box px="admin-app-px">
+      <Box px="admin-app-px" minH="admin-content-min-height">
         <Sidebar>
           <Outlet />
         </Sidebar>
