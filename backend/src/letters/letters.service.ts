@@ -161,7 +161,7 @@ export class LettersService {
 
   private decryptLetter(password: string | undefined, letter: Letter) {
     if (!password) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException('No Password provided')
     }
 
     try {
