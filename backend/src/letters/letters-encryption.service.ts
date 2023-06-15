@@ -21,6 +21,8 @@ export class LettersEncryptionService {
       enc.Utf8,
     )
 
+    // For short input and wrong decryption key AES removes all output (while removing padding).
+    // More details: https://go.gov.sg/aes-padding
     if (fieldValues === '' && issuedLetter === '') {
       throw new Error('Invalid Key')
     }
