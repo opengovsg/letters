@@ -75,7 +75,7 @@ export class LettersController {
     return this.lettersService.findOne(+id)
   }
 
-  @Get('/public/:publicId')
+  @Get('/public/:publicId') // Do we still use/need this?
   async findByPublicId(@Param('publicId') id: string) {
     const letter = await this.lettersService.findOneByPublicId(id)
     return mapLetterToPublicDto(letter)
