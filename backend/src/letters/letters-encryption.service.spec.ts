@@ -65,7 +65,7 @@ describe('LettersEncryptionService', () => {
           { ...new Letter(), ...encryptedLetter },
           wrongPassword,
         )
-      }).toThrow('Malformed UTF-8 data')
+      }).toThrow() // wrongly decrypted long cypher texts can cause 'Malformed UTF-8 data'
     })
   })
 })
