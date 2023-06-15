@@ -2,7 +2,7 @@ import { Letter } from '../database/entities/letter.entity'
 import { LettersEncryptionService } from './letters-encryption.service'
 import { RenderedLetter } from './letters-rendering.service'
 
-describe('LettersRenderingService', () => {
+describe('LettersEncryptionService', () => {
   let service: LettersEncryptionService
 
   beforeEach(() => {
