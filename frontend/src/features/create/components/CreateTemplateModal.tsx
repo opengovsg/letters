@@ -129,7 +129,11 @@ export const CreateTemplateModal = ({
             <Button variant="ghost" onClick={onClose} border={0}>
               Cancel
             </Button>
-            <Button isLoading={isLoading} type="submit">
+            <Button
+              isLoading={isLoading}
+              type="submit"
+              isDisabled={!!errors.templateName}
+            >
               Save Template
             </Button>
           </ModalFooter>
