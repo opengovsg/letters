@@ -57,7 +57,9 @@ export const LetterPublicPage = (): JSX.Element => {
             minWidth={{ md: WIDTH_A4 }}
             minHeight={{ md: HEIGHT_A4 }}
           />
-          <Button onClick={handleDownload}>Download as .PDF</Button>
+          {!isLetterLoading && (
+            <Button onClick={handleDownload}>Download as .PDF</Button>
+          )}
         </VStack>
       )}
     </VStack>
