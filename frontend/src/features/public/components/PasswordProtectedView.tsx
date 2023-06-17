@@ -14,6 +14,8 @@ import { FC, FormEvent, PropsWithChildren } from 'react'
 import ELetters from '~/assets/ELetters.svg'
 import { ResponseError } from '~/types/ResponseError'
 import { AppGrid } from '~templates/AppGrid'
+import { AuthGridArea } from '~templates/AuthGridArea'
+import { GenericNonMobileSidebarGridArea } from '~templates/GenericNonMobileSidebarGridArea'
 
 interface PasswordProtectedViewProps {
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void
@@ -37,32 +39,12 @@ export const PasswordProtectedView = ({
     />
   )
 
-  const PasswordGridArea: FC<PropsWithChildren> = ({ children }) => (
-    <GridItem
-      gridColumn={{ base: '1 / 5', md: '2 / 12', lg: '8 / 10' }}
-      py="4rem"
-      display="flex"
-      alignItems={{ base: 'initial', lg: 'center' }}
-      justifyContent="center"
-    >
-      {children}
-    </GridItem>
-  )
+  const PasswordGridArea: FC<PropsWithChildren> = ({ children }) => {
+    return AuthGridArea({ children }, '8 / 10')
+  }
 
-  const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) => (
-    <GridItem
-      display={{ base: 'none', md: 'flex' }}
-      gridColumn={{ md: '2 / 12', lg: '3 / 7' }}
-      h={{ md: '20.5rem', lg: 'auto' }}
-      pt={{ base: '1.5rem', md: '2.5rem', lg: '3rem' }}
-      pb={{ lg: '3rem' }}
-      flexDir="column"
-      alignItems={{ base: 'center', lg: 'start' }}
-      justifyContent={{ base: 'start', lg: 'center' }}
-    >
-      {children}
-    </GridItem>
-  )
+  const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) =>
+    GenericNonMobileSidebarGridArea({ children }, '3 / 7')
 
   return (
     <BaseGridLayout flex={1} bg="white" h="100%">
