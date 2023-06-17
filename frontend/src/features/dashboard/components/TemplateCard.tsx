@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  CardHeader,
-  Flex,
-  Heading,
-  Image,
-  Text,
-} from '@chakra-ui/react'
+import { Card, CardHeader, Flex, Heading, Image, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 

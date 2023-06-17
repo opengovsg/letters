@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Spacer, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, Image, Text, VStack } from '@chakra-ui/react'
 
 import NotFoundSvg from '~/assets/NotFound.svg'
 
