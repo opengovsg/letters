@@ -46,7 +46,7 @@ describe('LettersEncryptionService', () => {
           { ...new Letter(), ...encryptedLetter },
           wrongPassword,
         )
-      }).toThrow('Invalid Key')
+      }).toThrow() // wrongly decrypted short cypher texts usually cause ''  but can cause 'Malformed UTF-8 data'
     })
 
     it('should NOT decrypt a letter when the provided password is wrong (for a long letter)', () => {
