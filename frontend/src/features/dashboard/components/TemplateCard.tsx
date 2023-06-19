@@ -35,7 +35,12 @@ export const TemplateCard = (templateCardProps: TemplateCardProps) => {
       onMouseLeave={handleMouseHover}
       onClick={() => navigate(`${templateCardProps.id}/issue`)}
     >
-      <Flex justifyContent="center" background="#F8F9F9" paddingTop={5}>
+      <Flex
+        borderTopRadius={'inherit'}
+        justifyContent="center"
+        background="#F8F9F9"
+        paddingTop={5}
+      >
         <Image
           src={templateCardProps.thumbnailS3Path}
           width={170}

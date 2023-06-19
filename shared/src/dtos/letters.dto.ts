@@ -49,8 +49,9 @@ export class GetLetterPublicDto {
 export class GetLetterDto {
   templateName: string
   publicId: string
+  createdAt: string
   issuedLetter: string
-  createdAt: Date
+  isPasswordProtected: boolean
 }
 
 export class GetLettersDto {
