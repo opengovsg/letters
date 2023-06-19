@@ -1,5 +1,5 @@
 import { Button, VStack } from '@chakra-ui/react'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
@@ -16,6 +16,7 @@ import {
 export const LetterPublicPage = (): JSX.Element => {
   const { letterPublicId } = useLetterPublicId()
   const [password, setPassword] = useState('')
+  const [isPasswordProtected, setIsPasswordProtected] = useState(false)
 
   const { letter, isLetterLoading, error, refetchLetter } =
     useGetLetterByPublicId({
@@ -35,6 +36,12 @@ export const LetterPublicPage = (): JSX.Element => {
     await refetchLetter()
   }
 
+  useEffect(() => {
+    if (error?.json?.statusCode === 401) {
+      setIsPasswordProtected(true)
+    }
+  }, [error])
+
   if (error && error.json?.statusCode !== 401) {
     return <Navigate to={`/${routes.public.error}`} />
   }
@@ -45,7 +52,7 @@ export const LetterPublicPage = (): JSX.Element => {
         <meta name="robots" content="noindex" data-react-helmet="true" />
       </Helmet>
       <VStack alignItems="left" spacing="0px">
-        {error && error.json?.statusCode === 401 ? (
+        {isPasswordProtected && !letter ? (
           <PasswordProtectedView
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             handleSubmit={handleSubmit}

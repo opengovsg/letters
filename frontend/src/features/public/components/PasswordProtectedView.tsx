@@ -18,7 +18,7 @@ import { GenericNonMobileSidebarGridArea } from '~templates/GenericNonMobileSide
 
 interface PasswordProtectedViewProps {
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void
-  error: ResponseError
+  error: ResponseError | null
   password: string
   setPassword: (password: string) => void
   isLetterLoading: boolean
@@ -68,7 +68,7 @@ export const PasswordProtectedView = ({
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
-              <FormErrorMessage>{error.json.message}</FormErrorMessage>
+              <FormErrorMessage>{error?.json.message}</FormErrorMessage>
               <Button mt={4} w="100%" isLoading={isLetterLoading} type="submit">
                 Next
               </Button>
