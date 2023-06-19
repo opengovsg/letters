@@ -12,8 +12,9 @@ export const TemplatesPage = (): JSX.Element => {
 
   return (
     <VStack alignItems="left" spacing="0px">
-      <VStack pt={2.5} pl={8} spacing={8} align={'center'}>
+      <VStack pt={2.5} align={'center'}>
         <Button
+          marginLeft={8}
           alignSelf="start"
           leftIcon={<PlusCircle />}
           onClick={() => navigate(`/admin/${routes.admin.create}`)}
