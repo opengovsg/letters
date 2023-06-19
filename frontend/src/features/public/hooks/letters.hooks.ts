@@ -32,7 +32,7 @@ export const useGetLetterByPublicId = ({
         .headers({ password })
         .get()
         .json<GetLetterPublicDto>(),
-    { enabled: !!letterPublicId, retry: false },
+    { enabled: !!letterPublicId, retry: false, refetchOnWindowFocus: false },
   )
   return { letter: data, isLetterLoading: isLoading, error, refetchLetter }
 }
