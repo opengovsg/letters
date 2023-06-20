@@ -55,13 +55,12 @@ export const CreateTemplateModal = ({
     tempDiv.innerHTML = content
     const spanElements = tempDiv.querySelectorAll('span')
 
-    if (spanElements)
-      spanElements.forEach((span) => {
-        if (span.parentNode) {
-          const spanText = document.createTextNode(span.innerText)
-          span.parentNode.replaceChild(spanText, span)
-        }
-      })
+    spanElements?.forEach((span) => {
+      span.parentNode?.replaceChild(
+        document.createTextNode(span.innerText),
+        span,
+      )
+    })
 
     return tempDiv.innerHTML
   }

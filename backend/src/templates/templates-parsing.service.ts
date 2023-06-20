@@ -20,12 +20,13 @@ export class TemplatesParsingService {
     )
 
     const invalidHtml = isFieldsInvalid(getHtmlFields(createTemplateDto.html))
+    const invalidFields = isFieldsInvalid(createTemplateDto.fields)
+
     if (invalidHtml)
       throw new BadRequestException(
         `Invalid html fields: ${invalidHtml.join(', ')}`,
       )
 
-    const invalidFields = isFieldsInvalid(createTemplateDto.fields)
     if (invalidFields)
       throw new BadRequestException(
         `Invalid fields: ${invalidFields.join(', ')}`,

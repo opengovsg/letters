@@ -11,12 +11,11 @@ export const deduplicateFields = (fields: string[]): string[] => [
   ...new Set(fields),
 ]
 
-export const setHtmlKeywordsToLowerCase = (html: string): string => {
-  return html.replace(
+export const setHtmlKeywordsToLowerCase = (html: string): string =>
+  html.replace(
     TEMPLATE_KEYWORD_DELIMITER_REGEX,
     (match: string) => `${match.toLowerCase()}`,
   )
-}
 
 export const getHtmlFields = (html: string) => {
   const fields: string[] = []
