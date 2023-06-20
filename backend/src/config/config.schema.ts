@@ -242,6 +242,6 @@ export const schema: Schema<ConfigSchema> = {
     doc: 'The API key used for Tinymce',
     env: 'TINYMCE_API_KEY',
     format: String,
-    default: '', // defaults to empty string, which will disable TinyMCE
+    default: 'abc', // defaults to empty string, which will disable TinyMCE
   },
 }
