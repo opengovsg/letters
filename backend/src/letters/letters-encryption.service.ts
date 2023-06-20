@@ -1,4 +1,4 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { AES, enc } from 'crypto-js'
 import { Letter } from 'database/entities'
 
@@ -14,6 +14,14 @@ export class LettersEncryptionService {
   }
 
   decryptLetter(letter: Letter, password: string): Letter {
+    try {
+      return this.decrypt(letter, password)
+    } catch (error) {
+      throw new UnauthorizedException('Invalid Password')
+    }
+  }
+
+  private decrypt(letter: Letter, password: string): Letter {
     const fieldValues = AES.decrypt(letter.fieldValues, password).toString(
       enc.Utf8,
     )

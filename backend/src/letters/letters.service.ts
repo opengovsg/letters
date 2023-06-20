@@ -141,7 +141,11 @@ export class LettersService {
     if (!letter) throw new NotFoundException('Letter not found')
 
     if (letter.isPasswordProtected) {
-      return this.decryptLetter(password, letter)
+      if (!password) {
+        throw new UnauthorizedException('No Password provided')
+      }
+
+      return this.lettersEncryptionService.decryptLetter(letter, password)
     }
 
     return letter
@@ -157,17 +161,5 @@ export class LettersService {
 
   remove(id: number) {
     return `This action removes a #${id} letter`
-  }
-
-  private decryptLetter(password: string | undefined, letter: Letter) {
-    if (!password) {
-      throw new UnauthorizedException('No Password provided')
-    }
-
-    try {
-      return this.lettersEncryptionService.decryptLetter(letter, password)
-    } catch (error) {
-      throw new UnauthorizedException('Invalid Password')
-    }
   }
 }
