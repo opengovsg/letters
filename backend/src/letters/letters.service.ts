@@ -140,6 +140,18 @@ export class LettersService {
     return letter
   }
 
+  async recordFirstReadAt(letter: Letter) {
+    // If time that letter has been retrieved has already been recorded, then do nothing
+    if (letter.firstReadAt) return
+
+    const updatedLetter = {
+      ...letter,
+      firstReadAt: new Date().toISOString(),
+    }
+
+    await this.repository.save(updatedLetter)
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} letter`
   }
