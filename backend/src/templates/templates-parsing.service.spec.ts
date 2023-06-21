@@ -1,0 +1,69 @@
+import { CreateTemplateDto } from '~shared/dtos/templates.dto'
+
+import { TemplatesParsingService } from './templates-parsing.service'
+
+describe('TemplatesParsingService', () => {
+  let templatesParsingService: TemplatesParsingService
+
+  beforeEach(() => {
+    templatesParsingService = new TemplatesParsingService()
+  })
+
+  const partialTemplate = {
+    name: 'Test Template',
+    thumbnailS3Path: 'TODO',
+  }
+
+  describe('parseTemplate', () => {
+    it('should parse the template fields and return the parsed result', () => {
+      // Arrange
+      const createTemplateDto: CreateTemplateDto = {
+        ...partialTemplate,
+        html: 'Hello {{name}}, your email is {{email}}. Today is {{date_today}}.',
+      }
+
+      // Act
+      const result = templatesParsingService.parseTemplate(createTemplateDto)
+
+      // Assert
+      expect(result).toEqual({
+        ...createTemplateDto,
+        fields: ['name', 'email', 'date_today'],
+        html: 'Hello {{name}}, your email is {{email}}. Today is {{date_today}}.',
+      })
+    })
+
+    it('should handle whitespace and lowercase fields', () => {
+      const createTemplateDto: CreateTemplateDto = {
+        ...partialTemplate,
+        html: 'Hello {{  NAME   }}, your email is {{  EMaiL   }}.',
+      }
+
+      const result = templatesParsingService.parseTemplate(createTemplateDto)
+
+      expect(result).toEqual({
+        ...createTemplateDto,
+        fields: ['name', 'email'],
+        html: 'Hello {{name}}, your email is {{email}}.',
+      })
+    })
+
+    it('invalid variables should be treated as plain text', () => {
+      // Arrange
+      const createTemplateDto: CreateTemplateDto = {
+        ...partialTemplate,
+        html: 'Hello {{ Na%**123**E   }}, your email is {{keyWQ&&EI___Prd }}. Today is {{date_today}}.',
+      }
+
+      // Act
+      const result = templatesParsingService.parseTemplate(createTemplateDto)
+
+      // Assert
+      expect(result).toEqual({
+        ...createTemplateDto,
+        fields: ['date_today'],
+        html: 'Hello {{ Na%**123**E   }}, your email is {{keyWQ&&EI___Prd }}. Today is {{date_today}}.',
+      })
+    })
+  })
+})
