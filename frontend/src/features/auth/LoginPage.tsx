@@ -14,8 +14,9 @@ import { useNavigate } from 'react-router-dom'
 import { AppFooter } from '~/app/AppFooter'
 import ELetters from '~/assets/ELetters.svg'
 import LogoSvg from '~/assets/Logo.svg'
-import { useIsDesktop } from '~hooks/useIsDesktop'
 import { AppGrid } from '~templates/AppGrid'
+import { AuthGridArea } from '~templates/AuthGridArea'
+import { GenericNonMobileSidebarGridArea } from '~templates/GenericNonMobileSidebarGridArea'
 
 import { LoginForm, LoginFormInputs } from './components/LoginForm'
 import { OtpForm, OtpFormInputs } from './components/OtpForm'
@@ -51,17 +52,8 @@ const BaseGridLayout = (props: GridProps) => (
 )
 
 // Grid area styling for the login form.
-const LoginGridArea: FC<PropsWithChildren> = ({ children }) => (
-  <GridItem
-    gridColumn={{ base: '1 / 5', md: '2 / 12', lg: '8 / 12' }}
-    py="4rem"
-    display="flex"
-    alignItems={{ base: 'initial', lg: 'center' }}
-    justifyContent="center"
-  >
-    {children}
-  </GridItem>
-)
+const LoginGridArea: FC<PropsWithChildren> = ({ children }) =>
+  AuthGridArea({ children }, '8 / 12')
 
 // Grid area styling for the footer.
 const FooterGridArea: FC<PropsWithChildren> = ({ children }) => (
@@ -76,26 +68,13 @@ const FooterGridArea: FC<PropsWithChildren> = ({ children }) => (
 )
 
 // Grid area styling for the left sidebar that only displays on tablet and desktop breakpoints.
-const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) => (
-  <GridItem
-    display={{ base: 'none', md: 'flex' }}
-    gridColumn={{ md: '2 / 12', lg: '2 / 7' }}
-    h={{ md: '20.5rem', lg: 'auto' }}
-    pt={{ base: '1.5rem', md: '2.5rem', lg: '3rem' }}
-    pb={{ lg: '3rem' }}
-    flexDir="column"
-    alignItems={{ base: 'center', lg: 'start' }}
-    justifyContent={{ base: 'start', lg: 'center' }}
-  >
-    {children}
-  </GridItem>
-)
+const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) =>
+  GenericNonMobileSidebarGridArea({ children }, '2 / 7')
 
 export const LoginPage = (): JSX.Element => {
   const { verifyLoginOtp } = useAdminVerifyLoginOtp()
   const { sendLoginOtp } = useAdminSendLoginOtp()
   const { adminUser } = useAdminAuth()
-  const isDesktop = useIsDesktop()
   const navigate = useNavigate()
 
   const [email, setEmail] = useState<string>()

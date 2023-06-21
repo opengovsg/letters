@@ -1,4 +1,4 @@
-import { Box, Flex, VStack } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { Button } from '@opengovsg/design-system-react'
 
 import { LetterViewer } from '~features/editor/components/LetterViewer'

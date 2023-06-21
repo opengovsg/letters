@@ -25,6 +25,10 @@ const FRONTEND_PATH = join(__dirname, '..', '..', 'frontend', 'build')
       inject: [TraceIdProvider],
       useFactory: (traceProvider: TraceIdProvider) => ({
         pinoHttp: {
+          redact: {
+            paths: ['req.headers.password'],
+            remove: true,
+          },
           genReqId: traceProvider.getTraceId.bind(undefined),
           customProps: (req) => {
             const context = {

@@ -3,7 +3,8 @@
 		"_postman_id": "eecfa9fb-6881-4abf-b3e3-25b1dce247ac",
 		"name": "Letters",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27371917"
+		"_exporter_id": "27371917",
+		"_collection_link": "https://gogovsg.postman.co/workspace/New-Team-Workspace~ed1beb99-d614-4e1d-acf9-022ef13e8477/collection/27371917-eecfa9fb-6881-4abf-b3e3-25b1dce247ac?action=share&creator=27371917&source=collection_link"
 	},
 	"item": [
 		{
@@ -135,10 +136,64 @@
 			"response": []
 		},
 		{
-			"name": "public letter",
+			"name": "POST letters bulk password protected",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"templateId\": 5,\n    \"letterParamMaps\": [\n        {\n            \"name\": \"First Last\",\n            \"date\": \"Mon 8 May, 2023\",\n            \"addressƒ\": \"Marina Parade\"\n        },\n        {\n            \"name\": \"Some Name\",\n            \"date\": \"Mon 8 May, 2023\",\n            \"addressƒ\": \"Marina Parade\"\n        }\n    ],\n    \"passwords\": [\n        \"hunter1\", \"hunter2\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/letters/bulks",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"letters",
+						"bulks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET public letter",
 			"request": {
 				"method": "GET",
 				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/public/letters/{{Letter public Id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"letters",
+						"{{Letter public Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET password protected letter",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "password",
+						"value": "hunter2",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{baseUrl}}/api/public/letters/{{Letter public Id}}",
 					"host": [

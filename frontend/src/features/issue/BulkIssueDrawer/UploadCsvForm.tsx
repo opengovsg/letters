@@ -26,7 +26,6 @@ import {
   GetBulkLetterDto,
 } from '~shared/dtos/letters.dto'
 import { arrToCsv } from '~utils/csvUtils'
-import { pluraliseIfNeeded } from '~utils/stringUtils'
 
 interface UploadCsvFormProps {
   onSuccess: (res: GetBulkLetterDto[]) => void

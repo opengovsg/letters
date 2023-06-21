@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, EntityManager, Repository } from 'typeorm'
@@ -79,7 +80,7 @@ export class LettersService {
     const securedLetters = !passwords
       ? sanitizedLetters
       : sanitizedLetters.map((letter, i) =>
-          this.lettersEncryptionService.encryptLetters(letter, passwords[i]),
+          this.lettersEncryptionService.encryptLetter(letter, passwords[i]),
         )
 
     return await this.dataSource.transaction(async (entityManager) => {
@@ -130,13 +131,23 @@ export class LettersService {
     })
   }
 
-  async findOneByPublicId(publicId: string) {
+  async findOneByPublicId(publicId: string, password?: string) {
     const letter = await this.repository.findOne({
       where: {
         publicId: publicId,
       },
     })
+
     if (!letter) throw new NotFoundException('Letter not found')
+
+    if (letter.isPasswordProtected) {
+      if (!password) {
+        throw new UnauthorizedException('No Password provided')
+      }
+
+      return this.lettersEncryptionService.decryptLetter(letter, password)
+    }
+
     return letter
   }
 

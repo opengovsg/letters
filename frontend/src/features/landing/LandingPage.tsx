@@ -1,6 +1,5 @@
 // adapted from https://github.com/opengovsg/calsg/blob/develop/frontend/src/features/common/landing/LandingPage.tsx
 import {
-  Box,
   Button,
   Flex,
   Image,
