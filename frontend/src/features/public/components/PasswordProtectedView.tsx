@@ -7,8 +7,10 @@ import {
   GridProps,
   Image,
   Input,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react'
-import { FC, FormEvent, PropsWithChildren } from 'react'
+import { FC, FormEvent, PropsWithChildren, useState } from 'react'
 
 import ELetters from '~/assets/ELetters.svg'
 import { ResponseError } from '~/types/ResponseError'
@@ -37,6 +39,7 @@ export const PasswordProtectedView = ({
       {...props}
     />
   )
+  const [showPassword, setShowPassword] = useState(false)
 
   const PasswordGridArea: FC<PropsWithChildren> = ({ children }) => {
     return AuthGridArea({ children }, '8 / 10')
@@ -61,13 +64,24 @@ export const PasswordProtectedView = ({
               mb="2.5rem"
             >
               <FormLabel fontWeight={700}>Unlock Letter</FormLabel>
-              <Input
-                type="password"
-                placeholder="Enter password"
-                autoFocus
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-              />
+              <InputGroup>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter password"
+                  autoFocus
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                />
+                <InputRightElement width="4.9rem">
+                  <Button
+                    h="1.75rem"
+                    size="sm"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
               <FormErrorMessage>{error?.json.message}</FormErrorMessage>
               <Button mt={4} w="100%" isLoading={isLetterLoading} type="submit">
                 Next
