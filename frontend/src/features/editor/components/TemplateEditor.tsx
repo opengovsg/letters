@@ -30,7 +30,7 @@ export const TemplateEditor = ({
           'undo redo | bold italic underline | blocks fontfamily fontsizeinput | link image table',
       }}
       disabled={isDisabled}
-      onEditorChange={(content) => onContentChange(content)}
+      onEditorChange={onContentChange}
     />
   )
 }
