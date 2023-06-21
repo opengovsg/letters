@@ -9,19 +9,21 @@ import {
 
 import { Template } from '../database/entities'
 import { TemplatesParsingService } from './templates-parsing.service'
+import { TemplatesSanitizationService } from './templates-sanitization.service'
 
 @Injectable()
 export class TemplatesService {
   constructor(
+    private readonly templateSanitizationService: TemplatesSanitizationService,
     private readonly templatesParsingService: TemplatesParsingService,
   ) {}
 
   @InjectRepository(Template)
   private repository: Repository<Template>
   async create(createTemplateDto: CreateTemplateDto): Promise<Template> {
-    const template = this.repository.create(
-      this.templatesParsingService.processTemplate(createTemplateDto),
-    )
+    const sanitizedTemplate =
+      this.templateSanitizationService.sanitizeTemplate(createTemplateDto)
+    const template = this.repository.create(sanitizedTemplate)
     return await this.repository.save(template)
   }
 
