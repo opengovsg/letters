@@ -15,10 +15,6 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
-import {
-  getHtmlFields,
-  setHtmlKeywordsToLowerCase,
-} from '~shared/util/templates'
 
 import { useCreateTemplateMutation } from '../hooks/create.hooks'
 
@@ -51,14 +47,9 @@ export const CreateTemplateModal = ({
   } = useForm<FormData>()
 
   const onSubmit = async (data: FormData): Promise<void> => {
-    const processedHtml = setHtmlKeywordsToLowerCase(
-      stripSpanTags(templateContent),
-    )
-
     await mutateAsync({
       name: data.templateName.trim(),
-      fields: getHtmlFields(processedHtml),
-      html: processedHtml,
+      html: templateContent,
       thumbnailS3Path: 'TODO',
     })
   }

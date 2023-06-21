@@ -23,7 +23,9 @@ export class TemplatesService {
   async create(createTemplateDto: CreateTemplateDto): Promise<Template> {
     const sanitizedTemplate =
       this.templateSanitizationService.sanitizeTemplate(createTemplateDto)
-    const template = this.repository.create(sanitizedTemplate)
+    const parsedTemplate =
+      this.templatesParsingService.parseTemplate(sanitizedTemplate)
+    const template = this.repository.create(parsedTemplate)
     return await this.repository.save(template)
   }
 
