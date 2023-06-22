@@ -9,7 +9,7 @@ export class TemplatesParsingService {
   parseTemplate(createTemplateDto: CreateTemplateDto): Partial<Template> {
     const { html } = createTemplateDto
 
-    // extract valid keywords
+    // extract valid fields
     const validFields: string[] = getTemplateFields(html)
 
     // make fields lowercase, handle whitespace
@@ -17,8 +17,8 @@ export class TemplatesParsingService {
       parseTemplateField(field),
     )
 
-    // for each valid field, replace the field in the html with the parsed version
-    let parsedHtml = html
+    // for each valid field, replace field in html with the lowercased and trimmed version
+    let parsedHtml: string = html
     validFields.forEach((validField: string) => {
       parsedHtml = parsedHtml.replaceAll(
         `{{${validField}}}`,
