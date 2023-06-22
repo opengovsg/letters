@@ -12,6 +12,7 @@ export const mapLetterToPublicDto = (letter: Letter): GetLetterPublicDto => {
     publicId: letter.publicId,
     createdAt: letter.createdAt,
     issuedLetter: letter.issuedLetter,
+    firstReadAt: letter.firstReadAt,
   }
 }
 
@@ -20,6 +21,7 @@ export const mapLetterToDto = (letter: Letter): GetLetterDto => {
     templateName: letter.template.name,
     publicId: letter.publicId,
     createdAt: letter.createdAt.toDateString(),
+    firstReadAt: letter.firstReadAt?.toDateString(),
     isPasswordProtected: letter.isPasswordProtected,
     issuedLetter: letter.issuedLetter,
   }

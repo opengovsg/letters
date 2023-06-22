@@ -8,7 +8,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { Link, Pagination } from '@opengovsg/design-system-react'
+import { Badge, Link, Pagination } from '@opengovsg/design-system-react'
 import { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
@@ -51,6 +51,7 @@ export const IssuedLettersPage = (): JSX.Element => {
             <Tr backgroundColor="interaction.main-subtle.default">
               <HeaderCell>Letter link</HeaderCell>
               <HeaderCell>Issued on</HeaderCell>
+              <HeaderCell>Read Receipt</HeaderCell>
               <HeaderCell>Template used</HeaderCell>
             </Tr>
             {letters &&
@@ -78,6 +79,15 @@ export const IssuedLettersPage = (): JSX.Element => {
                     </Link>
                   </Td>
                   <Td>{letter.createdAt}</Td>
+                  <Td>
+                    {letter.firstReadAt ? (
+                      <Badge variant="subtle">Read</Badge>
+                    ) : (
+                      <Badge variant="subtle" colorScheme="grey">
+                        Unread
+                      </Badge>
+                    )}
+                  </Td>
                   <Td>{letter.templateName}</Td>
                 </Box>
               ))}

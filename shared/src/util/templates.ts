@@ -1,14 +1,18 @@
-import { TEMPLATE_KEYWORD_REGEX } from '../constants/regex'
+import { ACCEPTED_TEMPLATE_FIELDS_REGEX } from '../constants/regex'
 
-export const convertFieldsToLowerCase = (fields: string[]): string[] =>
-  fields.map((field: string) => field.toLowerCase())
+export const getTemplateFields = (html: string): string[] => {
+  // returns array of unique valid template fields
+  const fields: string[] = []
+  let match: RegExpExecArray | null
 
-export const deduplicateFields = (fields: string[]): string[] => [
-  ...new Set(fields),
-]
+  while ((match = ACCEPTED_TEMPLATE_FIELDS_REGEX.exec(html)) !== null) {
+    if (!fields.includes(match[1])) fields.push(match[1])
+  }
+  return fields
+}
 
-export const setHtmlKeywordsToLowerCase = (html: string): string =>
-  html.replace(
-    TEMPLATE_KEYWORD_REGEX,
-    (match: string, keyword: string) => `{{${keyword.toLowerCase()}}}`,
-  )
+export const parseTemplateField = (field: string): string =>
+  field
+    .replace(/&nbsp;/g, '')
+    .trim()
+    .toLowerCase()

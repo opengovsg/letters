@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { TemplatesController } from './templates.controller'
 import { TemplatesService } from './templates.service'
 import { TemplatesParsingService } from './templates-parsing.service'
+import { TemplatesSanitizationService } from './templates-sanitization.service'
 
 describe('TemplatesController', () => {
   let controller: TemplatesController
@@ -13,6 +14,7 @@ describe('TemplatesController', () => {
       providers: [
         { provide: TemplatesService, useValue: {} },
         TemplatesParsingService,
+        TemplatesSanitizationService,
       ],
     }).compile()
 

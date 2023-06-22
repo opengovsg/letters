@@ -69,7 +69,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"html\": \"this is sample template\",\n    \"name\": \"sample template {{ placeholder1 }}\",\n    \"thumbnailS3Path\": \"s3path\",\n    \"fields\": [\"placeholder1\"]\n}",
+					"raw": "{\n    \"html\": \"this is sample template\",\n    \"name\": \"sample template {{ placeholder1 }}\",\n    \"thumbnailS3Path\": \"s3path\",\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -29,6 +29,23 @@ interface PasswordProtectedViewProps {
   isLetterLoading: boolean
 }
 
+const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) => {
+  return GenericNonMobileSidebarGridArea({ children }, '3 / 7')
+}
+
+const PasswordGridArea: FC<PropsWithChildren> = ({ children }) => {
+  return AuthGridArea({ children }, '8 / 10')
+}
+
+const BaseGridLayout = (props: GridProps) => {
+  return (
+    <AppGrid
+      templateRows={{ md: 'auto 1fr auto', lg: '1fr auto' }}
+      {...props}
+    />
+  )
+}
+
 export const PasswordProtectedView = ({
   handleSubmit,
   error,
@@ -36,20 +53,7 @@ export const PasswordProtectedView = ({
   setPassword,
   isLetterLoading,
 }: PasswordProtectedViewProps): JSX.Element => {
-  const BaseGridLayout = (props: GridProps) => (
-    <AppGrid
-      templateRows={{ md: 'auto 1fr auto', lg: '1fr auto' }}
-      {...props}
-    />
-  )
   const [showPassword, setShowPassword] = useState(false)
-
-  const PasswordGridArea: FC<PropsWithChildren> = ({ children }) => {
-    return AuthGridArea({ children }, '8 / 10')
-  }
-
-  const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) =>
-    GenericNonMobileSidebarGridArea({ children }, '3 / 7')
 
   return (
     <BaseGridLayout flex={1} bg="white" h="100%">

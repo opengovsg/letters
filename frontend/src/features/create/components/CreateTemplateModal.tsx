@@ -15,11 +15,6 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
-import { TEMPLATE_KEYWORD_REGEX } from '~shared/constants/regex'
-import {
-  convertFieldsToLowerCase,
-  setHtmlKeywordsToLowerCase,
-} from '~shared/util/templates'
 
 import { useCreateTemplateMutation } from '../hooks/create.hooks'
 
@@ -51,26 +46,10 @@ export const CreateTemplateModal = ({
     formState: { errors },
   } = useForm<FormData>()
 
-  const getFields = (): string[] => {
-    const fields: string[] = []
-    let match: RegExpExecArray | null
-
-    while ((match = TEMPLATE_KEYWORD_REGEX.exec(templateContent)) !== null)
-      if (!fields.includes(match[1])) fields.push(match[1])
-
-    return convertFieldsToLowerCase(fields)
-  }
-
-  const validateName = (value: string) => {
-    if (value.trim() === '') return 'Template name cannot be empty.'
-    return true
-  }
-
   const onSubmit = async (data: FormData): Promise<void> => {
     await mutateAsync({
       name: data.templateName.trim(),
-      fields: getFields(),
-      html: setHtmlKeywordsToLowerCase(templateContent),
+      html: templateContent,
       thumbnailS3Path: 'TODO',
     })
   }
@@ -87,7 +66,10 @@ export const CreateTemplateModal = ({
               <Input
                 {...register('templateName', {
                   required: true,
-                  validate: validateName,
+                  validate: (value) =>
+                    value.trim() === ''
+                      ? 'Template name cannot be empty.'
+                      : true,
                 })}
               />
               <FormErrorMessage>
@@ -99,7 +81,11 @@ export const CreateTemplateModal = ({
             <Button variant="ghost" onClick={onClose} border={0}>
               Cancel
             </Button>
-            <Button isLoading={isLoading} type="submit">
+            <Button
+              isLoading={isLoading}
+              type="submit"
+              isDisabled={!!errors.templateName}
+            >
               Save Template
             </Button>
           </ModalFooter>
