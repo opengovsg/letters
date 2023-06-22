@@ -13,6 +13,9 @@ import {
 import { FC, FormEvent, PropsWithChildren, useState } from 'react'
 
 import ELetters from '~/assets/ELetters.svg'
+import { ReactComponent as Hide } from '~/assets/Hide.svg'
+import { ReactComponent as Show } from '~/assets/Show.svg'
+import { ReactComponent as ShowEmpty } from '~/assets/ShowEmpty.svg'
 import { ResponseError } from '~/types/ResponseError'
 import { AppGrid } from '~templates/AppGrid'
 import { AuthGridArea } from '~templates/AuthGridArea'
@@ -72,14 +75,16 @@ export const PasswordProtectedView = ({
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
                 />
-                <InputRightElement width="4.9rem">
-                  <Button
-                    h="1.75rem"
-                    size="sm"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
-                  </Button>
+                <InputRightElement width="3rem">
+                  <Box onClick={() => setShowPassword(!showPassword)}>
+                    {password.length === 0 ? (
+                      <ShowEmpty />
+                    ) : showPassword ? (
+                      <Hide />
+                    ) : (
+                      <Show />
+                    )}
+                  </Box>
                 </InputRightElement>
               </InputGroup>
               <FormErrorMessage>{error?.json.message}</FormErrorMessage>
