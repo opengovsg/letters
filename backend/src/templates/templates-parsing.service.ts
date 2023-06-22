@@ -1,37 +1,35 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
+import { Template } from 'database/entities'
 
 import { CreateTemplateDto } from '~shared/dtos/templates.dto'
-import { sanitizeHtml } from '~shared/util/html-sanitizer'
-import {
-  convertFieldsToLowerCase,
-  deduplicateFields,
-  getHtmlFields,
-  isFieldsInvalid,
-  setHtmlKeywordsToLowerCase,
-} from '~shared/util/templates'
+import { getTemplateFields, parseTemplateField } from '~shared/util/templates'
 
 @Injectable()
 export class TemplatesParsingService {
-  processTemplate(createTemplateDto: CreateTemplateDto) {
-    const sanitizedHtml = sanitizeHtml(createTemplateDto.html)
-    createTemplateDto.html = setHtmlKeywordsToLowerCase(sanitizedHtml)
-    createTemplateDto.fields = deduplicateFields(
-      convertFieldsToLowerCase(createTemplateDto.fields),
+  parseTemplate(createTemplateDto: CreateTemplateDto): Partial<Template> {
+    const { html } = createTemplateDto
+
+    // extract valid keywords
+    const validFields: string[] = getTemplateFields(html)
+
+    // make fields lowercase, handle whitespace
+    const parsedFields: string[] = validFields.map((field: string) =>
+      parseTemplateField(field),
     )
 
-    const invalidHtml = isFieldsInvalid(getHtmlFields(createTemplateDto.html))
-    const invalidFields = isFieldsInvalid(createTemplateDto.fields)
-
-    if (invalidHtml)
-      throw new BadRequestException(
-        `Invalid html fields: ${invalidHtml.join(', ')}`,
+    // for each valid field, replace the field in the html with the parsed version
+    let parsedHtml = html
+    validFields.forEach((validField: string) => {
+      parsedHtml = parsedHtml.replaceAll(
+        `{{${validField}}}`,
+        `{{${parseTemplateField(validField)}}}`,
       )
+    })
 
-    if (invalidFields)
-      throw new BadRequestException(
-        `Invalid fields: ${invalidFields.join(', ')}`,
-      )
-
-    return createTemplateDto
+    return {
+      ...createTemplateDto,
+      fields: parsedFields,
+      html: parsedHtml,
+    }
   }
 }

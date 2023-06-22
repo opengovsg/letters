@@ -6,6 +6,7 @@ import { BatchesService } from '../batches/batches.service'
 import { Batch, Letter, Template } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { TemplatesParsingService } from '../templates/templates-parsing.service'
+import { TemplatesSanitizationService } from '../templates/templates-sanitization.service'
 import { LettersService } from './letters.service'
 import { LettersEncryptionService } from './letters-encryption.service'
 import { LettersRenderingService } from './letters-rendering.service'
@@ -20,6 +21,7 @@ describe('LettersService', () => {
       providers: [
         LettersService,
         TemplatesService,
+        TemplatesSanitizationService,
         TemplatesParsingService,
         BatchesService,
         LettersRenderingService,

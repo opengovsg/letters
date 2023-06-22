@@ -1,9 +1,6 @@
-import { IsArray, IsDefined, IsString } from 'class-validator'
+import { IsDefined, IsString } from 'class-validator'
 
 export class CreateTemplateDto {
-  @IsDefined()
-  @IsArray()
-  fields: string[]
   @IsDefined()
   @IsString()
   html: string
