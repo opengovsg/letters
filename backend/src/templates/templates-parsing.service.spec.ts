@@ -48,6 +48,21 @@ describe('TemplatesParsingService', () => {
       })
     })
 
+    it('should deduplicate fields if there is more than one of the same field', () => {
+      const createTemplateDto: CreateTemplateDto = {
+        ...partialTemplate,
+        html: 'Hello {{  NAME   }}, your name is {{  Name   }}.',
+      }
+
+      const result = templatesParsingService.parseTemplate(createTemplateDto)
+
+      expect(result).toEqual({
+        ...createTemplateDto,
+        fields: ['name'],
+        html: 'Hello {{name}}, your name is {{name}}.',
+      })
+    })
+
     it('invalid variables should be treated as plain text', () => {
       // Arrange
       const createTemplateDto: CreateTemplateDto = {
