@@ -1,59 +1,78 @@
-import {
-  convertFieldsToLowerCase,
-  deduplicateFields,
-  setHtmlKeywordsToLowerCase,
-} from '../templates'
+import { getTemplateFields, parseTemplateField } from '../templates'
 
-describe('convertFieldsToLowerCase', () => {
-  test('converts fields array to lowercase', () => {
-    const fields = ['Field1', 'FIELD2', 'field3']
-    const result = convertFieldsToLowerCase(fields)
-    expect(result).toEqual(['field1', 'field2', 'field3'])
+describe('getTemplateFields', () => {
+  test('returns an empty array if no template fields are found', () => {
+    const html = '<div>No fields</div>'
+    const expectedFields = []
+
+    const result = getTemplateFields(html)
+
+    expect(result).toEqual(expectedFields)
   })
 
-  test('returns an empty array if input is empty', () => {
-    const fields: string[] = []
-    const result = convertFieldsToLowerCase(fields)
-    expect(result).toEqual([])
+  test('returns an array of unique valid template fields', () => {
+    const html =
+      '<div>{{Field1}}</div><div>{{Field2}}</div><div>{{Field1}}</div>'
+    const expectedFields = ['Field1', 'Field2']
+
+    const result = getTemplateFields(html)
+
+    expect(result).toEqual(expectedFields)
+  })
+
+  test('allows leading and trailing whitespace in template fields', () => {
+    const html = '<div>{{   Field1   }}</div><div>{{Field2}}</div>'
+    const expectedFields = ['   Field1   ', 'Field2']
+
+    const result = getTemplateFields(html)
+
+    expect(result).toEqual(expectedFields)
+  })
+
+  test('allows alphanumeric characters and and underscore in template fields', () => {
+    const html = '<div>{{name1}}{{EMail}}{{Da_Te}}</div>'
+    const expectedFields = ['name1', 'EMail', 'Da_Te']
+
+    const result = getTemplateFields(html)
+
+    expect(result).toEqual(expectedFields)
+  })
+
+  test('invalid variables should be treated as plain text', () => {
+    const html = '<div>{{nam&34e1}} {{Email}}{{Da Te}}</div>'
+    const expectedFields = ['Email']
+
+    const result = getTemplateFields(html)
+
+    expect(result).toEqual(expectedFields)
   })
 })
 
-describe('deduplicateFields', () => {
-  test('removes duplicate values from the fields array', () => {
-    const fields = ['field1', 'field2', 'field1', 'field2']
-    const result = deduplicateFields(fields)
-    expect(result).toEqual(['field1', 'field2'])
+describe('parseTemplateField', () => {
+  test('replaces "&nbsp;" with an empty string', () => {
+    const field = 'Field&nbsp;1'
+    const expectedParsedField = 'field1'
+
+    const result = parseTemplateField(field)
+
+    expect(result).toEqual(expectedParsedField)
   })
 
-  test('preserves the order of unique values', () => {
-    const fields = ['field1', 'field2', 'field1', 'field3', 'field2']
-    const result = deduplicateFields(fields)
-    expect(result).toEqual(['field1', 'field2', 'field3'])
+  test('trims leading and trailing whitespace', () => {
+    const field = '  Field2  '
+    const expectedParsedField = 'field2'
+
+    const result = parseTemplateField(field)
+
+    expect(result).toEqual(expectedParsedField)
   })
 
-  test('returns an empty array if input is empty', () => {
-    const fields: string[] = []
-    const result = deduplicateFields(fields)
-    expect(result).toEqual([])
-  })
-})
+  test('converts the field to lowercase', () => {
+    const field = 'Field3'
+    const expectedParsedField = 'field3'
 
-describe('setHtmlKeywordsToLowerCase', () => {
-  test('sets matched keywords in HTML to lowercase', () => {
-    const html = '<p>{{Keyword1}}</p><p>{{KEYWORD2}}</p>'
-    const result = setHtmlKeywordsToLowerCase(html)
-    expect(result).toEqual('<p>{{keyword1}}</p><p>{{keyword2}}</p>')
-  })
+    const result = parseTemplateField(field)
 
-  test('leaves HTML unchanged if no keywords are found', () => {
-    const html = '<p>Hello world</p>'
-    const result = setHtmlKeywordsToLowerCase(html)
-    expect(result).toEqual('<p>Hello world</p>')
-  })
-
-  test('returns an empty string if input is empty', () => {
-    const html = ''
-    const result = setHtmlKeywordsToLowerCase(html)
-    expect(result).toEqual('')
+    expect(result).toEqual(expectedParsedField)
   })
 })
