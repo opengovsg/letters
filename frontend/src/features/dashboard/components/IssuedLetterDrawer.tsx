@@ -118,6 +118,10 @@ export const IssuedLetterDrawer = ({
                 }
               />
               <GridItem
+                heading="Read Reciept"
+                content={<Text>{letter.firstReadAt ?? 'Unread'}</Text>}
+              />
+              <GridItem
                 heading="Issued on"
                 content={<Text>{letter.createdAt}</Text>}
               />

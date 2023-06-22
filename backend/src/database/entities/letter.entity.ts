@@ -48,4 +48,7 @@ export class Letter {
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date
+
+  @Column({ type: 'timestamptz', nullable: true, default: null })
+  firstReadAt: Date
 }
