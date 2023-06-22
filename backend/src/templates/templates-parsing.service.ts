@@ -12,10 +12,12 @@ export class TemplatesParsingService {
     // extract valid fields
     const validFields: string[] = getTemplateFields(html)
 
-    // make fields lowercase, handle whitespace
-    const parsedFields: string[] = validFields.map((field: string) =>
-      parseTemplateField(field),
-    )
+    // make fields lowercase, handle whitespace, deduplicate
+    const parsedFields: string[] = []
+    validFields.forEach((field: string) => {
+      const parsedField = parseTemplateField(field)
+      if (!parsedFields.includes(parsedField)) parsedFields.push(parsedField)
+    })
 
     // for each valid field, replace field in html with the lowercased and trimmed version
     let parsedHtml: string = html
