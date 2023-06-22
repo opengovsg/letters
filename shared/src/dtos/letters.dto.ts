@@ -21,6 +21,9 @@ export class CreateBulkLetterDto {
   @IsOptional()
   @IsArray()
   passwords?: string[]
+  @IsOptional()
+  @IsArray()
+  phoneNumbers?: string[]
 }
 
 export enum BulkLetterValidationResultErrorMessage {
