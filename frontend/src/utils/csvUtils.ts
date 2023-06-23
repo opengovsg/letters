@@ -48,6 +48,7 @@ export const csvToJsonArr = async (file: File): Promise<unknown[]> => {
       complete: (results) => {
         resolve(results.data)
       },
+      skipEmptyLines: true,
       error: (error) => {
         reject(error)
       },
