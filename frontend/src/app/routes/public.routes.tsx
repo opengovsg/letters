@@ -1,4 +1,4 @@
-import { Navigate, RouteObject } from 'react-router-dom'
+import { RouteObject } from 'react-router-dom'
 
 import { PublicLayout } from '~/layouts/PublicLayout'
 import { routes } from '~constants/routes'
@@ -36,9 +36,5 @@ export const publicRoutes: RouteObject[] = [
         element: <ErrorPage />,
       },
     ],
-  },
-  {
-    path: '*',
-    element: <Navigate to={routes.public.error} />, // TODO: Differentiate between invalid letters link and invalid page?
   },
 ]
