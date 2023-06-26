@@ -32,10 +32,6 @@ const router = createBrowserRouter([
         ),
         children: adminRoutes,
       },
-      {
-        path: '*',
-        element: <Navigate to={routes.admin.index} />,
-      },
     ],
   },
 ])
