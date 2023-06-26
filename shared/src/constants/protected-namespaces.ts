@@ -9,4 +9,5 @@ export const PROTECTED_NAMESPACES = [
   'terms-of-use',
   'privacy',
   'guide',
+  'not-found',
 ]
