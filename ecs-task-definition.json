@@ -53,6 +53,10 @@
           "valueFrom": "letters-<ENV>-otp-secret"
         },
         {
+          "name": "OTP_EXPIRY",
+          "valueFrom": "letters-<ENV>-otp-expiry"
+        },
+        {
           "name": "DD_API_KEY",
           "valueFrom": "letters-<ENV>-dd-api-key"
         },
