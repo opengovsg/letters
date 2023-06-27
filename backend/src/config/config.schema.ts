@@ -42,6 +42,7 @@ export interface ConfigSchema {
   }
   health: { heapSizeThreshold: number; rssThreshold: number }
   tinymceApiKey: string
+  twilioApiKey: { accountSid: string; authToken: string }
 }
 
 addFormats({
@@ -243,5 +244,19 @@ export const schema: Schema<ConfigSchema> = {
     env: 'TINYMCE_API_KEY',
     format: String,
     default: 'abc', // defaults to empty string, which will disable TinyMCE
+  },
+  twilioApiKey: {
+    accountSid: {
+      doc: 'Account SID used for Twilio',
+      env: 'TWILIO_SID',
+      format: String,
+      default: '',
+    },
+    authToken: {
+      doc: 'Auth Token used for Twilio',
+      env: 'TWILIO_AUTH_TOKEN',
+      format: String,
+      default: '',
+    },
   },
 }
