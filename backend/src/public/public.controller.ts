@@ -26,7 +26,7 @@ export class PublicController {
     )
     if (!letter) throw new NotFoundException('Letter not found')
 
-    await this.lettersService.recordFirstReadAt(letter.id)
+    await this.lettersService.recordFirstReadAtById(letter.id)
     return mapLetterToPublicDto(letter)
   }
 }

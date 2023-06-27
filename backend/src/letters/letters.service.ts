@@ -131,7 +131,10 @@ export class LettersService {
     })
   }
 
-  async findOneByPublicId(publicId: string, password?: string) {
+  async findOneByPublicId(
+    publicId: string,
+    password?: string,
+  ): Promise<Letter> {
     const letter = await this.repository.findOne({
       where: {
         publicId: publicId,
@@ -151,7 +154,7 @@ export class LettersService {
     return letter
   }
 
-  async recordFirstReadAt(id: number) {
+  async recordFirstReadAtById(id: number) {
     const letter = await this.repository.findOneBy({ id })
     if (!letter) throw new NotFoundException('Letter not found')
 
