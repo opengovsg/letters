@@ -2,6 +2,8 @@ import { Box, BoxProps, Spinner, Text, VStack } from '@chakra-ui/react'
 
 import { sanitizeHtml } from '~shared/util/html-sanitizer'
 
+import { LetterQRCode } from './LetterQRCode'
+
 interface LetterViewerProps extends BoxProps {
   letterPublicId?: string
   html: string | undefined
@@ -28,7 +30,15 @@ export const LetterViewer = ({
         borderColor="base.divider.medium"
         bg="white"
       >
-        <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
+        <>
+          <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
+
+          {letterPublicId && (
+            <LetterQRCode
+              qrCodeLinkValue={`${document.location.host}/letters/${letterPublicId}`}
+            />
+          )}
+        </>
       </Box>
       {letterPublicId && (
         <Box

@@ -24,6 +24,7 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.43.8",
     "react-icons": "^4.8.0",
+    "react-qr-code": "^2.0.11",
     "react-router-dom": "^6.9.0",
     "wretch": "^2.5.1",
     "zod": "^3.21.4"
