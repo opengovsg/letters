@@ -151,7 +151,10 @@ export class LettersService {
     return letter
   }
 
-  async recordFirstReadAt(letter: Letter) {
+  async recordFirstReadAt(id: number) {
+    const letter = await this.repository.findOneBy({ id })
+    if (!letter) throw new NotFoundException('Letter not found')
+
     // If time that letter has been retrieved has already been recorded, then do nothing
     if (letter.firstReadAt) return
 
