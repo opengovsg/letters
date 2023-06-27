@@ -90,11 +90,7 @@ export const IssuedLetterDrawer = ({
                 heading="Letter link"
                 content={
                   <HStack maxW="full" alignItems="center">
-                    <Link
-                      as={RouterLink}
-                      to={`/letters/${letter.publicId}`}
-                      maxW="80%"
-                    >
+                    <Link as={RouterLink} to={`/${letter.publicId}`} maxW="80%">
                       {letterPublicLink}
                     </Link>
                     <Box position="relative">

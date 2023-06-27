@@ -6,13 +6,19 @@ import { LandingPage } from '~features/landing/LandingPage'
 import { ErrorPage } from '~features/public/ErrorPage'
 import { LetterPublicPage } from '~features/public/LetterPublicPage'
 
+import { Redirect } from '../Redirect'
+
 export const publicRoutes: RouteObject[] = [
   {
     index: true,
     element: <LandingPage />,
   },
   {
-    path: `${routes.public.letters}/:letterPublicId`,
+    path: `letters/:letterPublicId`,
+    element: <Redirect to="/:letterPublicId" />,
+  },
+  {
+    path: `:letterPublicId`,
     element: <PublicLayout />,
     children: [
       {
@@ -33,6 +39,6 @@ export const publicRoutes: RouteObject[] = [
   },
   {
     path: '*',
-    element: <Navigate to={routes.public.error} />, // TODO: Differentiate between invalid letters link and invalid page?
+    element: <Navigate to={routes.public.error} />,
   },
 ]

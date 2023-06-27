@@ -10,6 +10,7 @@ import {
 } from '~features/issue/hooks/templates.hooks'
 import { GetBulkLetterDto } from '~shared/dtos/letters.dto'
 import { jsonArrToCsv } from '~utils/csvUtils'
+import { getLetterPublicLink } from '~utils/linkUtils'
 import { pluraliseIfNeeded } from '~utils/stringUtils'
 
 interface DownloadCsvProps {
@@ -34,7 +35,7 @@ export const DownloadCsv = ({
       return {
         ...letterParams,
         'Date of Issue': createdAt,
-        'Letter Link': `${document.location.host}/letters/${publicId}`,
+        'Letter Link': `${getLetterPublicLink(publicId)}`,
       }
     })
     jsonArrToCsv(downloadCsvName, bulkLettersWithLink)
