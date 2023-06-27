@@ -18,10 +18,10 @@ import { BatchesService } from '../batches/batches.service'
 import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersEncryptionService } from './letters-encryption.service'
+import { LettersNotificationsService } from './letters-notifications.service'
 import { LettersRenderingService } from './letters-rendering.service'
 import { LettersSanitizationService } from './letters-sanitization.service'
 import { LettersValidationService } from './letters-validation.service'
-
 @Injectable()
 export class LettersService {
   @InjectRepository(Letter)
@@ -33,6 +33,7 @@ export class LettersService {
     private readonly lettersValidationService: LettersValidationService,
     private readonly lettersSanitizationService: LettersSanitizationService,
     private readonly lettersEncryptionService: LettersEncryptionService,
+    private readonly lettersNotificationsService: LettersNotificationsService,
     private dataSource: DataSource,
   ) {}
 
@@ -55,7 +56,8 @@ export class LettersService {
     userId: number,
     createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const { templateId, letterParamMaps, passwords } = createBulkLetterDto
+    const { templateId, letterParamMaps, passwords, phoneNumbers } =
+      createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
 
@@ -63,6 +65,7 @@ export class LettersService {
       template.fields,
       letterParamMaps,
       passwords,
+      phoneNumbers,
     )
 
     if (!validationResult.success)
@@ -108,6 +111,14 @@ export class LettersService {
         lettersDto,
         entityManager,
       )
+
+      if (createBulkLetterDto.phoneNumbers)
+        await this.lettersNotificationsService.sendNotifications(
+          userId,
+          letters,
+          createBulkLetterDto.phoneNumbers,
+        )
+
       return letters
     })
   }

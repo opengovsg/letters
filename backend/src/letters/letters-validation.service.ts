@@ -14,6 +14,7 @@ export class LettersValidationService {
     fields: string[],
     letterParamMaps: LetterParamMaps,
     passwords: string[] | undefined,
+    phoneNumbers: string[] | undefined,
   ): BulkLetterValidationResultDto {
     if (letterParamMaps.length > BULK_MAX_ROW_LENGTH) {
       return {
@@ -29,6 +30,13 @@ export class LettersValidationService {
       }
     }
 
+    if (phoneNumbers && letterParamMaps.length !== phoneNumbers?.length) {
+      return {
+        success: false,
+        message: 'Number of phone numbers does not match number of letters',
+      }
+    }
+
     const errors: BulkLetterValidationResultError[] = []
 
     errors.push(
@@ -41,6 +49,10 @@ export class LettersValidationService {
 
     if (passwords) {
       errors.push(...this.validatePasswordsArePresent(passwords))
+    }
+
+    if (phoneNumbers) {
+      errors.push(...this.validatePhoneNumbers(phoneNumbers))
     }
 
     if (errors.length === 0)
@@ -109,5 +121,18 @@ export class LettersValidationService {
       !Object.prototype.hasOwnProperty.call(letterParamMap, field) ||
       letterParamMap[field] === ''
     )
+  }
+
+  private validatePhoneNumbers(
+    phoneNumbers: string[],
+  ): BulkLetterValidationResultError[] {
+    return phoneNumbers
+      .map((phoneNumber, initialIndex) => ({ phoneNumber, initialIndex }))
+      .filter(({ phoneNumber }) => !phoneNumber.match(/^\+65[89]\d{7}$/))
+      .map(({ initialIndex }) => ({
+        id: initialIndex,
+        param: 'PhoneNumber',
+        message: BulkLetterValidationResultErrorMessage.INVALID_ATTRIBUTE,
+      }))
   }
 }

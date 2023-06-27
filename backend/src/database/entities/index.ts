@@ -1,5 +1,6 @@
 export * from './batch.entity'
 export * from './letter.entity'
+export * from './notifications.entity'
 export * from './session.entity'
 export * from './template.entity'
 export * from './user.entity'
