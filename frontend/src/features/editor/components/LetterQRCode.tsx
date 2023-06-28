@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import QRCode from 'react-qr-code'
 
 interface LetterQRCodeProps {
@@ -9,28 +9,16 @@ export const LetterQRCode = ({
   qrCodeLinkValue,
 }: LetterQRCodeProps): JSX.Element => {
   return (
-    <div style={{ margin: 'auto', padding: '25px' }}>
-      <hr />
-      <Text>
-        This letter was retrieved from <b>{qrCodeLinkValue}</b>
-      </Text>
-      <div
+    <Box w="10%" h="10%">
+      <QRCode
+        size={12}
         style={{
-          height: '25%',
-          width: '25%',
-          margin: 'auto',
+          height: 'auto',
+          maxWidth: '100%',
+          width: '100%',
         }}
-      >
-        <QRCode
-          size={12}
-          style={{
-            height: 'auto',
-            maxWidth: '100%',
-            width: '100%',
-          }}
-          value={qrCodeLinkValue}
-        />
-      </div>
-    </div>
+        value={qrCodeLinkValue}
+      />
+    </Box>
   )
 }
