@@ -131,8 +131,8 @@ export class LettersValidationService {
       .filter(({ phoneNumber }) => !phoneNumber.match(/^\+65[89]\d{7}$/))
       .map(({ initialIndex }) => ({
         id: initialIndex,
-        param: 'PhoneNumber',
-        message: BulkLetterValidationResultErrorMessage.INVALID_ATTRIBUTE,
+        param: 'Phone Number',
+        message: BulkLetterValidationResultErrorMessage.INVALID_PHONE_NUMBER,
       }))
   }
 }
