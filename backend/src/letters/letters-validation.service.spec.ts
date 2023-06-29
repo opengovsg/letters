@@ -13,7 +13,7 @@ describe('LettersValidationService', () => {
     it('should not validate passwords if none are set', () => {
       const passwords = undefined
 
-      const result = service.validateBulk([], [], passwords)
+      const result = service.validateBulk([], [], passwords, undefined)
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -29,7 +29,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -53,7 +58,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -78,7 +88,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual(
@@ -101,7 +116,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -126,7 +146,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -144,7 +169,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -175,7 +205,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -197,7 +232,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -222,7 +262,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -249,7 +294,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -272,7 +322,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        undefined,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')

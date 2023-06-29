@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { Letter, User } from '../database/entities'
-import { Notifications } from '../database/entities/notifications.entity'
+import { Letter, Notifications, User } from '../database/entities'
 import { communicationChannels } from '../types/notifications'
 import { TwilioService } from './twilio.service'
 
