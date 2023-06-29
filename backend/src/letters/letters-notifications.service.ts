@@ -16,28 +16,6 @@ export class LettersNotificationsService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  async createBulkNotification(
-    channel: communicationChannels,
-    letters: Letter[],
-    uuid: string[],
-    messages: string[],
-    recipients: string[],
-  ): Promise<Notifications[]> {
-    const newNotifications: Notifications[] = []
-
-    for (let i = 0; i < letters.length; i++) {
-      const notification = new Notifications()
-      notification.channel = channel
-      notification.letter_id = letters[i].id
-      notification.uuid = uuid[i]
-      notification.message = messages[i]
-      notification.recipient = recipients[i]
-      newNotifications.push(notification)
-    }
-
-    return await this.notificationRepository.save(newNotifications)
-  }
-
   async sendNotifications(
     userId: number,
     letters: Letter[],
@@ -46,6 +24,7 @@ export class LettersNotificationsService {
     const templatedMessages = await this.getTemplatedMessages(userId, letters)
 
     const messageSids = await this.sendSms(templatedMessages, recipients)
+
     return await this.createBulkNotification(
       communicationChannels.TWILIO,
       letters,
@@ -55,7 +34,7 @@ export class LettersNotificationsService {
     )
   }
 
-  async getTemplatedMessages(
+  private async getTemplatedMessages(
     userId: number,
     letters: Letter[],
   ): Promise<string[]> {
@@ -63,33 +42,55 @@ export class LettersNotificationsService {
       where: { id: userId },
       select: ['email'],
     })
+
     const templatedMessages = letters.map((letter) => {
-      const message = user
-        ? `Hi there! You have a new letter from ${user.email}\n\nClick on the link to view the letter:\nhttps://letters.beta.gov.sg/${letter.publicId}`
-        : `Hi there! You have a new letter from the government.\n\nClick on the link to view the letter:\nhttps://letters.beta.gov.sg/${letter.publicId}`
-      return message
+      // Todo: we could also just throw an error as this case should never happen
+      const sender = user ? user.email : 'the government'
+      return `Hi there! You have a new letter from ${sender}\n\nClick on the link to view the letter:\n${letter.publicId}`
     })
 
     return templatedMessages
   }
 
-  async sendSms(messages: string[], recipients: string[]) {
-    const messageSids = []
+  private async sendSms(messages: string[], recipients: string[]) {
+    const messageSids: string[] = []
 
-    for (let i = 0; i < messages.length; i++) {
-      const message = messages[i]
-      const recipient = recipients[i]
+    // Todo: Error handling. abort all if one fails?
+    // Shold we even wait for the responses in the first place?
+    await Promise.allSettled(
+      messages.map(async (message, index) => {
+        const recipient = recipients[index]
 
-      try {
-        const messageSid = await this.twilioService.sendMessage(
-          message,
-          recipient,
-        )
-        messageSids.push(messageSid)
-      } catch (error) {
-        throw { success: false }
-      }
-    }
+        try {
+          const messageSid = await this.twilioService.sendMessage(
+            message,
+            recipient,
+          )
+          messageSids.push(messageSid)
+        } catch (error) {
+          throw { success: false }
+        }
+      }),
+    )
     return messageSids
+  }
+
+  private async createBulkNotification(
+    channel: communicationChannels,
+    letters: Letter[],
+    uuid: string[],
+    messages: string[],
+    recipients: string[],
+  ): Promise<Notifications[]> {
+    const newNotifications: Notifications[] = letters.map((letter, index) => {
+      const notification = new Notifications()
+      notification.channel = channel
+      notification.letter_id = letter.id
+      notification.uuid = uuid[index]
+      notification.message = messages[index]
+      notification.recipient = recipients[index]
+      return notification
+    })
+    return await this.notificationRepository.save(newNotifications)
   }
 }

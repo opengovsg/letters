@@ -123,6 +123,7 @@ export class LettersValidationService {
     )
   }
 
+  // Todo: Once we use more notification services (email, postman, etc.), move the validation logic in these services
   private validatePhoneNumbers(
     phoneNumbers: string[],
   ): BulkLetterValidationResultError[] {

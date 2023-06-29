@@ -31,6 +31,10 @@ export class ConfigService {
     return this.config.get('environment') === 'development'
   }
 
+  get isProdEnv(): boolean {
+    return this.config.get('environment') === 'production'
+  }
+
   findOneById(id: string): string | undefined {
     if (!CONFIG_ACCESSIBLE_BY_FRONTEND.includes(id)) return
     return JSON.stringify(this.get(id as Path<ConfigSchema>))
