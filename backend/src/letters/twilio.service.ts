@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { generatePublicId } from 'core/utils'
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 import twilio from 'twilio'
 
 import { ConfigService } from '../config/config.service'
+import { generatePublicId } from '../core/utils'
 
 @Injectable()
 export class TwilioService {
