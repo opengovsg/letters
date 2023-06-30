@@ -1,5 +1,7 @@
 import crypto from 'crypto'
 
+import { PROTECTED_NAMESPACES } from '~shared/constants/protected-namespaces'
+
 // A workaround to nanoid being incompatible with commonjs
 const random = (bytes: number) => crypto.randomBytes(bytes)
 const customRandom = (
@@ -30,4 +32,15 @@ const customAlphabet = (alphabet: string, size: number) =>
 const ALPHABET =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 const ID_LENGTH = 32
-export const generatePublicId = customAlphabet(ALPHABET, ID_LENGTH)
+
+export const generatePublicId = (
+  generator = customAlphabet(ALPHABET, ID_LENGTH),
+): string => {
+  let id = generator()
+  // if publicId is in protected name space, regenerate
+  while (PROTECTED_NAMESPACES.includes(id)) {
+    id = generator()
+  }
+
+  return id
+}

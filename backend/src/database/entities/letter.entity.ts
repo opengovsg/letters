@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
-import { generatePublicId } from '../../core/utils'
+import { generatePublicId } from '../../core/utils/generate-public-id'
 import { Batch } from './batch.entity'
 import { Template } from './template.entity'
 import { User } from './user.entity'

@@ -6,6 +6,7 @@ import {
   Param,
 } from '@nestjs/common'
 import { mapLetterToPublicDto } from 'core/dto-mappers/letter.dto-mapper'
+import { Letter } from 'database/entities'
 import { LettersService } from 'letters/letters.service'
 
 import { GetLetterPublicDto } from '~shared/dtos/letters.dto'
@@ -23,9 +24,9 @@ export class PublicController {
       publicId,
       password,
     )
-    if (!letter) throw new NotFoundException('letter not found')
+    if (!letter) throw new NotFoundException('Letter not found')
 
-    await this.lettersService.recordFirstReadAt(letter)
+    await this.lettersService.recordFirstReadAtById(letter.id)
     return mapLetterToPublicDto(letter)
   }
 }
