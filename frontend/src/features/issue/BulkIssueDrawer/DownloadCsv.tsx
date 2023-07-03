@@ -35,7 +35,7 @@ export const DownloadCsv = ({
       return {
         ...letterParams,
         'Date of Issue': createdAt,
-        'Letter Link': `${getLetterPublicLink(publicId)}`,
+        'Letter Link': `https://${getLetterPublicLink(publicId)}`,
       }
     })
     jsonArrToCsv(downloadCsvName, bulkLettersWithLink)
