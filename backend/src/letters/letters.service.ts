@@ -55,7 +55,8 @@ export class LettersService {
     userId: number,
     createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const { templateId, letterParamMaps, passwords } = createBulkLetterDto
+    const { templateId, letterParamMaps, passwords, passwordInstructions } =
+      createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
 
@@ -63,6 +64,7 @@ export class LettersService {
       template.fields,
       letterParamMaps,
       passwords,
+      passwordInstructions,
     )
 
     if (!validationResult.success)
@@ -87,6 +89,7 @@ export class LettersService {
       const createBatchDto = {
         userId,
         templateId,
+        passwordInstructions,
       } as CreateBatchDto
 
       const batch = await this.batchesService.createWithTransaction(

@@ -12,8 +12,14 @@ describe('LettersValidationService', () => {
   describe('validate Passwords', () => {
     it('should not validate passwords if none are set', () => {
       const passwords = undefined
+      const passwordInstructions = undefined
 
-      const result = service.validateBulk([], [], passwords)
+      const result = service.validateBulk(
+        [],
+        [],
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -28,8 +34,15 @@ describe('LettersValidationService', () => {
           field1: 'param1',
         },
       ]
+      const passwordInstructions =
+        'These are some instructions to unlock the letters'
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -52,8 +65,15 @@ describe('LettersValidationService', () => {
           field1: 'param1',
         },
       ]
+      const passwordInstructions =
+        'These are some instructions to unlock the letters'
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -77,8 +97,15 @@ describe('LettersValidationService', () => {
           field3: 'param3',
         },
       ]
+      const passwordInstructions =
+        'These are some instructions to unlock the letters'
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual(
@@ -100,8 +127,76 @@ describe('LettersValidationService', () => {
           field1: 'param1',
         },
       ]
+      const passwordInstructions =
+        'These are some instructions to unlock the letters'
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
+
+      expect(result.success).toBe(true)
+      expect(result.message).toEqual('Validation Success')
+      expect(result.errors).toBeUndefined()
+    })
+  })
+
+  describe('validate password instructions', () => {
+    it('should not validate if the password instructions are less than 10 characters', () => {
+      const passwords: string[] = ['hunter2', 'hunter2', 'hunter2']
+      const fields = ['field1']
+      const letterParamMaps: LetterParamMaps = [
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+      ]
+      const passwordInstructions = 'They are'
+
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
+
+      expect(result.success).toBe(false)
+      expect(result.message).toEqual(
+        'Password instructions need to have a minimum of 10 characters',
+      )
+      expect(result.errors).toBeUndefined()
+    })
+
+    it('should validate is the password instructions are more than 10 characters', () => {
+      const passwords: string[] = ['hunter2', 'hunter2', 'hunter2']
+      const fields = ['field1']
+      const letterParamMaps: LetterParamMaps = [
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+      ]
+      const passwordInstructions =
+        'These are some instructions to unlock the letters'
+
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -125,8 +220,15 @@ describe('LettersValidationService', () => {
           field3: 'param3',
         },
       ]
+      const passwordInstructions =
+        'These are some instructions to unlock the letters'
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -143,8 +245,14 @@ describe('LettersValidationService', () => {
           'field not in template': 'param3',
         },
       ]
+      const passwordInstructions = undefined
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -161,6 +269,7 @@ describe('LettersValidationService', () => {
   describe('validate template fields are in letterParams', () => {
     it('should succeed when all fields are present in params', () => {
       const passwords = undefined
+      const passwordInstructions = undefined
       const fields = ['field1', 'field2', 'field3']
       const letterParamMaps: LetterParamMaps = [
         {
@@ -175,7 +284,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -184,6 +298,7 @@ describe('LettersValidationService', () => {
 
     it('should fail when a template field is not present in the params', () => {
       const passwords = undefined
+      const passwordInstructions = undefined
       const fields = ['field1', 'field2', 'field3']
       const letterParamMaps: LetterParamMaps = [
         {
@@ -197,7 +312,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -208,6 +328,7 @@ describe('LettersValidationService', () => {
 
     it('should fail when a param field is empty', () => {
       const passwords = undefined
+      const passwordInstructions = undefined
       const fields = ['field1', 'field2', 'field3']
       const letterParamMaps: LetterParamMaps = [
         {
@@ -222,7 +343,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')
@@ -235,6 +361,8 @@ describe('LettersValidationService', () => {
   describe('validate Bulk', () => {
     it('should succeed when request data is valid', () => {
       const passwords: string[] = ['hunter2', 'hunter2']
+      const passwordInstructions =
+        'These are some password instructions to unlock the letter'
       const fields = ['field1', 'field2', 'field3']
       const letterParamMaps: LetterParamMaps = [
         {
@@ -249,7 +377,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -258,6 +391,8 @@ describe('LettersValidationService', () => {
 
     it('should raise errors with correct ids and messages when request data is not valid', () => {
       const passwords: string[] = ['hunter2', '']
+      const passwordInstructions =
+        'These are some password instructions to unlock the letters'
       const fields = ['field1', 'field2', 'field3', 'field missing']
       const letterParamMaps: LetterParamMaps = [
         {
@@ -272,7 +407,12 @@ describe('LettersValidationService', () => {
         },
       ]
 
-      const result = service.validateBulk(fields, letterParamMaps, passwords)
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        passwords,
+        passwordInstructions,
+      )
 
       expect(result.success).toBe(false)
       expect(result.message).toEqual('Malformed bulk create object')

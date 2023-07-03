@@ -5,6 +5,7 @@ import {
   FormControl,
   FormErrorMessage,
   Heading,
+  Input,
   Spacer,
   Stack,
   Text,
@@ -48,6 +49,15 @@ export const UploadCsvForm = ({
   const { templateId } = useTemplateId()
   const { template } = useGetTemplateById(templateId)
 
+  const [passwordInstructions, setPasswordInstructions] = useState('')
+
+  const handlePasswordInstructionsChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const inputValue = event.target.value
+    setPasswordInstructions(inputValue)
+  }
+
   const downloadSample = () => {
     const csvRows = isPasswordProtected
       ? [...template.fields, 'Password']
@@ -62,7 +72,12 @@ export const UploadCsvForm = ({
 
   const handleSubmit = async (): Promise<void> => {
     const reqBody = isPasswordProtected
-      ? { templateId, letterParamMaps: parsedArr, passwords }
+      ? {
+          templateId,
+          letterParamMaps: parsedArr,
+          passwords,
+          passwordInstructions,
+        }
       : { templateId, letterParamMaps: parsedArr }
     await mutateAsync(reqBody)
   }
@@ -127,9 +142,10 @@ export const UploadCsvForm = ({
             <Text fontSize="24px" fontWeight="500">
               Add password protection
             </Text>
+            {/* TODO: Add a link to password guidelines */}
             <Text fontSize="14px" fontWeight="400">
-              Create password that citizens would have to add before accessing
-              the letter.
+              Adds a csv field for password that citizens would have to add
+              before accessing the letter. Password Guidelines{' '}
             </Text>
           </Stack>
           <Switch
@@ -139,6 +155,23 @@ export const UploadCsvForm = ({
             isChecked={isPasswordProtected}
           ></Switch>
         </Flex>
+        {isPasswordProtected && (
+          <Stack>
+            <Text fontSize="18px" fontWeight="500">
+              Password Information Callout (Optional)
+            </Text>
+            <Text fontSize="14px" fontWeight="400">
+              Describe to citizens what information they can use to unlock their
+              letter. E.g. — &quot; Use the last four digits of NRIC + DOB to
+              unlock this letter &quot;
+            </Text>
+            <Input
+              value={passwordInstructions}
+              onChange={handlePasswordInstructionsChange}
+              placeholder="Password information callout"
+            />
+          </Stack>
+        )}
         <Spacer />
         <Flex justify="space-between">
           <Button
