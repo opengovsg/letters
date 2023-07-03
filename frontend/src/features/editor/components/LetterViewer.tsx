@@ -1,6 +1,8 @@
-import { Box, BoxProps, Spinner, Text, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Spinner, Text, VStack } from '@chakra-ui/react'
 
 import { sanitizeHtml } from '~shared/util/html-sanitizer'
+
+import { LetterQRCode } from './LetterQRCode'
 
 interface LetterViewerProps extends BoxProps {
   letterPublicId?: string
@@ -40,15 +42,24 @@ export const LetterViewer = ({
           paddingX="28px"
           paddingY="0.75rem"
         >
-          <VStack spacing="0.25rem" alignItems="flex-start">
-            <Text textColor="black">
-              Letter ID: <b>{letterPublicId}</b>
-            </Text>
-            <Text textStyle="legal" textColor="grey.400">
-              This letter is generated using {document.location.host}. Forging
-              or morphing is a criminal offence.
-            </Text>
-          </VStack>
+          <HStack spacing="0.25rem" alignItems="flex-start">
+            <LetterQRCode
+              qrCodeLinkValue={`${document.location.host}/letters/${letterPublicId}`}
+            />
+            <VStack
+              spacing="0.25rem"
+              alignItems="flex-start"
+              style={{ margin: 'auto 10px' }}
+            >
+              <Text textColor="black" fontSize="sm">
+                Letter ID: <b>{letterPublicId}</b>
+              </Text>
+              <Text textStyle="legal" textColor="grey.400">
+                This letter is generated using {document.location.host}. Forging
+                or morphing is a criminal offence.
+              </Text>
+            </VStack>
+          </HStack>
         </Box>
       )}
     </VStack>
