@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { AuthModule } from '../auth/auth.module'
 import { BatchesModule } from '../batches/batches.module'
-import { Letter, Notifications, User } from '../database/entities'
+import { Letter, Notification, User } from '../database/entities'
 import { TemplatesModule } from '../templates/templates.module'
 import { LettersController } from './letters.controller'
 import { LettersService } from './letters.service'
@@ -17,7 +17,7 @@ import { TwilioService } from './twilio.service'
 @Module({
   imports: [
     TypeOrmModule.forFeature([Letter]),
-    TypeOrmModule.forFeature([Notifications]),
+    TypeOrmModule.forFeature([Notification]),
     TypeOrmModule.forFeature([User]),
     AuthModule,
     BatchesModule,

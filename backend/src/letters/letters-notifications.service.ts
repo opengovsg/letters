@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { Letter, Notifications, User } from '../database/entities'
-import { communicationChannels } from '../types/notifications'
+import { Letter, Notification, User } from '../database/entities'
+import { NotificationChannel } from '../types/notification'
 import { TwilioService } from './twilio.service'
 
 @Injectable()
 export class LettersNotificationsService {
   constructor(
     private readonly twilioService: TwilioService,
-    @InjectRepository(Notifications)
-    private readonly notificationRepository: Repository<Notifications>,
+    @InjectRepository(Notification)
+    private readonly notificationRepository: Repository<Notification>,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}
@@ -20,13 +20,13 @@ export class LettersNotificationsService {
     userId: number,
     letters: Letter[],
     recipients: string[],
-  ): Promise<Notifications[]> {
+  ): Promise<Notification[]> {
     const templatedMessages = await this.getTemplatedMessages(userId, letters)
 
     const messageSids = await this.sendSms(templatedMessages, recipients)
 
     return await this.createBulkNotification(
-      communicationChannels.TWILIO,
+      NotificationChannel.TWILIO,
       letters,
       messageSids,
       templatedMessages,
@@ -76,17 +76,17 @@ export class LettersNotificationsService {
   }
 
   private async createBulkNotification(
-    channel: communicationChannels,
+    channel: NotificationChannel,
     letters: Letter[],
     uuid: string[],
     messages: string[],
     recipients: string[],
-  ): Promise<Notifications[]> {
-    const newNotifications: Notifications[] = letters.map((letter, index) => {
-      const notification = new Notifications()
+  ): Promise<Notification[]> {
+    const newNotifications: Notification[] = letters.map((letter, index) => {
+      const notification = new Notification()
       notification.channel = channel
-      notification.letter_id = letter.id
-      notification.uuid = uuid[index]
+      notification.letterId = letter.id
+      notification.providerId = uuid[index]
       notification.message = messages[index]
       notification.recipient = recipients[index]
       return notification
