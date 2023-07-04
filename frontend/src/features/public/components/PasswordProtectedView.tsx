@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   FormControl,
@@ -9,6 +11,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Text,
 } from '@chakra-ui/react'
 import { FC, FormEvent, PropsWithChildren, useState } from 'react'
 
@@ -16,17 +19,19 @@ import ELetters from '~/assets/ELetters.svg'
 import { ReactComponent as Hide } from '~/assets/Hide.svg'
 import { ReactComponent as Show } from '~/assets/Show.svg'
 import { ReactComponent as ShowEmpty } from '~/assets/ShowEmpty.svg'
-import { ResponseError } from '~/types/ResponseError'
+import { PasswordResponseError } from '~/types/PasswordResponseError'
+import { PASSWORD_ERROR_MESSAGE } from '~shared/constants/letters'
 import { AppGrid } from '~templates/AppGrid'
 import { AuthGridArea } from '~templates/AuthGridArea'
 import { GenericNonMobileSidebarGridArea } from '~templates/GenericNonMobileSidebarGridArea'
 
 interface PasswordProtectedViewProps {
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void
-  error: ResponseError | null
+  error: PasswordResponseError | null
   password: string
   setPassword: (password: string) => void
   isLetterLoading: boolean
+  passwordInstructions?: string
 }
 
 const NonMobileSidebarGridArea: FC<PropsWithChildren> = ({ children }) => {
@@ -52,6 +57,7 @@ export const PasswordProtectedView = ({
   password,
   setPassword,
   isLetterLoading,
+  passwordInstructions,
 }: PasswordProtectedViewProps): JSX.Element => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -66,11 +72,17 @@ export const PasswordProtectedView = ({
           <form noValidate onSubmit={(event) => handleSubmit(event)}>
             <FormControl
               isInvalid={
-                !!error && error.json.message !== 'No Password provided'
+                !!error && error.json.message !== PASSWORD_ERROR_MESSAGE
               }
               mb="2.5rem"
             >
               <FormLabel fontWeight={700}>Unlock Letter</FormLabel>
+              {passwordInstructions?.length ? (
+                <Alert status="info" style={{ margin: '10px 0px 10px' }}>
+                  <AlertIcon />
+                  <Text fontSize="sm">{passwordInstructions}</Text>
+                </Alert>
+              ) : null}
               <InputGroup>
                 <Input
                   type={showPassword ? 'text' : 'password'}
