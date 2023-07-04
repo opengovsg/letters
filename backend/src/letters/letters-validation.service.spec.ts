@@ -311,6 +311,35 @@ describe('LettersValidationService', () => {
       ])
     })
 
+    it('should allow phone numbers of with "+65", "65", or "+65- prefix', () => {
+      const phoneNumbers: string[] = [
+        '+6588877766',
+        '6588877766',
+        '+65-88877766',
+      ]
+      const fields = ['field1']
+      const letterParamMaps: LetterParamMaps = [
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+        {
+          field1: 'param1',
+        },
+      ]
+
+      const result = service.validateBulk(
+        fields,
+        letterParamMaps,
+        undefined,
+        phoneNumbers,
+      )
+
+      expect(result.success).toBe(true)
+      expect(result.message).toEqual('Validation Success')
+    })
     it('should fail validation of phone numbers when they are of the wrong format', () => {
       const phoneNumbers: string[] = ['+4912345678', '+6512345']
       const fields = ['field1']

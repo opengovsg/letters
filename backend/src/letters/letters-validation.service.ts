@@ -129,7 +129,10 @@ export class LettersValidationService {
   ): BulkLetterValidationResultError[] {
     return phoneNumbers
       .map((phoneNumber, initialIndex) => ({ phoneNumber, initialIndex }))
-      .filter(({ phoneNumber }) => !phoneNumber.match(/^\+65[89]\d{7}$/))
+      .filter(
+        // match singpore phone numbers with or without country code
+        ({ phoneNumber }) => !phoneNumber.match(/^(\+65|65|\+65-)?[89]\d{7}$/),
+      )
       .map(({ initialIndex }) => ({
         id: initialIndex,
         param: 'Phone Number',
