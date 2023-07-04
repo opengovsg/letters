@@ -17,7 +17,7 @@ export class LettersValidationService {
     fields: string[],
     letterParamMaps: LetterParamMaps,
     passwords: string[] | undefined,
-    passwordInstructions: string | undefined, // TODO: perform validation check
+    passwordInstructions: string | undefined,
   ): BulkLetterValidationResultDto {
     if (letterParamMaps.length > BULK_MAX_ROW_LENGTH) {
       return {

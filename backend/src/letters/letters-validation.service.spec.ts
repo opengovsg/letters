@@ -174,7 +174,7 @@ describe('LettersValidationService', () => {
       expect(result.errors).toBeUndefined()
     })
 
-    it('should validate is the password instructions are more than 10 characters', () => {
+    it('should validate if the password instructions are more than 10 characters', () => {
       const passwords: string[] = ['hunter2', 'hunter2', 'hunter2']
       const fields = ['field1']
       const letterParamMaps: LetterParamMaps = [
