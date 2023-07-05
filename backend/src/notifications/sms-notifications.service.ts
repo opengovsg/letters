@@ -15,7 +15,7 @@ export class SmsNotificationsService {
     private readonly logger: PinoLogger,
   ) {}
 
-  // We accept numbers in the following formats: +65x,65x, or without country code x
+  // We accept numbers in the following formats: +65x,65x,65-,+65-, or without country code x
   // This function returns a standardized phone number +65x
   private standardizePhoneNumber(recipient: string): string {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
@@ -26,7 +26,7 @@ export class SmsNotificationsService {
     if (!matches)
       throw new Error('Not in accepted Singapore phone number format')
 
-    const phoneNumber = matches[2] // array with format: [Original string, Group 1 - one of +65|65|undefined, Group 2 - phone number starting with 8 or 9]
+    const phoneNumber = matches[2] // array with format: [Original string, Group 1 - one of +65|65|65-|+65-|undefined, Group 2 - phone number starting with 8 or 9]
     return `+65${phoneNumber}`
   }
 

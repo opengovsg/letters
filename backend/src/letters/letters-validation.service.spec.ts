@@ -311,14 +311,18 @@ describe('LettersValidationService', () => {
       ])
     })
 
-    it('should allow phone numbers of with "+65", "65", or "+65- prefix', () => {
+    it('should allow phone numbers of with "+65", "65", "65-", or "+65-" prefix', () => {
       const phoneNumbers: string[] = [
         '+6588877766',
         '6588877766',
+        '65-88877766',
         '+65-88877766',
       ]
       const fields = ['field1']
       const letterParamMaps: LetterParamMaps = [
+        {
+          field1: 'param1',
+        },
         {
           field1: 'param1',
         },
