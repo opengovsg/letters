@@ -1,11 +1,11 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { FormEvent, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
 import { LetterViewer } from '~features/editor/components/LetterViewer'
-import { convertHtmlToPdf, HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
+import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import { PasswordProtectedView } from './components/PasswordProtectedView'
 import {
@@ -23,12 +23,6 @@ export const LetterPublicPage = (): JSX.Element => {
       letterPublicId,
       password,
     })
-
-  const handleDownload = () => {
-    if (letter && letter.issuedLetter) {
-      void convertHtmlToPdf(letter.issuedLetter, `${letterPublicId}.pdf`)
-    }
-  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -70,9 +64,6 @@ export const LetterPublicPage = (): JSX.Element => {
               minWidth={{ md: WIDTH_A4 }}
               minHeight={{ md: HEIGHT_A4 }}
             />
-            {!isLetterLoading && (
-              <Button onClick={handleDownload}>Download as .PDF</Button>
-            )}
           </VStack>
         )}
       </VStack>
