@@ -108,7 +108,7 @@ export class LettersService {
           }),
         ) as CreateLetterDto[]
 
-        return this.createWithTransaction(lettersDto, entityManager)
+        return await this.createWithTransaction(lettersDto, entityManager)
       },
     )
 
