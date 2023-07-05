@@ -10,6 +10,6 @@ export class removeUnusedRawcsvFromBatch1686218786357
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "batches" ADD "rawCsv" text NOT NULL`)
+    await queryRunner.query(`ALTER TABLE "batches" ADD "rawCsv" text`)
   }
 }
