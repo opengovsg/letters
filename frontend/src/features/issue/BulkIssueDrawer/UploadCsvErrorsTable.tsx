@@ -42,6 +42,27 @@ export const UploadCsvErrorsTable = ({
     )
   }
 
+  const getErrorMessage = (errorMessage: string): string => {
+    console.log('this is the error messsage', errorMessage)
+    if (
+      errorMessage === BulkLetterValidationResultErrorMessage.INVALID_ATTRIBUTE
+    ) {
+      return ' is not a valid attribute'
+    }
+    if (
+      errorMessage ===
+      BulkLetterValidationResultErrorMessage.PASSWORD_NOT_ALPHANUMERIC
+    ) {
+      return ' must be alphanumeric.'
+    }
+    if (
+      errorMessage === BulkLetterValidationResultErrorMessage.SHORT_PASSWORD
+    ) {
+      return ' must contains a minimum of 8 characters.'
+    }
+    return 'is missing'
+  }
+
   const errorsByRow = uploadCsvErrors.reduce(
     (errorGroup: Array<BulkLetterValidationResultError[]>, item) => {
       if (errorGroup[item.id]) {
@@ -66,11 +87,7 @@ export const UploadCsvErrorsTable = ({
                 {/* Add 1 because index starts from 0 actually */}
                 {index + 1}
                 {'. '}
-                {error.param}{' '}
-                {error.message ===
-                BulkLetterValidationResultErrorMessage.INVALID_ATTRIBUTE
-                  ? 'is not a valid attribute'
-                  : 'is missing'}
+                {error.param} {getErrorMessage(error.message)}
               </Text>
             )
           })}
