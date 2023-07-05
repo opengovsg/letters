@@ -71,7 +71,7 @@ export const IssuedLettersPage = (): JSX.Element => {
                   <Td>
                     <Link
                       as={RouterLink}
-                      to={`/letters/${letter.publicId}`}
+                      to={`/${letter.publicId}`}
                       textDecoration="none"
                       textColor="default"
                     >
