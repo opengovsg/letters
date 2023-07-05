@@ -3,7 +3,7 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 import twilio from 'twilio'
 
 import { ConfigService } from '../../config/config.service'
-import { generatePublicId } from '../../core/utils'
+import { generatePublicId } from '../../core/utils/generate-public-id'
 
 @Injectable()
 export class TwilioService {
