@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import { BULK_MAX_ROW_LENGTH } from '~shared/constants/letters'
+import { ACCEPTED_SINGAPORE_PHONE_NUMBERS_REGEX } from '~shared/constants/regex'
 import {
   BulkLetterValidationResultDto,
   BulkLetterValidationResultError,
@@ -131,7 +132,8 @@ export class LettersValidationService {
       .map((phoneNumber, initialIndex) => ({ phoneNumber, initialIndex }))
       .filter(
         // match singpore phone numbers with or without country code
-        ({ phoneNumber }) => !phoneNumber.match(/^(\+65|65|\+65-)?[89]\d{7}$/),
+        ({ phoneNumber }) =>
+          !phoneNumber.match(ACCEPTED_SINGAPORE_PHONE_NUMBERS_REGEX),
       )
       .map(({ initialIndex }) => ({
         id: initialIndex,
