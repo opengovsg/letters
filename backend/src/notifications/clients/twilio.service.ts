@@ -14,10 +14,11 @@ export class TwilioService {
   ) {}
 
   private getClient() {
-    const accountSid = this.config.get('twilioApiKey.accountSid')
-    const authToken = this.config.get('twilioApiKey.authToken')
+    const accountSid = this.config.get('twilioApi.accountSid')
+    const authToken = this.config.get('twilioApi.authToken')
+    const messagingServiceSid = this.config.get('twilioApi.messagingServiceSid')
 
-    if (accountSid && authToken) {
+    if (accountSid && authToken && messagingServiceSid) {
       return twilio(accountSid, authToken)
     }
 
@@ -40,6 +41,7 @@ export class TwilioService {
     // TODO: Add allow-listed phone numbers for dev testing
     this.logger.info(`Sending sms to ${recipient}`)
     const response = await this.client.messages.create({
+      messagingServiceSid: this.config.get('twilioApi.messagingServiceSid'),
       body: message,
       to: recipient,
     })
