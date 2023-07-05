@@ -87,6 +87,10 @@
         {
           "name": "TWILIO_MESSAGING_SERVICE_SID",
           "valueFrom": "letters-<ENV>-twilio-messaging-service-sid"
+        },
+        {
+          "name": "DOMAIN_NAME",
+          "valueFrom": "letters-<ENV>-domain-name"
         }
       ],
       "logConfiguration": {

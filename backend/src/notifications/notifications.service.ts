@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
+import { ConfigService } from '../config/config.service'
 import { Letter, Notification, User } from '../database/entities'
 import { SmsNotificationsService } from './sms-notifications.service'
 
@@ -13,6 +14,7 @@ export class NotificationsService {
     private readonly smsNotificationService: SmsNotificationsService,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private readonly config: ConfigService,
   ) {}
 
   async sendNotifications(
@@ -41,7 +43,9 @@ export class NotificationsService {
     return letters.map((letter) => {
       const sender = user ? user.email : 'the government'
       return {
-        message: `Hi there! You have a new letter from ${sender}\n\nClick on the link to view the letter:\n https://letters.beta.gov.sg/${letter.publicId}`,
+        message: `Hi there! You have a new letter from ${sender}\n\nClick on the link to view the letter:\n ${this.config.get(
+          'domainName',
+        )}/${letter.publicId}`,
         letterId: letter.id,
       }
     })

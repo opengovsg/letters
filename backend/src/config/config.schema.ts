@@ -47,6 +47,7 @@ export interface ConfigSchema {
     authToken: string
     messagingServiceSid: string
   }
+  domainName: string
 }
 
 addFormats({
@@ -268,5 +269,11 @@ export const schema: Schema<ConfigSchema> = {
       format: String,
       default: '',
     },
+  },
+  domainName: {
+    doc: 'Domain name of application',
+    env: 'DOMAIN_NAME',
+    format: String,
+    default: 'http://localhost:3000', // defaults to empty string, which will disable TinyMCE
   },
 }
