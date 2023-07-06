@@ -48,6 +48,7 @@ export interface ConfigSchema {
     messagingServiceSid: string
   }
   domainName: string
+  smsAllowList: string
 }
 
 addFormats({
@@ -274,6 +275,12 @@ export const schema: Schema<ConfigSchema> = {
     doc: 'Domain name of application',
     env: 'DOMAIN_NAME',
     format: String,
-    default: 'http://localhost:3000', // defaults to empty string, which will disable TinyMCE
+    default: 'http://localhost:3000',
+  },
+  smsAllowList: {
+    doc: 'Allow list for sms testing. Use "" to block all numbers, "*" to allow all numbers, or comma-separated phone numbers starting with +65, e.g. "+6588889999,+6588888888"',
+    env: 'SMS_ALLOW_LIST',
+    format: String,
+    default: '',
   },
 }

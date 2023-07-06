@@ -91,6 +91,10 @@
         {
           "name": "DOMAIN_NAME",
           "valueFrom": "letters-<ENV>-domain-name"
+        },
+        {
+          "name": "SMS_ALLOW_LIST",
+          "valueFrom": "letters-<ENV>-sms-allow-list"
         }
       ],
       "logConfiguration": {

@@ -124,14 +124,12 @@ export class LettersValidationService {
     )
   }
 
-  // Todo: Once we use more notification services (email, postman, etc.), move the validation logic in these services
   private validatePhoneNumbers(
     phoneNumbers: string[],
   ): BulkLetterValidationResultError[] {
     return phoneNumbers
       .map((phoneNumber, initialIndex) => ({ phoneNumber, initialIndex }))
       .filter(
-        // match singpore phone numbers with or without country code
         ({ phoneNumber }) =>
           !phoneNumber.match(ACCEPTED_SINGAPORE_PHONE_NUMBERS_REGEX),
       )
