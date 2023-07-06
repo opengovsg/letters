@@ -496,7 +496,7 @@ describe('LettersValidationService', () => {
     })
 
     it('should raise errors with correct ids and messages when request data is not valid', () => {
-      const phoneNumbers: string[] = ['+6584577420', '']
+      const phoneNumbers: string[] = ['+6588877766', '']
       const passwords: string[] = ['hunter2', '']
       const fields = ['field1', 'field2', 'field3', 'field missing']
       const letterParamMaps: LetterParamMaps = [
