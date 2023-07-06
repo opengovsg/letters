@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
+import { randomUUID } from 'crypto'
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 import twilio from 'twilio'
 
 import { ConfigService } from '../../config/config.service'
-import { generatePublicId } from '../../core/utils/generate-public-id'
 
 @Injectable()
 export class TwilioService {
@@ -27,10 +27,7 @@ export class TwilioService {
                Message: ${body} Recipient: ${to}`,
             )
             return Promise.resolve({
-              sid: `DEV_MODE_NO_SMS_SENT_${generatePublicId().substring(
-                0,
-                13,
-              )}`,
+              sid: `DEV_MODE_NO_SMS_SENT_${randomUUID().substring(0, 13)}`,
             })
           },
         },
