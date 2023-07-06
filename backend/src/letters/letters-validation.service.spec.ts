@@ -12,8 +12,9 @@ describe('LettersValidationService', () => {
   describe('validate Passwords', () => {
     it('should not validate passwords if none are set', () => {
       const passwords = undefined
+      const phoneNumbers = undefined
 
-      const result = service.validateBulk([], [], passwords, undefined)
+      const result = service.validateBulk([], [], passwords, phoneNumbers)
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -23,6 +24,7 @@ describe('LettersValidationService', () => {
     it('should validate passwords when they are enabled but none are set', () => {
       const passwords: string[] = ['']
       const fields = ['field1']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -33,7 +35,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(false)
@@ -46,6 +48,7 @@ describe('LettersValidationService', () => {
     it('should fail when one password is missing ', () => {
       const passwords: string[] = ['hunter2', '', 'hunter2']
       const fields = ['field1']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -62,7 +65,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(false)
@@ -75,6 +78,7 @@ describe('LettersValidationService', () => {
     it('should immediately fail the number passwords is not matching the number of letters', () => {
       const passwords: string[] = ['hunter2', 'hunter2', 'hunter2']
       const fields = ['field1', 'field2', 'field3']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -92,7 +96,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(false)
@@ -104,6 +108,7 @@ describe('LettersValidationService', () => {
     it('should succeed when all passwords are provided ', () => {
       const passwords: string[] = ['hunter2', 'hunter2', 'hunter2']
       const fields = ['field1']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -120,7 +125,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(true)
@@ -133,6 +138,7 @@ describe('LettersValidationService', () => {
     it('should succeed when all params exist in template', () => {
       const passwords = undefined
       const fields = ['field1', 'field2', 'field3']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -150,7 +156,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(true)
@@ -161,6 +167,7 @@ describe('LettersValidationService', () => {
     it('should fail when a param is not a field in the template', () => {
       const passwords = undefined
       const fields = ['field1', 'field2']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -173,7 +180,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(false)
@@ -192,6 +199,7 @@ describe('LettersValidationService', () => {
     it('should succeed when all fields are present in params', () => {
       const passwords = undefined
       const fields = ['field1', 'field2', 'field3']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -209,7 +217,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(true)
@@ -220,6 +228,7 @@ describe('LettersValidationService', () => {
     it('should fail when a template field is not present in the params', () => {
       const passwords = undefined
       const fields = ['field1', 'field2', 'field3']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -236,7 +245,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(false)
@@ -249,6 +258,7 @@ describe('LettersValidationService', () => {
     it('should fail when a param field is empty', () => {
       const passwords = undefined
       const fields = ['field1', 'field2', 'field3']
+      const phoneNumbers = undefined
       const letterParamMaps: LetterParamMaps = [
         {
           field1: 'param1',
@@ -266,7 +276,7 @@ describe('LettersValidationService', () => {
         fields,
         letterParamMaps,
         passwords,
-        undefined,
+        phoneNumbers,
       )
 
       expect(result.success).toBe(false)
@@ -279,9 +289,10 @@ describe('LettersValidationService', () => {
 
   describe('validate Phone numbers', () => {
     it('should not validate phone numbers if none are set', () => {
+      const passwords = undefined
       const phoneNumbers = undefined
 
-      const result = service.validateBulk([], [], undefined, phoneNumbers)
+      const result = service.validateBulk([], [], passwords, phoneNumbers)
 
       expect(result.success).toBe(true)
       expect(result.message).toEqual('Validation Success')
@@ -289,6 +300,7 @@ describe('LettersValidationService', () => {
     })
 
     it('should validate phone numbers when they are enabled but none are set', () => {
+      const passwords = undefined
       const phoneNumbers: string[] = ['']
       const fields = ['field1']
       const letterParamMaps: LetterParamMaps = [
@@ -300,7 +312,7 @@ describe('LettersValidationService', () => {
       const result = service.validateBulk(
         fields,
         letterParamMaps,
-        undefined,
+        passwords,
         phoneNumbers,
       )
 
@@ -312,6 +324,7 @@ describe('LettersValidationService', () => {
     })
 
     it('should allow phone numbers of with "+65", "65", "65-", or "+65-" prefix', () => {
+      const passwords = undefined
       const phoneNumbers: string[] = [
         '+6588877766',
         '6588877766',
@@ -337,7 +350,7 @@ describe('LettersValidationService', () => {
       const result = service.validateBulk(
         fields,
         letterParamMaps,
-        undefined,
+        passwords,
         phoneNumbers,
       )
 
@@ -345,6 +358,7 @@ describe('LettersValidationService', () => {
       expect(result.message).toEqual('Validation Success')
     })
     it('should fail validation of phone numbers when they are of the wrong format', () => {
+      const passwords = undefined
       const phoneNumbers: string[] = ['+4912345678', '+6512345']
       const fields = ['field1']
       const letterParamMaps: LetterParamMaps = [
@@ -359,7 +373,7 @@ describe('LettersValidationService', () => {
       const result = service.validateBulk(
         fields,
         letterParamMaps,
-        undefined,
+        passwords,
         phoneNumbers,
       )
 
@@ -372,6 +386,7 @@ describe('LettersValidationService', () => {
     })
 
     it('should fail when one phone Number is missing ', () => {
+      const passwords = undefined
       const phoneNumbers: string[] = ['+6588877766', '', '+6588877766']
       const fields = ['field1']
       const letterParamMaps: LetterParamMaps = [
@@ -389,7 +404,7 @@ describe('LettersValidationService', () => {
       const result = service.validateBulk(
         fields,
         letterParamMaps,
-        undefined,
+        passwords,
         phoneNumbers,
       )
 
@@ -401,6 +416,7 @@ describe('LettersValidationService', () => {
     })
 
     it('should immediately fail the number phone numbers is not matching the number of letters', () => {
+      const passwords = undefined
       const phoneNumbers: string[] = [
         '+6588877766',
         '+6588877766',
@@ -423,7 +439,7 @@ describe('LettersValidationService', () => {
       const result = service.validateBulk(
         fields,
         letterParamMaps,
-        undefined,
+        passwords,
         phoneNumbers,
       )
 
@@ -434,6 +450,7 @@ describe('LettersValidationService', () => {
     })
 
     it('should succeed when all phone numbers are provided ', () => {
+      const passwords = undefined
       const phoneNumbers: string[] = [
         '+6588877766',
         '+6588877766',
@@ -455,7 +472,7 @@ describe('LettersValidationService', () => {
       const result = service.validateBulk(
         fields,
         letterParamMaps,
-        undefined,
+        passwords,
         phoneNumbers,
       )
 
