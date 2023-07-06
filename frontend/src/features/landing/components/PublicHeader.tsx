@@ -14,7 +14,7 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import LogoSvg from '~/assets/Logo.svg'
 import { useIsDesktop } from '~/hooks/useIsDesktop'
-import { BETA_SIGNUP, USER_GUIDE } from '~shared/constants/links'
+import { USER_GUIDE } from '~shared/constants/links'
 
 type PublicHeaderLinkProps = {
   label: string

@@ -7,7 +7,7 @@ export const TemplatesBody = () => {
   const { templates, isTemplatesLoading } = useGetTemplates()
   return (
     <Flex flexDir="row" flex="1">
-      <Wrap px={10} flex="1" spacing="30px" py={10}>
+      <Wrap flex="1" spacing="30px" padding={8}>
         {!isTemplatesLoading && templates.length > 0 ? (
           templates.map((template, index) => (
             <WrapItem key={index}>

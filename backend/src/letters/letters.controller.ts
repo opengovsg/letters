@@ -45,7 +45,11 @@ export class LettersController {
     @Body() bulkRequest: CreateBulkLetterDto,
   ): Promise<GetBulkLetterDto[]> {
     const letters = await this.lettersService.bulkCreate(user.id, bulkRequest)
-    return mapLetterToGetBulkLetterDto(bulkRequest.letterParamMaps, letters)
+    return mapLetterToGetBulkLetterDto(
+      bulkRequest.letterParamMaps,
+      letters,
+      bulkRequest.passwords,
+    )
   }
 
   @Get()
@@ -71,7 +75,7 @@ export class LettersController {
     return this.lettersService.findOne(+id)
   }
 
-  @Get('/public/:publicId')
+  @Get('/public/:publicId') // Do we still use/need this?
   async findByPublicId(@Param('publicId') id: string) {
     const letter = await this.lettersService.findOneByPublicId(id)
     return mapLetterToPublicDto(letter)

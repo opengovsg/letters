@@ -7,6 +7,7 @@ import { Letter } from '../database/entities' // To be deleted
 import { TemplatesModule } from '../templates/templates.module'
 import { LettersController } from './letters.controller'
 import { LettersService } from './letters.service'
+import { LettersEncryptionService } from './letters-encryption.service'
 import { LettersRenderingService } from './letters-rendering.service'
 import { LettersSanitizationService } from './letters-sanitization.service'
 import { LettersValidationService } from './letters-validation.service'
@@ -24,6 +25,7 @@ import { LettersValidationService } from './letters-validation.service'
     LettersValidationService,
     LettersRenderingService,
     LettersSanitizationService,
+    LettersEncryptionService,
   ],
   exports: [LettersService, TypeOrmModule],
 })

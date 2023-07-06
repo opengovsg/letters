@@ -12,6 +12,7 @@ export const mapLetterToPublicDto = (letter: Letter): GetLetterPublicDto => {
     publicId: letter.publicId,
     createdAt: letter.createdAt,
     issuedLetter: letter.issuedLetter,
+    firstReadAt: letter.firstReadAt,
   }
 }
 
@@ -19,7 +20,9 @@ export const mapLetterToDto = (letter: Letter): GetLetterDto => {
   return {
     templateName: letter.template.name,
     publicId: letter.publicId,
-    createdAt: letter.createdAt,
+    createdAt: letter.createdAt.toDateString(),
+    firstReadAt: letter.firstReadAt?.toDateString(),
+    isPasswordProtected: letter.isPasswordProtected,
     issuedLetter: letter.issuedLetter,
   }
 }
@@ -27,10 +30,18 @@ export const mapLetterToDto = (letter: Letter): GetLetterDto => {
 export const mapLetterToGetBulkLetterDto = (
   letterParams: LetterParamMaps,
   letters: Letter[],
+  passwords?: string[],
 ): GetBulkLetterDto[] => {
-  return letters.map((letter, index) => ({
+  const getBulkLetterDtos = letters.map((letter, index) => ({
     ...letterParams[index],
     createdAt: letter.createdAt.toDateString(),
     publicId: letter.publicId,
   }))
+
+  return !passwords
+    ? getBulkLetterDtos
+    : getBulkLetterDtos.map((dtos, index) => ({
+        ...dtos,
+        Password: passwords[index], // Capitalized as it is what the user expects
+      }))
 }

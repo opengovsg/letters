@@ -1,11 +1,13 @@
-import { Button, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { VStack } from '@chakra-ui/react'
+import { FormEvent, useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
-import { Editor } from '~features/tinymce/components/Editor'
-import { convertHtmlToPdf, HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
+import { LetterViewer } from '~features/editor/components/LetterViewer'
+import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
+import { PasswordProtectedView } from './components/PasswordProtectedView'
 import {
   useGetLetterByPublicId,
   useLetterPublicId,
@@ -13,32 +15,58 @@ import {
 
 export const LetterPublicPage = (): JSX.Element => {
   const { letterPublicId } = useLetterPublicId()
-  const { letter, isLetterLoading } = useGetLetterByPublicId({
-    letterPublicId,
-  })
+  const [password, setPassword] = useState('')
+  const [isPasswordProtected, setIsPasswordProtected] = useState(false)
 
-  const handleDownload = () => {
-    if (letter && letter.issuedLetter) {
-      void convertHtmlToPdf(letter.issuedLetter, `${letterPublicId}.pdf`)
-    }
+  const { letter, isLetterLoading, error, refetchLetter } =
+    useGetLetterByPublicId({
+      letterPublicId,
+      password,
+    })
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    await refetchLetter()
   }
 
-  if (!isLetterLoading && !letter) {
+  useEffect(() => {
+    if (error?.json?.statusCode === 401) {
+      setIsPasswordProtected(true)
+    }
+  }, [error])
+
+  if (error && error.json?.statusCode !== 401) {
     return <Navigate to={`/${routes.public.error}`} />
   }
+
   return (
-    <VStack alignItems="left" spacing="0px">
-      <VStack padding={16} spacing={8} align={'center'}>
-        <Editor
-          html={letter?.issuedLetter}
-          isLoading={isLetterLoading}
-          isDisabled={true}
-          isInline={true}
-          minWidth={{ md: WIDTH_A4 }}
-          minHeight={{ md: HEIGHT_A4 }}
-        />
-        <Button onClick={handleDownload}>Download as .PDF</Button>
+    <>
+      <Helmet>
+        <meta name="robots" content="noindex" data-react-helmet="true" />
+      </Helmet>
+      <VStack alignItems="left" spacing="0px">
+        {isPasswordProtected && !letter ? (
+          <PasswordProtectedView
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            handleSubmit={handleSubmit}
+            error={error}
+            password={password}
+            setPassword={setPassword}
+            isLetterLoading={isLetterLoading}
+          />
+        ) : (
+          <VStack padding={16} spacing={8} align={'center'}>
+            <LetterViewer
+              letterPublicId={letterPublicId}
+              html={letter?.issuedLetter}
+              isLoading={isLetterLoading}
+              minWidth={{ md: WIDTH_A4 }}
+              minHeight={{ md: HEIGHT_A4 }}
+            />
+          </VStack>
+        )}
       </VStack>
-    </VStack>
+    </>
   )
 }

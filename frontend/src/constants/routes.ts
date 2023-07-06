@@ -9,5 +9,6 @@ export const routes = {
     login: 'login',
     templates: 'templates',
     letters: 'letters',
+    create: 'create',
   },
 }

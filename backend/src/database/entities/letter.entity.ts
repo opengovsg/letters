@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
-import { generatePublicId } from '../../core/utils'
+import { generatePublicId } from '../../core/utils/generate-public-id'
 import { Batch } from './batch.entity'
 import { Template } from './template.entity'
 import { User } from './user.entity'
@@ -40,9 +40,15 @@ export class Letter {
   @Column('text')
   fieldValues: string
 
+  @Column('boolean')
+  isPasswordProtected: boolean
+
   @Column('text')
   shortLink: string
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date
+
+  @Column({ type: 'timestamptz', nullable: true, default: null })
+  firstReadAt: Date
 }

@@ -27,7 +27,7 @@ export const PublicLayout = () => {
         </RouterLink>
       </Flex>
 
-      <Box minH="admin-content-min-height" w="full" bg="gray.100">
+      <Box w="full" bg="gray.100">
         <Outlet />
       </Box>
       <AppFooter />

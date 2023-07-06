@@ -1,5 +1,12 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Headers,
+  NotFoundException,
+  Param,
+} from '@nestjs/common'
 import { mapLetterToPublicDto } from 'core/dto-mappers/letter.dto-mapper'
+import { Letter } from 'database/entities'
 import { LettersService } from 'letters/letters.service'
 
 import { GetLetterPublicDto } from '~shared/dtos/letters.dto'
@@ -10,11 +17,16 @@ export class PublicController {
 
   @Get('letters/:publicId')
   async getLetterPublic(
+    @Headers('password') password: string,
     @Param('publicId') publicId: string,
   ): Promise<GetLetterPublicDto> {
-    const letter = await this.lettersService.findOneByPublicId(publicId)
-    if (!letter) throw new NotFoundException('letter not found')
+    const letter = await this.lettersService.findOneByPublicId(
+      publicId,
+      password,
+    )
+    if (!letter) throw new NotFoundException('Letter not found')
 
+    await this.lettersService.recordFirstReadAtById(letter.id)
     return mapLetterToPublicDto(letter)
   }
 }

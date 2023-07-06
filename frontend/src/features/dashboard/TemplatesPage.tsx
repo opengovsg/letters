@@ -1,17 +1,20 @@
-import { Box, ButtonGroup, VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { Button } from '@opengovsg/design-system-react'
-import { Link } from 'react-router-dom'
-
-import { useAdminAuth } from '~features/auth/context/AdminProtectedContext'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { TemplatesBody } from './components/TemplatesBody'
 
 export const TemplatesPage = (): JSX.Element => {
-  const { adminUser } = useAdminAuth()
+  const navigate = useNavigate()
 
   return (
     <VStack alignItems="left" spacing="0px">
-      <VStack pt={16} spacing={8} align={'center'}>
+      <VStack pt={2.5} align={'start'}>
+        <Link to="https://go.gov.sg/letters-beta" target="_blank">
+          <Button marginLeft={8} alignSelf="start">
+            Request New Template
+          </Button>
+        </Link>
         <Box>
           <TemplatesBody />
         </Box>

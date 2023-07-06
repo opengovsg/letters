@@ -6,10 +6,13 @@ import {
   FormErrorMessage,
   Heading,
   Spacer,
+  Stack,
+  Text,
   useControllableState,
   VStack,
 } from '@chakra-ui/react'
-import { Attachment } from '@opengovsg/design-system-react'
+import { Attachment, Switch } from '@opengovsg/design-system-react'
+import { useState } from 'react'
 
 import { ReactComponent as CsvIcon } from '~/assets/CsvIcon.svg'
 import {
@@ -18,13 +21,11 @@ import {
   useTemplateId,
 } from '~features/issue/hooks/templates.hooks'
 import useParseCsv from '~features/issue/hooks/useParseCsv'
-import { useToast } from '~hooks/useToast'
 import {
   BulkLetterValidationResultError,
   GetBulkLetterDto,
 } from '~shared/dtos/letters.dto'
 import { arrToCsv } from '~utils/csvUtils'
-import { pluraliseIfNeeded } from '~utils/stringUtils'
 
 interface UploadCsvFormProps {
   onSuccess: (res: GetBulkLetterDto[]) => void
@@ -40,34 +41,58 @@ export const UploadCsvForm = ({
   reset,
 }: UploadCsvFormProps): JSX.Element => {
   const [file, setFile] = useControllableState<File | undefined>({})
+  const [isPasswordProtected, setIsPasswordProtected] = useState(false)
 
-  const toast = useToast()
-  const { parsedArr, parseCsv, error: parseCsvError } = useParseCsv()
+  const { parsedArr, parseCsv, error: parseCsvError, passwords } = useParseCsv()
 
   const { templateId } = useTemplateId()
   const { template } = useGetTemplateById(templateId)
 
   const downloadSample = () => {
-    arrToCsv(`${template.name} Sample.csv`, template.fields)
+    const csvRows = isPasswordProtected
+      ? [...template.fields, 'Password']
+      : template.fields
+    arrToCsv(`${template.name} Sample.csv`, csvRows)
   }
 
   const { mutateAsync, isLoading } = useCreateBulkLetterMutation({
-    onSuccess: (res: GetBulkLetterDto[]) => {
-      onSuccess(res)
-      toast({
-        title: `${res.length} ${pluraliseIfNeeded(res, 'letter')} created`,
-        status: 'success',
-      })
-    },
+    onSuccess,
     onError,
   })
 
   const handleSubmit = async (): Promise<void> => {
-    await mutateAsync({ templateId, letterParamMaps: parsedArr })
+    const reqBody = isPasswordProtected
+      ? { templateId, letterParamMaps: parsedArr, passwords }
+      : { templateId, letterParamMaps: parsedArr }
+    await mutateAsync(reqBody)
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsPasswordProtected(event.target.checked)
+  }
+
+  const getErrorMessage = (): string => {
+    if (!file) return ''
+    if (parseCsvError) {
+      return parseCsvError
+    }
+    if (!isPasswordProtected && passwords.length > 0) {
+      return 'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+    }
+    if (isPasswordProtected && passwords.length === 0) {
+      return 'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+    }
+    return ''
   }
 
   return (
-    <FormControl isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}>
+    <FormControl
+      isInvalid={
+        !!parseCsvError ||
+        uploadCsvErrors.length > 0 ||
+        (file && passwords.length > 0 !== isPasswordProtected)
+      }
+    >
       <VStack spacing={4} align="stretch">
         <Heading size="sm">Upload the completed .CSV file</Heading>
         <VStack align="stretch" spacing={0}>
@@ -96,7 +121,24 @@ export const UploadCsvForm = ({
             isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}
           />
         </VStack>
-        <FormErrorMessage>{parseCsvError}</FormErrorMessage>
+        <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
+        <Flex justify="space-between">
+          <Stack>
+            <Text fontSize="24px" fontWeight="500">
+              Add password protection
+            </Text>
+            <Text fontSize="14px" fontWeight="400">
+              Create password that citizens would have to add before accessing
+              the letter.
+            </Text>
+          </Stack>
+          <Switch
+            size="lg"
+            colorScheme="green"
+            onChange={handleChange}
+            isChecked={isPasswordProtected}
+          ></Switch>
+        </Flex>
         <Spacer />
         <Flex justify="space-between">
           <Button
@@ -111,9 +153,11 @@ export const UploadCsvForm = ({
           <Button
             flex="1"
             isDisabled={
+              !file ||
               !(parsedArr.length > 0) ||
               !!parseCsvError ||
-              uploadCsvErrors.length > 0
+              uploadCsvErrors.length > 0 ||
+              isPasswordProtected !== passwords.length > 0
             }
             isLoading={isLoading}
             type="submit"

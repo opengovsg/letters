@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, EntityManager, Repository } from 'typeorm'
@@ -16,6 +17,7 @@ import {
 import { BatchesService } from '../batches/batches.service'
 import { Letter } from '../database/entities'
 import { TemplatesService } from '../templates/templates.service'
+import { LettersEncryptionService } from './letters-encryption.service'
 import { LettersRenderingService } from './letters-rendering.service'
 import { LettersSanitizationService } from './letters-sanitization.service'
 import { LettersValidationService } from './letters-validation.service'
@@ -30,6 +32,7 @@ export class LettersService {
     private readonly lettersRenderingService: LettersRenderingService,
     private readonly lettersValidationService: LettersValidationService,
     private readonly lettersSanitizationService: LettersSanitizationService,
+    private readonly lettersEncryptionService: LettersEncryptionService,
     private dataSource: DataSource,
   ) {}
 
@@ -44,10 +47,7 @@ export class LettersService {
     createLetterDtos: CreateLetterDto[],
     entityManager: EntityManager,
   ): Promise<Letter[]> {
-    const sanitizedCreateLetterDtos = createLetterDtos.map((createLetterDto) =>
-      this.lettersSanitizationService.sanitizeLetter(createLetterDto),
-    )
-    const letters = this.repository.create(sanitizedCreateLetterDtos)
+    const letters = this.repository.create(createLetterDtos)
     return entityManager.save(letters)
   }
 
@@ -55,14 +55,16 @@ export class LettersService {
     userId: number,
     createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const { templateId, letterParamMaps } = createBulkLetterDto
+    const { templateId, letterParamMaps, passwords } = createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
 
     const validationResult = this.lettersValidationService.validateBulk(
       template.fields,
       letterParamMaps,
+      passwords,
     )
+
     if (!validationResult.success)
       throw new BadRequestException(validationResult)
 
@@ -70,24 +72,35 @@ export class LettersService {
       template.html,
       letterParamMaps,
     )
+
+    const sanitizedLetters = renderedLetters.map((renderedLetter) =>
+      this.lettersSanitizationService.sanitizeLetter(renderedLetter),
+    )
+
+    const securedLetters = !passwords
+      ? sanitizedLetters
+      : sanitizedLetters.map((letter, i) =>
+          this.lettersEncryptionService.encryptLetter(letter, passwords[i]),
+        )
+
     return await this.dataSource.transaction(async (entityManager) => {
       const createBatchDto = {
         userId,
         templateId,
-        rawCsv: JSON.stringify(letterParamMaps),
       } as CreateBatchDto
 
       const batch = await this.batchesService.createWithTransaction(
         createBatchDto,
         entityManager,
       )
-      const lettersDto = renderedLetters.map(
-        (renderedLetter: Partial<Letter>) => ({
-          ...renderedLetter,
+      const lettersDto = securedLetters.map(
+        (securedLetters: Partial<Letter>) => ({
+          ...securedLetters,
           batchId: batch.id,
           userId,
           templateId,
           shortLink: '',
+          isPasswordProtected: !!passwords,
         }),
       ) as CreateLetterDto[]
 
@@ -118,14 +131,42 @@ export class LettersService {
     })
   }
 
-  async findOneByPublicId(publicId: string) {
+  async findOneByPublicId(
+    publicId: string,
+    password?: string,
+  ): Promise<Letter> {
     const letter = await this.repository.findOne({
       where: {
         publicId: publicId,
       },
     })
+
     if (!letter) throw new NotFoundException('Letter not found')
+
+    if (letter.isPasswordProtected) {
+      if (!password) {
+        throw new UnauthorizedException('No Password provided')
+      }
+
+      return this.lettersEncryptionService.decryptLetter(letter, password)
+    }
+
     return letter
+  }
+
+  async recordFirstReadAtById(id: number) {
+    const letter = await this.repository.findOneBy({ id })
+    if (!letter) throw new NotFoundException('Letter not found')
+
+    // If time that letter has been retrieved has already been recorded, then do nothing
+    if (letter.firstReadAt) return
+
+    const updatedLetter = {
+      ...letter,
+      firstReadAt: new Date().toISOString(),
+    }
+
+    await this.repository.save(updatedLetter)
   }
 
   findOne(id: number) {
