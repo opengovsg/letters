@@ -26,6 +26,8 @@ export class CreateBulkLetterDto {
 export enum BulkLetterValidationResultErrorMessage {
   INVALID_ATTRIBUTE = 'Invalid attribute in param',
   MISSING_PARAM = 'Missing param',
+  SHORT_PASSWORD = 'Short password',
+  PASSWORD_NOT_ALPHANUMERIC = 'Password is not alphanumeric',
 }
 
 export class BulkLetterValidationResultError {

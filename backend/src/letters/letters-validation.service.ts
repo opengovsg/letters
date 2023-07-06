@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common'
 
-import { BULK_MAX_ROW_LENGTH } from '~shared/constants/letters'
+import {
+  ALPHANUMERIC_PASSWORD_REGEX,
+  BULK_MAX_ROW_LENGTH,
+  MIN_PASSWORD_LENGTH,
+} from '~shared/constants/letters'
 import {
   BulkLetterValidationResultDto,
   BulkLetterValidationResultError,
@@ -40,7 +44,7 @@ export class LettersValidationService {
     )
 
     if (passwords) {
-      errors.push(...this.validatePasswordsArePresent(passwords))
+      errors.push(...this.validatePasswordsArePresentAndValid(passwords))
     }
 
     if (errors.length === 0)
@@ -88,17 +92,36 @@ export class LettersValidationService {
     )
   }
 
-  private validatePasswordsArePresent(
+  private validatePasswordsArePresentAndValid(
     passwords: string[],
   ): BulkLetterValidationResultError[] {
     return passwords
       .map((password, initialIndex) => ({ password, initialIndex }))
-      .filter((password) => password.password === '')
-      .map((password) => ({
-        id: password.initialIndex,
-        param: 'Password',
-        message: BulkLetterValidationResultErrorMessage.MISSING_PARAM,
-      }))
+      .filter(
+        (password) =>
+          password.password.length < MIN_PASSWORD_LENGTH ||
+          !password.password.match(ALPHANUMERIC_PASSWORD_REGEX),
+      )
+      .map((password) =>
+        password.password === ''
+          ? {
+              id: password.initialIndex,
+              param: 'Password',
+              message: BulkLetterValidationResultErrorMessage.MISSING_PARAM,
+            }
+          : password.password.length < MIN_PASSWORD_LENGTH
+          ? {
+              id: password.initialIndex,
+              param: 'Password',
+              message: BulkLetterValidationResultErrorMessage.SHORT_PASSWORD,
+            }
+          : {
+              id: password.initialIndex,
+              param: 'Password',
+              message:
+                BulkLetterValidationResultErrorMessage.PASSWORD_NOT_ALPHANUMERIC,
+            },
+      )
   }
 
   private fieldIsNotPopulatedInLetterParams(
