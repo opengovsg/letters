@@ -17,6 +17,7 @@ export const LetterPublicPage = (): JSX.Element => {
   const { letterPublicId } = useLetterPublicId()
   const [password, setPassword] = useState('')
   const [isPasswordProtected, setIsPasswordProtected] = useState(false)
+  const [passwordInstructions, setPasswordInstructions] = useState('')
 
   const { letter, isLetterLoading, error, refetchLetter } =
     useGetLetterByPublicId({
@@ -33,6 +34,9 @@ export const LetterPublicPage = (): JSX.Element => {
   useEffect(() => {
     if (error?.json?.statusCode === 401) {
       setIsPasswordProtected(true)
+      if (!passwordInstructions?.length) {
+        setPasswordInstructions(error?.json?.passwordInstructions)
+      }
     }
   }, [error])
 
@@ -54,6 +58,7 @@ export const LetterPublicPage = (): JSX.Element => {
             password={password}
             setPassword={setPassword}
             isLetterLoading={isLetterLoading}
+            passwordInstructions={passwordInstructions}
           />
         ) : (
           <VStack padding={16} spacing={8} align={'center'}>

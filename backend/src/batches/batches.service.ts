@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EntityManager, Repository } from 'typeorm'
 
@@ -22,6 +22,15 @@ export class BatchesService {
   ): Promise<Batch> {
     const batch = this.repository.create(createBatchDto)
     return await entityManager.save(batch)
+  }
+
+  async findOneByBatchId(id: number): Promise<Batch> {
+    const batch = await this.repository.findOneBy({
+      id,
+    })
+    if (!batch) throw new NotFoundException('Batch not found')
+
+    return batch
   }
 
   findAll() {

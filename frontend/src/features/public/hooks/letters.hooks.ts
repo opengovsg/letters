@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-import { ResponseError } from '~/types/ResponseError'
+import { PasswordResponseError } from '~/types/PasswordResponseError'
 import { publicQueryKeys } from '~constants/query-keys'
 import { api } from '~lib/api'
 import { GetLetterPublicDto } from '~shared/dtos/letters.dto'
@@ -24,7 +24,7 @@ export const useGetLetterByPublicId = ({
     isLoading,
     error,
     refetch: refetchLetter,
-  } = useQuery<GetLetterPublicDto, ResponseError>(
+  } = useQuery<GetLetterPublicDto, PasswordResponseError>(
     publicQueryKeys.letters(letterPublicId),
     () =>
       api

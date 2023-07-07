@@ -26,4 +26,7 @@ export class Batch {
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date
+
+  @Column({ type: 'text', default: '' })
+  passwordInstructions: string
 }

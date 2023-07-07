@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common'
 
-import { BULK_MAX_ROW_LENGTH } from '~shared/constants/letters'
+import {
+  BULK_MAX_ROW_LENGTH,
+  MIN_PASSWORD_INSTRUCTION_LENGTH,
+} from '~shared/constants/letters'
 import {
   BulkLetterValidationResultDto,
   BulkLetterValidationResultError,
@@ -14,6 +17,7 @@ export class LettersValidationService {
     fields: string[],
     letterParamMaps: LetterParamMaps,
     passwords: string[] | undefined,
+    passwordInstructions: string | undefined,
   ): BulkLetterValidationResultDto {
     if (letterParamMaps.length > BULK_MAX_ROW_LENGTH) {
       return {
@@ -26,6 +30,17 @@ export class LettersValidationService {
       return {
         success: false,
         message: 'Number of passwords does not match number of letters',
+      }
+    }
+
+    if (
+      passwordInstructions &&
+      passwordInstructions.length < MIN_PASSWORD_INSTRUCTION_LENGTH
+    ) {
+      return {
+        success: false,
+        message:
+          'Password instructions need to have a minimum of 10 characters',
       }
     }
 

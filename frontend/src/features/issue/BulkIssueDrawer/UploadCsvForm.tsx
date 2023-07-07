@@ -5,6 +5,8 @@ import {
   FormControl,
   FormErrorMessage,
   Heading,
+  Input,
+  Link,
   Spacer,
   Stack,
   Text,
@@ -48,6 +50,15 @@ export const UploadCsvForm = ({
   const { templateId } = useTemplateId()
   const { template } = useGetTemplateById(templateId)
 
+  const [passwordInstructions, setPasswordInstructions] = useState('')
+
+  const handlePasswordInstructionsChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const inputValue = event.target.value
+    setPasswordInstructions(inputValue)
+  }
+
   const downloadSample = () => {
     const csvRows = isPasswordProtected
       ? [...template.fields, 'Password']
@@ -62,7 +73,12 @@ export const UploadCsvForm = ({
 
   const handleSubmit = async (): Promise<void> => {
     const reqBody = isPasswordProtected
-      ? { templateId, letterParamMaps: parsedArr, passwords }
+      ? {
+          templateId,
+          letterParamMaps: parsedArr,
+          passwords,
+          passwordInstructions,
+        }
       : { templateId, letterParamMaps: parsedArr }
     await mutateAsync(reqBody)
   }
@@ -72,6 +88,11 @@ export const UploadCsvForm = ({
   }
 
   const getErrorMessage = (): string => {
+    // place this here, since officers might input the password instructions before uploading the CSV file
+    // they wouldn't be able to see the error, if this condition is placed below the empty file condition
+    if (passwordInstructions.length != 0 && passwordInstructions.length < 10) {
+      return 'Password instructions must at least contains a minimum of 10 characters.'
+    }
     if (!file) return ''
     if (parseCsvError) {
       return parseCsvError
@@ -85,16 +106,18 @@ export const UploadCsvForm = ({
     return ''
   }
 
+  const csvFormError =
+    !!parseCsvError ||
+    uploadCsvErrors.length > 0 ||
+    (file && passwords.length > 0 !== isPasswordProtected)
+
+  const passwordInstructionsError =
+    passwordInstructions.length != 0 && passwordInstructions.length < 10
+
   return (
-    <FormControl
-      isInvalid={
-        !!parseCsvError ||
-        uploadCsvErrors.length > 0 ||
-        (file && passwords.length > 0 !== isPasswordProtected)
-      }
-    >
+    <FormControl isInvalid={csvFormError || passwordInstructionsError}>
       <VStack spacing={4} align="stretch">
-        <Heading size="sm">Upload the completed .CSV file</Heading>
+        <Heading size="md">Upload the completed .CSV file</Heading>
         <VStack align="stretch" spacing={0}>
           {file && (
             <Box
@@ -121,15 +144,18 @@ export const UploadCsvForm = ({
             isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}
           />
         </VStack>
-        <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
+        {csvFormError && (
+          <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
+        )}
         <Flex justify="space-between">
           <Stack>
-            <Text fontSize="24px" fontWeight="500">
-              Add password protection
-            </Text>
+            <Heading size="md">Add password protection</Heading>
             <Text fontSize="14px" fontWeight="400">
-              Create password that citizens would have to add before accessing
-              the letter.
+              Adds a csv field for password that citizens would have to add
+              before accessing the letter.{' '}
+              <Link href="https://lettersg.gitbook.io/lettersg-guide/for-agency-users/bulk-generating-letters/generating-password-protected-letters">
+                Password Guidelines
+              </Link>{' '}
             </Text>
           </Stack>
           <Switch
@@ -139,6 +165,24 @@ export const UploadCsvForm = ({
             isChecked={isPasswordProtected}
           ></Switch>
         </Flex>
+        {isPasswordProtected && (
+          <Stack>
+            <Heading size="sm">Password Information Callout (Optional)</Heading>
+            <Text fontSize="14px" fontWeight="400">
+              Describe to citizens what information they can use to unlock their
+              letter. E.g. — &quot; Use the last four digits of NRIC + DOB to
+              unlock this letter &quot;
+            </Text>
+            <Input
+              value={passwordInstructions}
+              onChange={handlePasswordInstructionsChange}
+              placeholder="Password information callout"
+            />
+            {passwordInstructionsError && (
+              <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
+            )}
+          </Stack>
+        )}
         <Spacer />
         <Flex justify="space-between">
           <Button

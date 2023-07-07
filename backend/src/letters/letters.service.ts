@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, EntityManager, Repository } from 'typeorm'
 
+import { PASSWORD_ERROR_MESSAGE } from '~shared/constants/letters'
 import { CreateBatchDto } from '~shared/dtos/batches.dto'
 import {
   CreateBulkLetterDto,
@@ -55,7 +56,8 @@ export class LettersService {
     userId: number,
     createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const { templateId, letterParamMaps, passwords } = createBulkLetterDto
+    const { templateId, letterParamMaps, passwords, passwordInstructions } =
+      createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
 
@@ -63,6 +65,7 @@ export class LettersService {
       template.fields,
       letterParamMaps,
       passwords,
+      passwordInstructions,
     )
 
     if (!validationResult.success)
@@ -87,6 +90,7 @@ export class LettersService {
       const createBatchDto = {
         userId,
         templateId,
+        passwordInstructions,
       } as CreateBatchDto
 
       const batch = await this.batchesService.createWithTransaction(
@@ -144,8 +148,18 @@ export class LettersService {
     if (!letter) throw new NotFoundException('Letter not found')
 
     if (letter.isPasswordProtected) {
+      // this is the case, where we show the screen for entering the password
+      // and the password instructions. So here we pass the password instructions
+      // to be displayed on frontend
       if (!password) {
-        throw new UnauthorizedException('No Password provided')
+        const letterBatch = await this.batchesService.findOneByBatchId(
+          letter.batchId,
+        )
+        throw new UnauthorizedException({
+          statusCode: 401,
+          message: PASSWORD_ERROR_MESSAGE,
+          passwordInstructions: letterBatch.passwordInstructions,
+        })
       }
 
       return this.lettersEncryptionService.decryptLetter(letter, password)
