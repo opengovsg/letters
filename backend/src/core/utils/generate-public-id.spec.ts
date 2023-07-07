@@ -11,7 +11,7 @@ describe('generatePublicId', () => {
   test('should regenerate ID if it matches a protected string', () => {
     const mockGenerator = jest
       .fn()
-      .mockReturnValueOnce('api')
+      .mockReturnValueOnce('wheredream')
       .mockReturnValue('abcdeabcdeabcdeabcde')
 
     const id = generatePublicId(mockGenerator)

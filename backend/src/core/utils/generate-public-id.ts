@@ -52,14 +52,19 @@ const BLOCK_SIZE = 5
 const GROUPS = 4
 const ID_LENGTH = BLOCK_SIZE * GROUPS
 
+/*
+ * Generates publicID of the format `xzyqd-dsfss-sdfs0-sdfss`
+ * Where each alphabet belongs to the ALPHABET const string above
+ * The letter ID contains 4 GROUPS and each group has a BLOCK_SIZE of 5
+ */
 export const generatePublicId = (
   generator = customAlphabet(ALPHABET, ID_LENGTH),
 ): string => {
-  let id = generator()
+  let id = splitStrIntoBlocks(generator(), BLOCK_SIZE)
   // if publicId is in protected name space, regenerate
   while (PROTECTED_NAMESPACES.includes(id)) {
-    id = generator()
+    id = splitStrIntoBlocks(generator(), BLOCK_SIZE)
   }
 
-  return splitStrIntoBlocks(id, BLOCK_SIZE)
+  return id
 }
