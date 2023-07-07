@@ -1,10 +1,10 @@
 import { PinoLogger } from 'nestjs-pino'
 
 import { ConfigService } from '../../config/config.service'
-import { TwilioService } from './twilio.service'
+import { TwilioClient } from './twilio.client'
 
-describe('TwilioService', () => {
-  let twilioService: TwilioService
+describe('TwilioClient', () => {
+  let twilioClient: TwilioClient
   let config: ConfigService
   let logger: PinoLogger
 
@@ -23,7 +23,7 @@ describe('TwilioService', () => {
     jest.resetAllMocks()
     config = mockConfigService as unknown as ConfigService
     logger = mockLogger as unknown as PinoLogger
-    twilioService = new TwilioService(config, logger)
+    twilioClient = new TwilioClient(config, logger)
   })
 
   describe('sendMessage', () => {
@@ -44,11 +44,11 @@ describe('TwilioService', () => {
         },
       }
       const getClientSpy = jest
-        .spyOn(twilioService as any, 'getClient')
+        .spyOn(twilioClient as any, 'getClient')
         .mockReturnValue(mockClient)
 
       // test
-      const sid = await twilioService.sendMessage(message, recipient)
+      const sid = await twilioClient.sendMessage(message, recipient)
 
       // assert
       expect(getClientSpy).toHaveBeenCalledWith({ logOnly: false })
@@ -77,11 +77,11 @@ describe('TwilioService', () => {
         },
       }
       const getClientSpy = jest
-        .spyOn(twilioService as any, 'getClient')
+        .spyOn(twilioClient as any, 'getClient')
         .mockReturnValue(mockClient)
 
       // test
-      const sid = await twilioService.sendMessage(message, recipient)
+      const sid = await twilioClient.sendMessage(message, recipient)
 
       // assert
       expect(getClientSpy).toHaveBeenCalledWith({ logOnly: false })
@@ -112,11 +112,11 @@ describe('TwilioService', () => {
         },
       }
       const getClientSpy = jest
-        .spyOn(twilioService as any, 'getClient')
+        .spyOn(twilioClient as any, 'getClient')
         .mockReturnValue(mockClient)
 
       // test
-      const sid = await twilioService.sendMessage(message, recipient)
+      const sid = await twilioClient.sendMessage(message, recipient)
 
       // assert
       expect(getClientSpy).toHaveBeenCalledWith({ logOnly: true })

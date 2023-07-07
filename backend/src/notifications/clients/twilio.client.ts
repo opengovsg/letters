@@ -6,10 +6,10 @@ import twilio from 'twilio'
 import { ConfigService } from '../../config/config.service'
 
 @Injectable()
-export class TwilioService {
+export class TwilioClient {
   constructor(
     private readonly config: ConfigService,
-    @InjectPinoLogger(TwilioService.name)
+    @InjectPinoLogger(TwilioClient.name)
     private readonly logger: PinoLogger,
   ) {}
 

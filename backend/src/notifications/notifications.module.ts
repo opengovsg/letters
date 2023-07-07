@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Notification, User } from 'database/entities'
 
 import { ConfigModule } from '../config/config.module'
-import { TwilioService } from './clients/twilio.service'
+import { TwilioClient } from './clients/twilio.client'
 import { NotificationsService } from './notifications.service'
 import { SmsNotificationsService } from './sms-notifications.service'
 
@@ -14,7 +14,7 @@ import { SmsNotificationsService } from './sms-notifications.service'
     TypeOrmModule.forFeature([Notification]),
     TypeOrmModule.forFeature([User]),
   ],
-  providers: [NotificationsService, TwilioService, SmsNotificationsService],
+  providers: [NotificationsService, SmsNotificationsService, TwilioClient],
   exports: [NotificationsService],
 })
 export class NotificationsModule {}

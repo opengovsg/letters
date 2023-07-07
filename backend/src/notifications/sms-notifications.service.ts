@@ -5,12 +5,12 @@ import { ACCEPTED_SINGAPORE_PHONE_NUMBERS_REGEX } from '~shared/constants/regex'
 
 import { Notification } from '../database/entities'
 import { NotificationChannel } from '../types/notification'
-import { TwilioService } from './clients/twilio.service'
+import { TwilioClient } from './clients/twilio.client'
 
 @Injectable()
 export class SmsNotificationsService {
   constructor(
-    private readonly smsClient: TwilioService,
+    private readonly smsClient: TwilioClient,
     @InjectPinoLogger(SmsNotificationsService.name)
     private readonly logger: PinoLogger,
   ) {}
