@@ -3,6 +3,7 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 
 import { ACCEPTED_SINGAPORE_PHONE_NUMBERS_REGEX } from '~shared/constants/regex'
 
+import { ConfigService } from '../config/config.service'
 import { Notification } from '../database/entities'
 import { NotificationChannel } from '../types/notification'
 import { TwilioClient } from './clients/twilio.client'
@@ -13,11 +14,12 @@ export class SmsNotificationsService {
     private readonly smsClient: TwilioClient,
     @InjectPinoLogger(SmsNotificationsService.name)
     private readonly logger: PinoLogger,
+    private readonly config: ConfigService,
   ) {}
 
   // We accept numbers in the following formats: +65x,65x,65-,+65-, or without country code x
   // This function returns a standardized phone number +65x
-  private standardizePhoneNumber(recipient: string): string {
+  standardizePhoneNumber(recipient: string): string {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const matches = ACCEPTED_SINGAPORE_PHONE_NUMBERS_REGEX.exec(
       recipient,
@@ -30,6 +32,13 @@ export class SmsNotificationsService {
     return `+65${phoneNumber}`
   }
 
+  isInSmsAllowList(recipient: string): boolean {
+    const smsAllowListString = this.config.get('smsAllowList')
+    if (smsAllowListString === '*') return true
+    const smsAllowList = smsAllowListString ? smsAllowListString.split(',') : []
+    return smsAllowList.includes(recipient)
+  }
+
   async send(
     templatedMessages: { message: string; letterId: number }[],
     recipients: string[],
@@ -40,11 +49,13 @@ export class SmsNotificationsService {
       templatedMessages.map(async ({ message, letterId }, index) => {
         const recipient = recipients[index]
         const standardizedRecipient = this.standardizePhoneNumber(recipient)
+        const logOnly = !this.isInSmsAllowList(standardizedRecipient)
         let messageSid
         try {
           messageSid = await this.smsClient.sendMessage(
             message,
             standardizedRecipient,
+            logOnly,
           )
         } catch (error) {
           this.logger.error(error)
