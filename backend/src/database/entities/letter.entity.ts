@@ -40,7 +40,7 @@ export class Letter {
   @Column('text')
   fieldValues: string
 
-  @Column('boolean')
+  @Column({ type: 'boolean', default: false })
   isPasswordProtected: boolean
 
   @Column('text')

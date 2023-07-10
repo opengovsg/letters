@@ -17,12 +17,12 @@ import {
 
 import { BatchesService } from '../batches/batches.service'
 import { Letter } from '../database/entities'
+import { NotificationsService } from '../notifications/notifications.service'
 import { TemplatesService } from '../templates/templates.service'
 import { LettersEncryptionService } from './letters-encryption.service'
 import { LettersRenderingService } from './letters-rendering.service'
 import { LettersSanitizationService } from './letters-sanitization.service'
 import { LettersValidationService } from './letters-validation.service'
-
 @Injectable()
 export class LettersService {
   @InjectRepository(Letter)
@@ -34,6 +34,7 @@ export class LettersService {
     private readonly lettersValidationService: LettersValidationService,
     private readonly lettersSanitizationService: LettersSanitizationService,
     private readonly lettersEncryptionService: LettersEncryptionService,
+    private readonly notificationsService: NotificationsService,
     private dataSource: DataSource,
   ) {}
 
@@ -56,8 +57,13 @@ export class LettersService {
     userId: number,
     createBulkLetterDto: CreateBulkLetterDto,
   ): Promise<Letter[]> {
-    const { templateId, letterParamMaps, passwords, passwordInstructions } =
-      createBulkLetterDto
+    const {
+      templateId,
+      letterParamMaps,
+      passwords,
+      passwordInstructions,
+      phoneNumbers,
+    } = createBulkLetterDto
     const template = await this.templatesService.findOne(templateId)
     if (!template) throw new NotFoundException('Template not found')
 
@@ -66,6 +72,7 @@ export class LettersService {
       letterParamMaps,
       passwords,
       passwordInstructions,
+      phoneNumbers,
     )
 
     if (!validationResult.success)
@@ -86,34 +93,41 @@ export class LettersService {
           this.lettersEncryptionService.encryptLetter(letter, passwords[i]),
         )
 
-    return await this.dataSource.transaction(async (entityManager) => {
-      const createBatchDto = {
-        userId,
-        templateId,
-        passwordInstructions,
-      } as CreateBatchDto
-
-      const batch = await this.batchesService.createWithTransaction(
-        createBatchDto,
-        entityManager,
-      )
-      const lettersDto = securedLetters.map(
-        (securedLetters: Partial<Letter>) => ({
-          ...securedLetters,
-          batchId: batch.id,
+    const createdLetters = await this.dataSource.transaction(
+      async (entityManager) => {
+        const createBatchDto = {
           userId,
           templateId,
-          shortLink: '',
-          isPasswordProtected: !!passwords,
-        }),
-      ) as CreateLetterDto[]
+          passwordInstructions,
+        } as CreateBatchDto
 
-      const letters = await this.createWithTransaction(
-        lettersDto,
-        entityManager,
+        const batch = await this.batchesService.createWithTransaction(
+          createBatchDto,
+          entityManager,
+        )
+        const lettersDto = securedLetters.map(
+          (securedLetters: Partial<Letter>) => ({
+            ...securedLetters,
+            batchId: batch.id,
+            userId,
+            templateId,
+            shortLink: '',
+            isPasswordProtected: !!passwords,
+          }),
+        ) as CreateLetterDto[]
+
+        return await this.createWithTransaction(lettersDto, entityManager)
+      },
+    )
+
+    if (createBulkLetterDto.phoneNumbers)
+      await this.notificationsService.sendNotifications(
+        userId,
+        createdLetters,
+        createBulkLetterDto.phoneNumbers,
       )
-      return letters
-    })
+
+    return createdLetters
   }
 
   findAndCount(userId: number, limit: number, offset: number) {

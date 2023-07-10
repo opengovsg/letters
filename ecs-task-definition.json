@@ -75,6 +75,26 @@
         {
           "name": "TINYMCE_API_KEY",
           "valueFrom": "letters-<ENV>-tinymce-api-key"
+        },
+        {
+          "name": "TWILIO_ACCOUNT_SID",
+          "valueFrom": "letters-<ENV>-twilio-account-sid"
+        },
+        {
+          "name": "TWILIO_AUTH_TOKEN",
+          "valueFrom": "letters-<ENV>-twilio-auth-token"
+        },
+        {
+          "name": "TWILIO_MESSAGING_SERVICE_SID",
+          "valueFrom": "letters-<ENV>-twilio-messaging-service-sid"
+        },
+        {
+          "name": "DOMAIN_NAME",
+          "valueFrom": "letters-<ENV>-domain-name"
+        },
+        {
+          "name": "SMS_ALLOW_LIST",
+          "valueFrom": "letters-<ENV>-sms-allow-list"
         }
       ],
       "logConfiguration": {

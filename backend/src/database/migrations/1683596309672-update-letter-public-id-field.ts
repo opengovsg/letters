@@ -24,8 +24,6 @@ export class updateLetterPublicIdField1683596309672
       `ALTER TABLE "letters" DROP CONSTRAINT "UQ_cfe06d7f8cda8902e25c03c0c70"`,
     )
     await queryRunner.query(`ALTER TABLE "letters" DROP COLUMN "publicId"`)
-    await queryRunner.query(
-      `ALTER TABLE "letters" ADD "publicId" text NOT NULL`,
-    )
+    await queryRunner.query(`ALTER TABLE "letters" ADD "publicId" text`)
   }
 }

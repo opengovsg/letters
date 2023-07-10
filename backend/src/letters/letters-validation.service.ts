@@ -4,6 +4,7 @@ import {
   BULK_MAX_ROW_LENGTH,
   MIN_PASSWORD_INSTRUCTION_LENGTH,
 } from '~shared/constants/letters'
+import { ACCEPTED_SINGAPORE_PHONE_NUMBERS_REGEX } from '~shared/constants/regex'
 import {
   BulkLetterValidationResultDto,
   BulkLetterValidationResultError,
@@ -18,6 +19,7 @@ export class LettersValidationService {
     letterParamMaps: LetterParamMaps,
     passwords: string[] | undefined,
     passwordInstructions: string | undefined,
+    phoneNumbers: string[] | undefined,
   ): BulkLetterValidationResultDto {
     if (letterParamMaps.length > BULK_MAX_ROW_LENGTH) {
       return {
@@ -44,6 +46,13 @@ export class LettersValidationService {
       }
     }
 
+    if (phoneNumbers && letterParamMaps.length !== phoneNumbers?.length) {
+      return {
+        success: false,
+        message: 'Number of phone numbers does not match number of letters',
+      }
+    }
+
     const errors: BulkLetterValidationResultError[] = []
 
     errors.push(
@@ -56,6 +65,10 @@ export class LettersValidationService {
 
     if (passwords) {
       errors.push(...this.validatePasswordsArePresent(passwords))
+    }
+
+    if (phoneNumbers) {
+      errors.push(...this.validatePhoneNumbers(phoneNumbers))
     }
 
     if (errors.length === 0)
@@ -124,5 +137,21 @@ export class LettersValidationService {
       !Object.prototype.hasOwnProperty.call(letterParamMap, field) ||
       letterParamMap[field] === ''
     )
+  }
+
+  private validatePhoneNumbers(
+    phoneNumbers: string[],
+  ): BulkLetterValidationResultError[] {
+    return phoneNumbers
+      .map((phoneNumber, initialIndex) => ({ phoneNumber, initialIndex }))
+      .filter(
+        ({ phoneNumber }) =>
+          !phoneNumber.match(ACCEPTED_SINGAPORE_PHONE_NUMBERS_REGEX),
+      )
+      .map(({ initialIndex }) => ({
+        id: initialIndex,
+        param: 'Phone Number',
+        message: BulkLetterValidationResultErrorMessage.INVALID_PHONE_NUMBER,
+      }))
   }
 }

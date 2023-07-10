@@ -42,6 +42,13 @@ export interface ConfigSchema {
   }
   health: { heapSizeThreshold: number; rssThreshold: number }
   tinymceApiKey: string
+  twilioApi: {
+    accountSid: string
+    authToken: string
+    messagingServiceSid: string
+  }
+  domainName: string
+  smsAllowList: string
 }
 
 addFormats({
@@ -243,5 +250,37 @@ export const schema: Schema<ConfigSchema> = {
     env: 'TINYMCE_API_KEY',
     format: String,
     default: 'abc', // defaults to empty string, which will disable TinyMCE
+  },
+  twilioApi: {
+    accountSid: {
+      doc: 'Account SID used for Twilio',
+      env: 'TWILIO_ACCOUNT_SID',
+      format: String,
+      default: '',
+    },
+    authToken: {
+      doc: 'Auth Token used for Twilio',
+      env: 'TWILIO_AUTH_TOKEN',
+      format: String,
+      default: '',
+    },
+    messagingServiceSid: {
+      doc: 'Messaging Service SID used for Twilio',
+      env: 'TWILIO_MESSAGING_SERVICE_SID',
+      format: String,
+      default: '',
+    },
+  },
+  domainName: {
+    doc: 'Domain name of application',
+    env: 'DOMAIN_NAME',
+    format: String,
+    default: 'http://localhost:3000',
+  },
+  smsAllowList: {
+    doc: 'Allow list for sms testing. Use "" to block all numbers, "*" to allow all numbers, or comma-separated phone numbers starting with +65, e.g. "+6588889999,+6588888888"',
+    env: 'SMS_ALLOW_LIST',
+    format: String,
+    default: '',
   },
 }

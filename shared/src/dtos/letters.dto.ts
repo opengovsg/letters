@@ -23,11 +23,15 @@ export class CreateBulkLetterDto {
   passwords?: string[]
   @IsOptional()
   passwordInstructions?: string
+  @IsOptional()
+  @IsArray()
+  phoneNumbers?: string[]
 }
 
 export enum BulkLetterValidationResultErrorMessage {
   INVALID_ATTRIBUTE = 'Invalid attribute in param',
   MISSING_PARAM = 'Missing param',
+  INVALID_PHONE_NUMBER = 'Invalid phone number',
 }
 
 export class BulkLetterValidationResultError {

@@ -3,7 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { AuthModule } from '../auth/auth.module'
 import { BatchesModule } from '../batches/batches.module'
-import { Letter } from '../database/entities' // To be deleted
+import { Letter, User } from '../database/entities'
+import { NotificationsModule } from '../notifications/notifications.module'
 import { TemplatesModule } from '../templates/templates.module'
 import { LettersController } from './letters.controller'
 import { LettersService } from './letters.service'
@@ -15,9 +16,11 @@ import { LettersValidationService } from './letters-validation.service'
 @Module({
   imports: [
     TypeOrmModule.forFeature([Letter]),
+    TypeOrmModule.forFeature([User]),
     AuthModule,
     BatchesModule,
     TemplatesModule,
+    NotificationsModule,
   ],
   controllers: [LettersController],
   providers: [
