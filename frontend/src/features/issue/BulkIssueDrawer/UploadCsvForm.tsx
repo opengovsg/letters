@@ -104,9 +104,6 @@ export const UploadCsvForm = ({
   const getErrorMessage = (): string => {
     // place this here, since officers might input the password instructions before uploading the CSV file
     // they wouldn't be able to see the error, if this condition is placed below the empty file condition
-    if (passwordInstructions.length != 0 && passwordInstructions.length < 10) {
-      return 'Password instructions must at least contains a minimum of 10 characters.'
-    }
     if (!file) return ''
     if (parseCsvError) {
       return parseCsvError
@@ -122,6 +119,13 @@ export const UploadCsvForm = ({
     }
     if (isSendViaSms && phoneNumbers.length === 0) {
       return 'No Phone number field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+    }
+    return ''
+  }
+
+  const getPasswordInstructionErrorMessage = (): string => {
+    if (passwordInstructions.length != 0 && passwordInstructions.length < 10) {
+      return 'Password instructions must at least contains a minimum of 10 characters.'
     }
     return ''
   }
@@ -205,7 +209,9 @@ export const UploadCsvForm = ({
               isInvalid={passwordInstructionsError}
             />
             {passwordInstructionsError && (
-              <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
+              <FormErrorMessage>
+                {getPasswordInstructionErrorMessage()}
+              </FormErrorMessage>
             )}
           </Stack>
         )}
