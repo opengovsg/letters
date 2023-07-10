@@ -1,11 +1,11 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { FormEvent, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
 import { LetterViewer } from '~features/editor/components/LetterViewer'
-import { convertHtmlToPdf, HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
+import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import { PasswordProtectedView } from './components/PasswordProtectedView'
 import {
@@ -17,18 +17,13 @@ export const LetterPublicPage = (): JSX.Element => {
   const { letterPublicId } = useLetterPublicId()
   const [password, setPassword] = useState('')
   const [isPasswordProtected, setIsPasswordProtected] = useState(false)
+  const [passwordInstructions, setPasswordInstructions] = useState('')
 
   const { letter, isLetterLoading, error, refetchLetter } =
     useGetLetterByPublicId({
       letterPublicId,
       password,
     })
-
-  const handleDownload = () => {
-    if (letter && letter.issuedLetter) {
-      void convertHtmlToPdf(letter.issuedLetter, `${letterPublicId}.pdf`)
-    }
-  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -39,6 +34,9 @@ export const LetterPublicPage = (): JSX.Element => {
   useEffect(() => {
     if (error?.json?.statusCode === 401) {
       setIsPasswordProtected(true)
+      if (!passwordInstructions?.length) {
+        setPasswordInstructions(error?.json?.passwordInstructions)
+      }
     }
   }, [error])
 
@@ -60,6 +58,7 @@ export const LetterPublicPage = (): JSX.Element => {
             password={password}
             setPassword={setPassword}
             isLetterLoading={isLetterLoading}
+            passwordInstructions={passwordInstructions}
           />
         ) : (
           <VStack padding={16} spacing={8} align={'center'}>
@@ -70,9 +69,6 @@ export const LetterPublicPage = (): JSX.Element => {
               minWidth={{ md: WIDTH_A4 }}
               minHeight={{ md: HEIGHT_A4 }}
             />
-            {!isLetterLoading && (
-              <Button onClick={handleDownload}>Download as .PDF</Button>
-            )}
           </VStack>
         )}
       </VStack>

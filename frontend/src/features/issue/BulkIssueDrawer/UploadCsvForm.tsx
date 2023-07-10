@@ -5,6 +5,8 @@ import {
   FormControl,
   FormErrorMessage,
   Heading,
+  Input,
+  Link,
   Spacer,
   Stack,
   Text,
@@ -41,40 +43,6 @@ function getRequiredFields(fields: [boolean, string][]): string[] {
     .map(([, fieldName]) => fieldName)
 }
 
-function getRequiredRequestParameters(
-  parameters: [boolean, string[], string][],
-): { [string: string]: string[] } {
-  return parameters
-    .filter(([isRequired]) => isRequired)
-    .reduce(
-      (paramObj, [, fields, fieldName]) => ({
-        ...paramObj,
-        [fieldName]: fields,
-      }),
-      {},
-    )
-}
-
-function getErrorMessagesForMismatchedFields(
-  fields: [boolean, string[], string, string][],
-): string[] {
-  const errors: string[] = []
-  for (const field of fields) {
-    const [isSelected, provided, columnName, feature] = field
-    if (!isSelected && provided.length > 0) {
-      errors.push(
-        `${columnName} field found in the CSV file despite ${feature} disabled, please upload an updated .csv`,
-      )
-    }
-    if (isSelected && provided.length === 0) {
-      errors.push(
-        `No ${columnName} field found in the CSV file despite ${feature} enabled, please upload an updated .csv`,
-      )
-    }
-  }
-  return errors
-}
-
 export const PASSWORD_KEY = 'Password'
 export const PHONENUMBER_KEY = 'Phone Number'
 
@@ -99,6 +67,8 @@ export const UploadCsvForm = ({
   const { templateId } = useTemplateId()
   const { template } = useGetTemplateById(templateId)
 
+  const [passwordInstructions, setPasswordInstructions] = useState('')
+
   const downloadSample = () => {
     const csvRows: string[] = [
       ...template.fields,
@@ -120,44 +90,57 @@ export const UploadCsvForm = ({
     const reqBody: CreateBulkLetterDto = {
       templateId,
       letterParamMaps: parsedArr,
-      ...getRequiredRequestParameters([
-        [isPasswordProtected, passwords, 'passwords'],
-        [isSendViaSms, phoneNumbers, 'phoneNumbers'],
-      ]),
     }
-
+    if (isPasswordProtected) {
+      reqBody.passwords = passwords
+      reqBody.passwordInstructions = passwordInstructions
+    }
+    if (isSendViaSms) {
+      reqBody.phoneNumbers = phoneNumbers
+    }
     await mutateAsync(reqBody)
   }
 
-  const getFormErrorMessages = (): string[] => {
-    if (!file) return []
+  const getErrorMessage = (): string => {
+    // place this here, since officers might input the password instructions before uploading the CSV file
+    // they wouldn't be able to see the error, if this condition is placed below the empty file condition
+    if (passwordInstructions.length != 0 && passwordInstructions.length < 10) {
+      return 'Password instructions must at least contains a minimum of 10 characters.'
+    }
+    if (!file) return ''
     if (parseCsvError) {
-      return [parseCsvError]
+      return parseCsvError
     }
-    if (uploadCsvErrors.length > 0) {
-      return ['Please correct the errors in the CSV file before proceeding']
+    if (!isPasswordProtected && passwords.length > 0) {
+      return 'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
     }
-
-    return getErrorMessagesForMismatchedFields([
-      [isPasswordProtected, passwords, PASSWORD_KEY, 'Password protection'],
-      [isSendViaSms, phoneNumbers, PHONENUMBER_KEY, 'SMS sending'],
-    ])
+    if (isPasswordProtected && passwords.length === 0) {
+      return 'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+    }
+    if (!isSendViaSms && phoneNumbers.length > 0) {
+      return 'Phone number field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+    }
+    if (isSendViaSms && phoneNumbers.length === 0) {
+      return 'No Phone number field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+    }
+    return ''
   }
 
-  const isFormValid = () => {
-    return (
-      parsedArr.length > 0 &&
-      parseCsvError.length === 0 &&
-      uploadCsvErrors.length === 0 &&
-      isPasswordProtected === passwords.length > 0 &&
-      isSendViaSms === phoneNumbers.length > 0
-    )
-  }
+  const csvFormError =
+    !!parseCsvError ||
+    uploadCsvErrors.length > 0 ||
+    isPasswordProtected === (passwords.length === 0) ||
+    isSendViaSms === (phoneNumbers.length === 0)
+
+  const passwordInstructionsError =
+    isPasswordProtected &&
+    passwordInstructions.length != 0 &&
+    passwordInstructions.length < 10
 
   return (
-    <FormControl isInvalid={!isFormValid()}>
+    <FormControl isInvalid={csvFormError || passwordInstructionsError}>
       <VStack spacing={4} align="stretch">
-        <Heading size="sm">Upload the completed .CSV file</Heading>
+        <Heading size="md">Upload the completed .CSV file</Heading>
         <VStack align="stretch" spacing={0}>
           {file && (
             <Box
@@ -184,31 +167,51 @@ export const UploadCsvForm = ({
             isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}
           />
         </VStack>
-        {getFormErrorMessages().map((error) => (
-          <FormErrorMessage key={error}>{error}</FormErrorMessage>
-        ))}
+        {csvFormError && (
+          <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
+        )}
         <Flex justify="space-between">
           <Stack>
-            <Text fontSize="24px" fontWeight="500">
-              Add password protection
-            </Text>
+            <Heading size="md">Add password protection</Heading>
             <Text fontSize="14px" fontWeight="400">
-              Create password that citizens would have to add before accessing
-              the letter.
+              Adds a csv field for password that citizens would have to add
+              before accessing the letter.{' '}
+              <Link href="https://lettersg.gitbook.io/lettersg-guide/for-agency-users/bulk-generating-letters/generating-password-protected-letters">
+                Password Guidelines
+              </Link>{' '}
             </Text>
           </Stack>
           <Switch
             size="lg"
             colorScheme="green"
-            onChange={(e) => setIsPasswordProtected(e.target.checked)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setIsPasswordProtected(e.target.checked)
+            }
             isChecked={isPasswordProtected}
           ></Switch>
         </Flex>
+        {isPasswordProtected && (
+          <Stack>
+            <Heading size="sm">Password Information Callout (Optional)</Heading>
+            <Text fontSize="14px" fontWeight="400">
+              Describe to citizens what information they can use to unlock their
+              letter. E.g. — &quot; Use the last four digits of NRIC + DOB to
+              unlock this letter &quot;
+            </Text>
+            <Input
+              value={passwordInstructions}
+              onChange={(e) => setPasswordInstructions(e.target.value)}
+              placeholder="Password information callout"
+              isInvalid={passwordInstructionsError}
+            />
+            {passwordInstructionsError && (
+              <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
+            )}
+          </Stack>
+        )}
         <Flex justify="space-between">
           <Stack>
-            <Text fontSize="24px" fontWeight="500">
-              Send via SMS
-            </Text>
+            <Heading size="md">Send via SMS</Heading>
             <Text fontSize="14px" fontWeight="400">
               Send the letter via SMS by including the phone numbers in the CSV
             </Text>
@@ -233,7 +236,7 @@ export const UploadCsvForm = ({
           <Spacer maxW="0.5rem" />
           <Button
             flex="1"
-            isDisabled={!file || !isFormValid()}
+            isDisabled={!file || csvFormError || passwordInstructionsError}
             isLoading={isLoading}
             type="submit"
             // eslint-disable-next-line @typescript-eslint/no-misused-promises

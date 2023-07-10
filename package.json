@@ -1,6 +1,6 @@
 {
   "name": "@opengovsg/ts-template",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A template for most TypeScript projects in OGP",
   "author": "Open Government Products, GovTech Singapore (https://open.gov.sg)",
   "license": "MIT",

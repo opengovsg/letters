@@ -22,6 +22,8 @@ export class CreateBulkLetterDto {
   @IsArray()
   passwords?: string[]
   @IsOptional()
+  passwordInstructions?: string
+  @IsOptional()
   @IsArray()
   phoneNumbers?: string[]
 }
