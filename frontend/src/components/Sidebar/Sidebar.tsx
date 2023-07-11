@@ -21,8 +21,8 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
           <VStack w="full" align="stretch" spacing={0}>
             <SidebarButton
               name={'Templates'}
-              isSelected={!!useMatch(`/admin/${routes.admin.templates}`)}
-              onClick={() => navigate(`/admin/${routes.admin.templates}`)}
+              isSelected={!!useMatch(`/admin/${routes.admin.templates.index}`)}
+              onClick={() => navigate(`/admin/${routes.admin.templates.index}`)}
             />
             <SidebarButton
               name={'Issued Letters'}
