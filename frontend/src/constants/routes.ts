@@ -7,8 +7,10 @@ export const routes = {
   admin: {
     index: 'admin',
     login: 'login',
-    templates: 'templates',
+    templates: {
+      index: 'templates',
+      create: 'create',
+    },
     letters: 'letters',
-    create: 'create',
   },
 }

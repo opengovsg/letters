@@ -12,37 +12,41 @@ import { BulkIssueDrawer } from '~features/issue/BulkIssueDrawer'
 export const adminRoutes: RouteObject[] = [
   {
     index: true,
-    element: <Navigate to={routes.admin.templates} />,
+    element: <Navigate to={routes.admin.templates.index} />,
   },
   {
     path: routes.admin.login,
     element: <LoginPage />,
   },
   {
-    path: routes.admin.templates,
-    element: (
-      <AdminProtectedRoute>
-        <AdminLayout />
-      </AdminProtectedRoute>
-    ),
+    path: routes.admin.templates.index,
     children: [
       {
-        index: true,
-        element: <TemplatesPage />,
+        element: (
+          <AdminProtectedRoute>
+            <AdminLayout />
+          </AdminProtectedRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <TemplatesPage />,
+          },
+        ],
       },
-    ],
-  },
-  {
-    path: routes.admin.create,
-    element: (
-      <AdminProtectedRoute>
-        <Outlet />
-      </AdminProtectedRoute>
-    ),
-    children: [
       {
-        index: true,
-        element: <CreateTemplatePage />,
+        path: routes.admin.templates.create,
+        element: (
+          <AdminProtectedRoute>
+            <Outlet />
+          </AdminProtectedRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <CreateTemplatePage />,
+          },
+        ],
       },
     ],
   },
@@ -61,7 +65,7 @@ export const adminRoutes: RouteObject[] = [
     ],
   },
   {
-    path: `${routes.admin.templates}/:templateId/issue`,
+    path: `${routes.admin.templates.index}/:templateId/issue`,
     element: (
       <AdminProtectedRoute>
         <AdminLayout />
@@ -81,6 +85,6 @@ export const adminRoutes: RouteObject[] = [
   },
   {
     path: '*',
-    element: <Navigate to={routes.admin.templates} />,
+    element: <Navigate to={routes.admin.templates.index} />,
   },
 ]
