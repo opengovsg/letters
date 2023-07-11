@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack } from '@chakra-ui/react'
+import { Box, HStack, Text } from '@chakra-ui/react'
 
 import { ReactComponent as CheckMark } from '~/assets/CheckMark.svg'
 import { ReactComponent as CsvIcon } from '~/assets/CsvIcon.svg'
@@ -53,13 +53,12 @@ export const BulkIssueCompletionCard = ({
       handlePreviousClick={() => goToPrevious()}
       buttonConfig={{ nextButtonLabel: 'Download file' }}
     >
-      <Box padding={8}>
+      <Box padding={'5px'}>
         <HStack direction="row" spacing={2}>
-          <CheckMark />
-          <Heading size="sm">
+          <Text textStyle="h6">
             {bulkLetters.length} {pluraliseIfNeeded(bulkLetters, 'letter')}{' '}
             generated
-          </Heading>
+          </Text>
         </HStack>
         <Box
           bg="#F9F9F9"

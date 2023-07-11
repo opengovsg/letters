@@ -183,15 +183,19 @@ export const BulkIssueUploadCsvCard = ({
           <Text textStyle="h6">Upload the completed .CSV file</Text>
           <Text textStyle="body-2">
             CSV file must include:
-            <UnorderedList>
+            <UnorderedList padding={'5px'}>
               {/* TODO: Make this list dependent on the variables selected */}
               <li>All placeholders in the template</li>
-              <li>
-                A phone number column with the recipient &apos;s phone number
-              </li>
-              <li>
-                A &quot;Password&quot; column with the password to view letter
-              </li>
+              {isSendViaSms && (
+                <li>
+                  A phone number column with the recipient&apos;s phone number
+                </li>
+              )}
+              {isPasswordProtected && (
+                <li>
+                  A &quot;Password&quot; column with the password to view letter
+                </li>
+              )}
             </UnorderedList>
           </Text>
 
