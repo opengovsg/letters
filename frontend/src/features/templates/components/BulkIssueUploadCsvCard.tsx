@@ -9,6 +9,7 @@ import {
   Text,
   UnorderedList,
   useControllableState,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { Attachment, Button } from '@opengovsg/design-system-react'
@@ -33,6 +34,7 @@ import { arrToCsv } from '~utils/csvUtils'
 import { pluraliseIfNeeded } from '~utils/stringUtils'
 
 import { BulkIssueCard } from './BulkIssueCard'
+import { BulkIssueCsvErrorModal } from './modals/BulkIssueCsvErrorModal'
 import { BulkLetterIssueFormState } from './states/BulkLetterIssueFormState'
 
 interface BulkIssueUploadCsvCardProps {
@@ -66,6 +68,8 @@ export const BulkIssueUploadCsvCard = ({
   const passwordInstructions = getValues('passwordInstructions')
 
   const isSendViaSms = notificationMethod === CitizenNotificationMethod.SMS
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const {
     parsedArr,
@@ -241,13 +245,14 @@ export const BulkIssueUploadCsvCard = ({
                 </Text>
               </HStack>
 
-              <Button
-                variant="clear"
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                onClick={() => {}}
-              >
+              <Button variant="clear" onClick={onOpen}>
                 View
               </Button>
+              <BulkIssueCsvErrorModal
+                isOpen={isOpen}
+                onClose={onClose}
+                uploadCsvErrors={uploadCsvErrors}
+              />
             </Flex>
           ) : (
             <></>

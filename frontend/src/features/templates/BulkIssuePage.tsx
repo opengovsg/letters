@@ -26,6 +26,8 @@ export const BulkIssuePage = (): JSX.Element => {
 
   const toast = useToast({
     status: 'success',
+    isClosable: true,
+    position: 'bottom',
   })
 
   const notificationMethod = methods.getValues('notificationMethod')
@@ -72,8 +74,6 @@ export const BulkIssuePage = (): JSX.Element => {
                 setBulkLetters(letters)
                 toast({
                   description: 'Letters sent successfully!',
-                  isClosable: true,
-                  position: 'bottom',
                 })
               }}
             />
