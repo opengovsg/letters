@@ -31,7 +31,7 @@ export const BulkIssueCard = ({
     <FormProvider {...methods}>
       <VStack
         align={'left'}
-        width={'27%'}
+        width={'31%'}
         backgroundColor="white"
         padding={'24px'}
       >
@@ -41,7 +41,7 @@ export const BulkIssueCard = ({
         paddingBottom="32px"
         paddingTop="16px"
         justify="space-between"
-        width={'27%'}
+        width={'31%'}
       >
         {handlePreviousClick ? (
           <>

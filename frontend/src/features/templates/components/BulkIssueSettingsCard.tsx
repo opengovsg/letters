@@ -14,7 +14,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { Radio, Switch, Textarea } from '@opengovsg/design-system-react'
+import { Badge, Radio, Switch, Textarea } from '@opengovsg/design-system-react'
 import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { MdChat, MdInfo, MdLock } from 'react-icons/md'
@@ -69,7 +69,13 @@ export const BulkIssueSettingsCard = ({
               </Text>
             </Radio>
             <Radio value={CitizenNotificationMethod.EMAIL} isDisabled>
-              <Text>Via Email sent through LetterSG</Text>
+              <HStack>
+                <Text>Via Email sent through LetterSG</Text>
+                <Badge colorScheme="grey" fontSize={'10px'}>
+                  {' '}
+                  COMING SOON{' '}
+                </Badge>
+              </HStack>
               <Text textStyle={'caption-1'} color={'grey.400'}>
                 Send letter links using Email
               </Text>
