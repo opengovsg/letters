@@ -1,6 +1,7 @@
 import { Box, BoxProps, HStack, Spinner, Text, VStack } from '@chakra-ui/react'
 
 import { sanitizeHtml } from '~shared/util/html-sanitizer'
+import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import { LetterQRCode } from './LetterQRCode'
 
@@ -22,11 +23,12 @@ export const LetterViewer = ({
   const cleanHtml = sanitizeHtml(html)
 
   return (
-    <VStack spacing={0}>
+    <VStack {...styleProps} spacing={0}>
       <Box
-        {...styleProps}
+        height={HEIGHT_A4}
+        width={WIDTH_A4}
         borderX="2px"
-        borderTop="2px"
+        borderY="2px"
         borderColor="base.divider.medium"
         bg="white"
       >
