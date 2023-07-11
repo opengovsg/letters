@@ -1,5 +1,5 @@
-import { Box, VStack } from '@chakra-ui/react'
-import { FormEvent, useEffect, useState } from 'react'
+import { Box, useDimensions, VStack } from '@chakra-ui/react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
@@ -61,7 +61,7 @@ export const LetterPublicPage = (): JSX.Element => {
           isLetterLoading={isLetterLoading}
         />
       ) : (
-        <Box w="full" bg="gray.100" height={(HEIGHT_A4 + 200) * transformScale}>
+        <Box w="full" bg="gray.100">
           <VStack padding={4} spacing={4} align={'center'}>
             <LetterViewer
               letterPublicId={letterPublicId}

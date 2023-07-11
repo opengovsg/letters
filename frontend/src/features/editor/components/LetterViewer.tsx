@@ -25,7 +25,7 @@ export const LetterViewer = ({
   return (
     <VStack {...styleProps} spacing={0}>
       <Box
-        height={HEIGHT_A4}
+        minHeight={HEIGHT_A4}
         width={WIDTH_A4}
         borderX="2px"
         borderY="2px"
