@@ -36,7 +36,6 @@ export const BulkIssueSettingsCard = ({
 }: BulkIssueSettingsCardProps) => {
   const { register } = useFormContext<BulkLetterIssueFormState>()
   const [isPasswordProtected, setIsPasswordProtected] = useState(false)
-  const [passwordInstructions, setPasswordInstructions] = useState('')
   const [notificationMethod, setNotificationMethod] = useState(
     CitizenNotificationMethod.SMS,
   )
@@ -143,8 +142,6 @@ export const BulkIssueSettingsCard = ({
             </Text>
             <Textarea
               {...register('passwordInstructions')}
-              value={passwordInstructions}
-              onChange={(e) => setPasswordInstructions(e.target.value)}
               placeholder="Sample password hint: Your password is the first three letters of your first name + DOB in DD/MM/YYYY format "
             />
           </Stack>

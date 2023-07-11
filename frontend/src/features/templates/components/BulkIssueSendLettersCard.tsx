@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
+import { useAdminAuth } from '~features/auth/context/AdminProtectedContext'
 import { useCreateBulkLetterMutation } from '~features/issue/hooks/templates.hooks'
 import {
   BulkLetterValidationResultError,
@@ -26,6 +27,8 @@ export const BulkIssueSendLettersCard = ({
 }: BulkIssueSendLettersCardProps): JSX.Element => {
   const navigate = useNavigate()
   const { getValues } = useFormContext()
+
+  const adminAuth = useAdminAuth()
 
   const letterCount = (
     getValues('letterGenerationObject') as CreateBulkLetterDto
@@ -70,7 +73,7 @@ export const BulkIssueSendLettersCard = ({
       </Text>
       <Text textStyle={'body-1'}>{` {{letter_link}}`}</Text>
       <Text textStyle={'body-1'}>
-        If you face issues viewing, write to letters@open.gov.sg.
+        If you face issues viewing, write to {adminAuth.adminUser?.email ?? ''}.
       </Text>
       <BulkIssueSendLettersConfirmationModal
         isOpen={isOpen}
