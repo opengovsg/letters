@@ -1,23 +1,25 @@
-import { VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { FormEvent, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
 import { LetterViewer } from '~features/editor/components/LetterViewer'
-import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
+import { HEIGHT_A4 } from '~utils/htmlUtils'
 
 import { PasswordProtectedView } from './components/PasswordProtectedView'
 import {
   useGetLetterByPublicId,
   useLetterPublicId,
 } from './hooks/letters.hooks'
+import { useTransformScale } from './hooks/useTransformScale'
 
 export const LetterPublicPage = (): JSX.Element => {
   const { letterPublicId } = useLetterPublicId()
   const [password, setPassword] = useState('')
   const [isPasswordProtected, setIsPasswordProtected] = useState(false)
   const [passwordInstructions, setPasswordInstructions] = useState('')
+  const transformScale = useTransformScale()
 
   const { letter, isLetterLoading, error, refetchLetter } =
     useGetLetterByPublicId({
@@ -49,29 +51,28 @@ export const LetterPublicPage = (): JSX.Element => {
       <Helmet>
         <meta name="robots" content="noindex" data-react-helmet="true" />
       </Helmet>
-      <VStack alignItems="left" spacing="0px">
-        {isPasswordProtected && !letter ? (
-          <PasswordProtectedView
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            handleSubmit={handleSubmit}
-            error={error}
-            password={password}
-            setPassword={setPassword}
-            isLetterLoading={isLetterLoading}
-            passwordInstructions={passwordInstructions}
-          />
-        ) : (
-          <VStack padding={16} spacing={8} align={'center'}>
+      {isPasswordProtected && !letter ? (
+        <PasswordProtectedView
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          handleSubmit={handleSubmit}
+          error={error}
+          password={password}
+          setPassword={setPassword}
+          isLetterLoading={isLetterLoading}
+        />
+      ) : (
+        <Box w="full" bg="gray.100" height={(HEIGHT_A4 + 200) * transformScale}>
+          <VStack padding={4} spacing={4} align={'center'}>
             <LetterViewer
               letterPublicId={letterPublicId}
               html={letter?.issuedLetter}
               isLoading={isLetterLoading}
-              minWidth={{ md: WIDTH_A4 }}
-              minHeight={{ md: HEIGHT_A4 }}
+              transform={`scale(${transformScale})`}
+              transformOrigin="top"
             />
           </VStack>
-        )}
-      </VStack>
+        </Box>
+      )}
     </>
   )
 }

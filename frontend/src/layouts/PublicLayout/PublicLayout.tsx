@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Image, Stack, VStack } from '@chakra-ui/react'
+import { Flex, Heading, Image, Stack, VStack } from '@chakra-ui/react'
 import { Link as RouterLink, Outlet } from 'react-router-dom'
 
 import { AppFooter } from '~/app/AppFooter'
@@ -26,10 +26,7 @@ export const PublicLayout = () => {
           </Stack>
         </RouterLink>
       </Flex>
-
-      <Box w="full" bg="gray.100">
-        <Outlet />
-      </Box>
+      <Outlet />
       <AppFooter />
     </VStack>
   )
