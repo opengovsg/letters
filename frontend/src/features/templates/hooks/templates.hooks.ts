@@ -8,6 +8,5 @@ export const useTemplateId = (): { templateId: number } => {
 
 export const useGetTemplateById = (templateId: number) => {
   // TODO: insert react query call here
-  console.log(`getting template for ${templateId}`)
   return { name: 'Certificate of Participation IMDA' }
 }
