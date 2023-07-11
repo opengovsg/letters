@@ -1,4 +1,5 @@
 import { Spacer, Text, useDisclosure } from '@chakra-ui/react'
+import { useToast } from '@opengovsg/design-system-react'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +10,6 @@ import { useCreateBulkLetterMutation } from '~features/issue/hooks/templates.hoo
 import {
   BulkLetterValidationResultError,
   CreateBulkLetterDto,
-  GetBulkLetterDto,
 } from '~shared/dtos/letters.dto'
 
 import { BulkIssueCard } from './BulkIssueCard'
@@ -18,17 +18,21 @@ import { BulkIssueSendLettersConfirmationModal } from './modals/BulkIssueSendLet
 interface BulkIssueSendLettersCardProps {
   shouldDisplay: boolean
   goToPrevious: () => void
-  onSuccess: (res: GetBulkLetterDto[]) => void
 }
 export const BulkIssueSendLettersCard = ({
   shouldDisplay,
   goToPrevious,
-  onSuccess,
 }: BulkIssueSendLettersCardProps): JSX.Element => {
   const navigate = useNavigate()
   const { getValues } = useFormContext()
 
   const adminAuth = useAdminAuth()
+
+  const toast = useToast({
+    status: 'success',
+    isClosable: true,
+    position: 'bottom',
+  })
 
   const letterCount = (
     getValues('letterGenerationObject') as CreateBulkLetterDto
@@ -41,6 +45,13 @@ export const BulkIssueSendLettersCard = ({
   const onError = (errors: BulkLetterValidationResultError[]) => {
     setUploadCsvErrors(errors)
   }
+
+  const onSuccess = () => {
+    toast({
+      description: 'Letters sent successfully!',
+    })
+  }
+
   const { mutateAsync } = useCreateBulkLetterMutation({
     onSuccess,
     onError,

@@ -1,13 +1,9 @@
 import { VStack } from '@chakra-ui/react'
 import { useSteps } from '@chakra-ui/stepper'
-import { useToast } from '@opengovsg/design-system-react'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 
-import { routes } from '~constants/routes'
 import {
-  BulkLetterValidationResultError,
   CitizenNotificationMethod,
   GetBulkLetterDto,
 } from '~shared/dtos/letters.dto'
@@ -20,26 +16,11 @@ import { BulkLetterIssueFormState } from './components/states/BulkLetterIssueFor
 import { TemplateHeader } from './components/TemplateHeader'
 
 export const BulkIssuePage = (): JSX.Element => {
-  const navigate = useNavigate()
-
   const methods = useForm<BulkLetterIssueFormState>()
-
-  const toast = useToast({
-    status: 'success',
-    isClosable: true,
-    position: 'bottom',
-  })
 
   const notificationMethod = methods.getValues('notificationMethod')
 
-  const [uploadCsvErrors, setUploadCsvErrors] = useState<
-    BulkLetterValidationResultError[]
-  >([])
-
   const [bulkLetters, setBulkLetters] = useState<GetBulkLetterDto[]>([])
-
-  const onClose = () =>
-    navigate(`/${routes.admin.index}/${routes.admin.templates}`)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { activeStep, goToNext, goToPrevious } = useSteps()
@@ -57,11 +38,9 @@ export const BulkIssuePage = (): JSX.Element => {
 
           <BulkIssueUploadCsvCard
             onSuccess={(letters: GetBulkLetterDto[]) => {
-              setUploadCsvErrors([])
               setBulkLetters(letters)
             }}
             shouldDisplay={activeStep === 1}
-            uploadCsvErrors={uploadCsvErrors}
             goToNext={() => goToNext()}
             goToPrevious={() => goToPrevious()}
           />
@@ -69,21 +48,11 @@ export const BulkIssuePage = (): JSX.Element => {
             <BulkIssueSendLettersCard
               shouldDisplay={activeStep === 2}
               goToPrevious={() => goToPrevious()}
-              onSuccess={(letters: GetBulkLetterDto[]) => {
-                setUploadCsvErrors([])
-                setBulkLetters(letters)
-                toast({
-                  description: 'Letters sent successfully!',
-                })
-              }}
             />
           ) : (
             <BulkIssueCompletionCard
               shouldDisplay={activeStep === 2}
               bulkLetters={bulkLetters}
-              onDownload={() => {
-                onClose()
-              }}
               goToPrevious={() => goToPrevious()}
             />
           )}

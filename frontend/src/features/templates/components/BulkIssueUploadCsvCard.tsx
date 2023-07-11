@@ -39,7 +39,6 @@ import { BulkLetterIssueFormState } from './states/BulkLetterIssueFormState'
 
 interface BulkIssueUploadCsvCardProps {
   onSuccess: (res: GetBulkLetterDto[]) => void
-  uploadCsvErrors: BulkLetterValidationResultError[]
   shouldDisplay: boolean
   goToNext: () => void
   goToPrevious: () => void
@@ -184,7 +183,6 @@ export const BulkIssueUploadCsvCard = ({
           <Text textStyle="body-2">
             CSV file must include:
             <UnorderedList padding={'5px'}>
-              {/* TODO: Make this list dependent on the variables selected */}
               <li>All placeholders in the template</li>
               {isSendViaSms && (
                 <li>

@@ -1,7 +1,8 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
-import { ReactComponent as CheckMark } from '~/assets/CheckMark.svg'
 import { ReactComponent as CsvIcon } from '~/assets/CsvIcon.svg'
+import { routes } from '~constants/routes'
 import {
   useGetTemplateById,
   useTemplateId,
@@ -15,21 +16,23 @@ import { BulkIssueCard } from './BulkIssueCard'
 
 interface BulkIssueCompletionCardProps {
   bulkLetters: GetBulkLetterDto[]
-  onDownload: () => void
   shouldDisplay: boolean
   goToPrevious: () => void
 }
 
 export const BulkIssueCompletionCard = ({
   bulkLetters,
-  onDownload,
   shouldDisplay,
   goToPrevious,
 }: BulkIssueCompletionCardProps): JSX.Element => {
+  const navigate = useNavigate()
   const { templateId } = useTemplateId()
   const { template } = useGetTemplateById(templateId)
 
   const downloadCsvName = `${template?.name} [COMPLETED].csv`
+
+  const onDownload = () =>
+    navigate(`/${routes.admin.index}/${routes.admin.templates}`)
 
   const handleDownloadCsv = () => {
     if (!bulkLetters) return
