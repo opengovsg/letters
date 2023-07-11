@@ -7,10 +7,12 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '~constants/routes'
 import {
   BulkLetterValidationResultError,
+  CitizenNotificationMethod,
   GetBulkLetterDto,
 } from '~shared/dtos/letters.dto'
 
 import { BulkIssueCompletionCard } from './components/BulkIssueCompletionCard'
+import { BulkIssueSendLettersCard } from './components/BulkIssueSendLettersCard'
 import { BulkIssueSettingsCard } from './components/BulkIssueSettingsCard'
 import { BulkIssueUploadCsvCard } from './components/BulkIssueUploadCsvCard'
 import { BulkLetterIssueFormState } from './components/states/BulkLetterIssueFormState'
@@ -21,11 +23,12 @@ export const BulkIssuePage = (): JSX.Element => {
 
   const methods = useForm<BulkLetterIssueFormState>()
 
+  const notificationMethod = methods.getValues('notificationMethod')
+
   const [uploadCsvErrors, setUploadCsvErrors] = useState<
     BulkLetterValidationResultError[]
   >([])
 
-  const [isShowDownloadCsv, setIsShowDownloadCsv] = useState(false)
   const [bulkLetters, setBulkLetters] = useState<GetBulkLetterDto[]>([])
 
   const onClose = () =>
@@ -49,23 +52,28 @@ export const BulkIssuePage = (): JSX.Element => {
             onSuccess={(letters: GetBulkLetterDto[]) => {
               setUploadCsvErrors([])
               setBulkLetters(letters)
-              setIsShowDownloadCsv(true)
             }}
             shouldDisplay={activeStep === 1}
             uploadCsvErrors={uploadCsvErrors}
             goToNext={() => goToNext()}
             goToPrevious={() => goToPrevious()}
           />
-
-          <BulkIssueCompletionCard
-            shouldDisplay={activeStep === 2}
-            bulkLetters={bulkLetters}
-            onDownload={() => {
-              setIsShowDownloadCsv(false)
-              onClose()
-            }}
-            goToPrevious={() => goToPrevious()}
-          />
+          {notificationMethod === CitizenNotificationMethod.SMS ? (
+            <BulkIssueSendLettersCard
+              shouldDisplay={activeStep === 2}
+              letterCount={bulkLetters.length}
+              goToPrevious={() => goToPrevious()}
+            />
+          ) : (
+            <BulkIssueCompletionCard
+              shouldDisplay={activeStep === 2}
+              bulkLetters={bulkLetters}
+              onDownload={() => {
+                onClose()
+              }}
+              goToPrevious={() => goToPrevious()}
+            />
+          )}
         </VStack>
       </VStack>
     </FormProvider>
