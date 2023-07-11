@@ -1,5 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 import { useSteps } from '@chakra-ui/stepper'
+import { useToast } from '@opengovsg/design-system-react'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -22,6 +23,10 @@ export const BulkIssuePage = (): JSX.Element => {
   const navigate = useNavigate()
 
   const methods = useForm<BulkLetterIssueFormState>()
+
+  const toast = useToast({
+    status: 'success',
+  })
 
   const notificationMethod = methods.getValues('notificationMethod')
 
@@ -61,8 +66,16 @@ export const BulkIssuePage = (): JSX.Element => {
           {notificationMethod === CitizenNotificationMethod.SMS ? (
             <BulkIssueSendLettersCard
               shouldDisplay={activeStep === 2}
-              letterCount={bulkLetters.length}
               goToPrevious={() => goToPrevious()}
+              onSuccess={(letters: GetBulkLetterDto[]) => {
+                setUploadCsvErrors([])
+                setBulkLetters(letters)
+                toast({
+                  description: 'Letters sent successfully!',
+                  isClosable: true,
+                  position: 'bottom',
+                })
+              }}
             />
           ) : (
             <BulkIssueCompletionCard

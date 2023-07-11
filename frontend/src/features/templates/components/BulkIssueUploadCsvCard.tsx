@@ -60,7 +60,7 @@ export const BulkIssueUploadCsvCard = ({
 }: BulkIssueUploadCsvCardProps): JSX.Element => {
   const [file, setFile] = useControllableState<File | undefined>({})
 
-  const { getValues } = useFormContext<BulkLetterIssueFormState>()
+  const { getValues, setValue } = useFormContext<BulkLetterIssueFormState>()
   const isPasswordProtected = getValues('isPasswordProtected')
   const notificationMethod = getValues('notificationMethod')
   const passwordInstructions = getValues('passwordInstructions')
@@ -115,7 +115,11 @@ export const BulkIssueUploadCsvCard = ({
     if (isSendViaSms) {
       reqBody.phoneNumbers = phoneNumbers
     }
-    await mutateAsync(reqBody)
+    setValue('letterGenerationObject', reqBody)
+
+    if (!isSendViaSms) {
+      await mutateAsync(reqBody)
+    }
 
     if (!uploadCsvErrors?.length) {
       goToNext()

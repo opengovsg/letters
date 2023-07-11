@@ -14,10 +14,12 @@ import LetterConfirmation from '~/assets/LetterConfirmation.svg'
 interface BulkIssueSendLettersConfirmationModalProps {
   isOpen: boolean
   onClose: () => void
+  onConfirmSendLetters: () => void
 }
 export const BulkIssueSendLettersConfirmationModal = ({
   isOpen,
   onClose,
+  onConfirmSendLetters,
 }: BulkIssueSendLettersConfirmationModalProps): JSX.Element => {
   return (
     <Modal
@@ -43,7 +45,7 @@ export const BulkIssueSendLettersConfirmationModal = ({
             {' '}
             Cancel
           </Button>
-          <Button colorScheme="blue" onClick={onClose}>
+          <Button colorScheme="blue" onClick={onConfirmSendLetters}>
             Confirm & Send
           </Button>
         </Flex>
