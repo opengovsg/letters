@@ -19,6 +19,7 @@ export const LetterPublicPage = (): JSX.Element => {
   const [isPasswordProtected, setIsPasswordProtected] = useState(false)
   const [passwordInstructions, setPasswordInstructions] = useState('')
   const transformScale = useTransformScale()
+  const [letterHeight, setLetterHeight] = useState<number | undefined>(0)
 
   const { letter, isLetterLoading, error, refetchLetter } =
     useGetLetterByPublicId({
@@ -62,13 +63,19 @@ export const LetterPublicPage = (): JSX.Element => {
         />
       ) : (
         <Box w="full" bg="gray.100">
-          <VStack padding={4} spacing={4} align={'center'}>
+          <VStack
+            padding={4}
+            spacing={4}
+            align={'center'}
+            height={letterHeight ? letterHeight * transformScale + 50 : 'auto'}
+          >
             <LetterViewer
               letterPublicId={letterPublicId}
               html={letter?.issuedLetter}
               isLoading={isLetterLoading}
               transform={`scale(${transformScale})`}
               transformOrigin="top"
+              setHeight={setLetterHeight}
             />
           </VStack>
         </Box>
