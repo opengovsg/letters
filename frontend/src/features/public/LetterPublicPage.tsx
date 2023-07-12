@@ -24,7 +24,7 @@ export const LetterPublicPage = (): JSX.Element => {
   const letterViewerRef = useCallback(
     (node: HTMLDivElement) => {
       if (node !== null) {
-        setLetterHeight && setLetterHeight(node.offsetHeight)
+        setLetterHeight(node.offsetHeight)
       }
     },
     [setLetterHeight],
