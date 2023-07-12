@@ -59,6 +59,7 @@ export const LetterPublicPage = (): JSX.Element => {
           password={password}
           setPassword={setPassword}
           isLetterLoading={isLetterLoading}
+          passwordInstructions={passwordInstructions}
         />
       ) : (
         <Box w="full" bg="gray.100">
