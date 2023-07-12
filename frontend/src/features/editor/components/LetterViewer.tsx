@@ -1,5 +1,5 @@
 import { Box, BoxProps, HStack, Spinner, Text, VStack } from '@chakra-ui/react'
-import { Dispatch, useCallback } from 'react'
+import { forwardRef, LegacyRef } from 'react'
 
 import { sanitizeHtml } from '~shared/util/html-sanitizer'
 import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
@@ -10,25 +10,13 @@ interface LetterViewerProps extends BoxProps {
   letterPublicId?: string
   html: string | undefined
   isLoading: boolean
-  setHeight?: Dispatch<React.SetStateAction<number | undefined>>
 }
 
-export const LetterViewer = ({
-  letterPublicId,
-  html,
-  isLoading,
-  setHeight,
-  ...styleProps
-}: LetterViewerProps): JSX.Element => {
-  const ref = useCallback(
-    (node: HTMLDivElement) => {
-      if (node !== null) {
-        setHeight && setHeight(node.offsetHeight)
-      }
-    },
-    [setHeight],
-  )
-
+export const LetterViewerInner = (
+  props: LetterViewerProps,
+  ref: LegacyRef<HTMLDivElement> | undefined,
+): JSX.Element => {
+  const { letterPublicId, html, isLoading, ...styleProps } = props
   if (isLoading || !html) {
     return <Spinner />
   }
@@ -79,3 +67,4 @@ export const LetterViewer = ({
     </VStack>
   )
 }
+export const LetterViewer = forwardRef(LetterViewerInner)

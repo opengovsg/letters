@@ -1,5 +1,5 @@
 import { Box, VStack } from '@chakra-ui/react'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useCallback, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
@@ -20,6 +20,15 @@ export const LetterPublicPage = (): JSX.Element => {
   const [passwordInstructions, setPasswordInstructions] = useState('')
   const transformScale = useTransformScale()
   const [letterHeight, setLetterHeight] = useState<number | undefined>(0)
+
+  const letterViewerRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (node !== null) {
+        setLetterHeight && setLetterHeight(node.offsetHeight)
+      }
+    },
+    [setLetterHeight],
+  )
 
   const { letter, isLetterLoading, error, refetchLetter } =
     useGetLetterByPublicId({
@@ -70,12 +79,12 @@ export const LetterPublicPage = (): JSX.Element => {
             height={letterHeight ? letterHeight * transformScale + 50 : 'auto'}
           >
             <LetterViewer
+              ref={letterViewerRef}
               letterPublicId={letterPublicId}
               html={letter?.issuedLetter}
               isLoading={isLetterLoading}
               transform={`scale(${transformScale})`}
               transformOrigin="top"
-              setHeight={setLetterHeight}
             />
           </VStack>
         </Box>
