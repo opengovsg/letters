@@ -101,26 +101,34 @@ export const UploadCsvForm = ({
     await mutateAsync(reqBody)
   }
 
-  const getErrorMessage = (): string => {
-    // place this here, since officers might input the password instructions before uploading the CSV file
-    // they wouldn't be able to see the error, if this condition is placed below the empty file condition
-    if (!file) return ''
+  const getErrorMessageArr = (): string[] => {
+    if (!file || !parsedArr) return []
+
+    const errorMessageArr: string[] = []
     if (parseCsvError) {
-      return parseCsvError
+      errorMessageArr.push(...parseCsvError)
     }
     if (!isPasswordProtected && passwords.length > 0) {
-      return 'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+      errorMessageArr.push(
+        'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv',
+      )
     }
     if (isPasswordProtected && passwords.length === 0) {
-      return 'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+      errorMessageArr.push(
+        'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv',
+      )
     }
     if (!isSendViaSms && phoneNumbers.length > 0) {
-      return 'Phone number field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+      errorMessageArr.push(
+        'Phone number field found in the CSV file despite Send via SMS disabled, please upload an updated .csv',
+      )
     }
     if (isSendViaSms && phoneNumbers.length === 0) {
-      return 'No Phone number field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+      errorMessageArr.push(
+        'No Phone number field found in the CSV file despite Send via SMS enabled, please upload an updated .csv',
+      )
     }
-    return ''
+    return errorMessageArr
   }
 
   const getPasswordInstructionErrorMessage = (): string => {
@@ -171,9 +179,9 @@ export const UploadCsvForm = ({
             isInvalid={!!parseCsvError || uploadCsvErrors.length > 0}
           />
         </VStack>
-        {csvFormError && (
-          <FormErrorMessage>{getErrorMessage()}</FormErrorMessage>
-        )}
+        {getErrorMessageArr().map((errorMessage: string, i: number) => (
+          <FormErrorMessage key={i}>{errorMessage}</FormErrorMessage>
+        ))}
         <Flex justify="space-between">
           <Stack>
             <Heading size="md">Add password protection</Heading>
