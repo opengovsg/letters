@@ -117,25 +117,27 @@ export const BulkIssueSettingsCard = ({
           <Stack paddingTop="24px">
             <HStack>
               <Text textStyle="subhead-2">Password Hint (Optional)</Text>
-              <Popover trigger="hover" placement="bottom">
-                <PopoverTrigger>
-                  <Icon as={MdInfo} />
-                </PopoverTrigger>
-                <PopoverContent
-                  inset={'420px 600px'}
-                  bg="grey.600"
-                  borderRadius={'10px'}
-                >
-                  <PopoverArrow />
-                  <Stack padding={'15px'} color={'grey.200'}>
-                    <Image maxW="100%" maxH="100%" src={PasswordInstruction} />
-                    <PopoverBody textStyle={'body-4'} fontSize={'14px'}>
-                      Citizens will see this hint when they enter their password
-                      to view the letter.
-                    </PopoverBody>
-                  </Stack>
-                </PopoverContent>
-              </Popover>
+              <Box position="relative">
+                <Popover trigger="hover">
+                  <PopoverTrigger>
+                    <Icon as={MdInfo} />
+                  </PopoverTrigger>
+                  <PopoverContent bg="grey.600" borderRadius={'10px'}>
+                    <PopoverArrow />
+                    <Stack padding={'15px'} color={'grey.200'}>
+                      <Image
+                        maxW="100%"
+                        maxH="100%"
+                        src={PasswordInstruction}
+                      />
+                      <PopoverBody textStyle={'body-4'} fontSize={'14px'}>
+                        Citizens will see this hint when they enter their
+                        password to view the letter.
+                      </PopoverBody>
+                    </Stack>
+                  </PopoverContent>
+                </Popover>
+              </Box>
             </HStack>
             <Text fontSize="14px" fontWeight="400">
               Do <b>NOT</b> put any password here.
