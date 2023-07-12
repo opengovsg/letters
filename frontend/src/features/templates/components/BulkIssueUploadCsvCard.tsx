@@ -139,18 +139,41 @@ export const BulkIssueUploadCsvCard = ({
     if (parseCsvError) {
       return parseCsvError
     }
-    if (!isPasswordProtected && passwords.length > 0) {
-      return 'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+
+    if (isPasswordProtected) {
+      if (isSendViaSms) {
+        if (passwords.length === 0 && phoneNumbers.length === 0)
+          return 'No Phone number and Password field found in the CSV file despite SMS sending and Password protection enabled, please upload an updated .csv'
+        if (passwords.length > 0 && phoneNumbers.length === 0)
+          return 'No Phone number field found in the CSV file despite SMS sending enabled, please upload an updated .csv'
+        if (passwords.length === 0 && phoneNumbers.length > 0)
+          return 'No Password field found in the CSV file despite SMS sending and Password protection enabled, please upload an updated .csv'
+      }
+      if (!isSendViaSms) {
+        if (passwords.length === 0)
+          return 'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+        if (phoneNumbers.length > 0)
+          return 'Phone number field found in the CSV file despite SMS sending disabled, please upload an updated .csv'
+      }
     }
-    if (isPasswordProtected && passwords.length === 0) {
-      return 'No Password field found in the CSV file despite Password protection enabled, please upload an updated .csv'
+
+    if (!isPasswordProtected) {
+      if (isSendViaSms) {
+        if (phoneNumbers.length === 0)
+          return 'No Phone number field found in the CSV file despite SMS sending enabled, please upload an updated .csv'
+        if (passwords.length > 0)
+          return 'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+      }
+      if (!isSendViaSms) {
+        if (passwords.length > 0 && phoneNumbers.length > 0)
+          return 'Phone number and Password field found in the CSV file despite SMS sending and Password protection disabled, please upload an updated .csv'
+        if (phoneNumbers.length > 0)
+          return 'Phone number field found in the CSV file despite SMS sending disabled, please upload an updated .csv'
+        if (passwords.length > 0)
+          return 'Password field found in the CSV file despite Password protection disabled, please upload an updated .csv'
+      }
     }
-    if (!isSendViaSms && phoneNumbers.length > 0) {
-      return 'Phone number field found in the CSV file despite Password protection disabled, please upload an updated .csv'
-    }
-    if (isSendViaSms && phoneNumbers.length === 0) {
-      return 'No Phone number field found in the CSV file despite Password protection enabled, please upload an updated .csv'
-    }
+
     return ''
   }
 
