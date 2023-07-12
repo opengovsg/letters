@@ -132,22 +132,19 @@ export const UploadCsvForm = ({
   }
 
   const getPasswordInstructionErrorMessage = (): string => {
-    if (passwordInstructions.length != 0 && passwordInstructions.length < 10) {
+    if (
+      isPasswordProtected &&
+      passwordInstructions.length != 0 &&
+      passwordInstructions.length < 10
+    ) {
       return 'Password instructions must at least contains a minimum of 10 characters.'
     }
     return ''
   }
 
-  const csvFormError =
-    !!parseCsvError ||
-    uploadCsvErrors.length > 0 ||
-    isPasswordProtected === (passwords.length === 0) ||
-    isSendViaSms === (phoneNumbers.length === 0)
+  const csvFormError = getErrorMessageArr().length > 0
 
-  const passwordInstructionsError =
-    isPasswordProtected &&
-    passwordInstructions.length != 0 &&
-    passwordInstructions.length < 10
+  const passwordInstructionsError = !!getPasswordInstructionErrorMessage()
 
   return (
     <FormControl isInvalid={csvFormError || passwordInstructionsError}>
