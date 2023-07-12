@@ -57,7 +57,9 @@ export const BulkIssueSettingsCard = ({
           {...register('notificationMethod')}
           marginLeft={'24px'}
           onChange={(newVal: CitizenNotificationMethod) => {
-            setNotificationMethod(newVal)
+            if (newVal) {
+              setNotificationMethod(newVal)
+            }
           }}
           value={notificationMethod}
         >
