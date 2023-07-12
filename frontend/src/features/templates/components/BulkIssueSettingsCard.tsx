@@ -43,7 +43,10 @@ export const BulkIssueSettingsCard = ({
     <BulkIssueCard
       shouldDisplay={shouldDisplay}
       handleNextClick={() => goToNext()}
-      buttonConfig={{ nextButtonLabel: 'Next' }}
+      buttonConfig={{
+        nextButtonLabel: 'Next',
+        isNextButtonDisabled: notificationMethod == null,
+      }}
     >
       <Box marginBottom={'36px'}>
         <HStack textStyle="h6" marginBottom={'36px'}>
