@@ -1,6 +1,8 @@
 import { Box, BoxProps, HStack, Spinner, Text, VStack } from '@chakra-ui/react'
+import { forwardRef, LegacyRef } from 'react'
 
 import { sanitizeHtml } from '~shared/util/html-sanitizer'
+import { HEIGHT_A4, WIDTH_A4 } from '~utils/htmlUtils'
 
 import { LetterQRCode } from './LetterQRCode'
 
@@ -10,23 +12,23 @@ interface LetterViewerProps extends BoxProps {
   isLoading: boolean
 }
 
-export const LetterViewer = ({
-  letterPublicId,
-  html,
-  isLoading,
-  ...styleProps
-}: LetterViewerProps): JSX.Element => {
+export const LetterViewerInner = (
+  props: LetterViewerProps,
+  ref: LegacyRef<HTMLDivElement> | undefined,
+): JSX.Element => {
+  const { letterPublicId, html, isLoading, ...styleProps } = props
   if (isLoading || !html) {
     return <Spinner />
   }
   const cleanHtml = sanitizeHtml(html)
 
   return (
-    <VStack spacing={0}>
+    <VStack {...styleProps} spacing={0} ref={ref}>
       <Box
-        {...styleProps}
+        minHeight={HEIGHT_A4}
+        width={WIDTH_A4}
         borderX="2px"
-        borderTop="2px"
+        borderY="2px"
         borderColor="base.divider.medium"
         bg="white"
       >
@@ -65,3 +67,4 @@ export const LetterViewer = ({
     </VStack>
   )
 }
+export const LetterViewer = forwardRef(LetterViewerInner)

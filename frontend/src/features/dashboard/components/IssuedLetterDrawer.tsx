@@ -23,7 +23,9 @@ import { BiCopy, BiLeftArrowAlt } from 'react-icons/bi'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { IconButton } from '~components/IconButton'
+import { DRAWER_WIDTH_IN_PIXELS } from '~constants/theme'
 import { LetterViewer } from '~features/editor/components/LetterViewer'
+import { calculateTransformScale } from '~features/public/hooks/useTransformScale'
 import { GetLetterDto } from '~shared/dtos/letters.dto'
 import { getLetterPublicLink } from '~utils/linkUtils'
 
@@ -114,7 +116,7 @@ export const IssuedLetterDrawer = ({
                 }
               />
               <GridItem
-                heading="Read Reciept"
+                heading="Read Receipt"
                 content={<Text>{letter.firstReadAt ?? 'Unread'}</Text>}
               />
               <GridItem
@@ -142,6 +144,10 @@ export const IssuedLetterDrawer = ({
                     <LetterViewer
                       isLoading={false}
                       html={letter.issuedLetter}
+                      transformOrigin="top"
+                      transform={`scale(${calculateTransformScale(
+                        DRAWER_WIDTH_IN_PIXELS,
+                      )})`} // TODO: should be able to avoid hardcoding by reading from parent drawer component
                     />
                   }
                 />
