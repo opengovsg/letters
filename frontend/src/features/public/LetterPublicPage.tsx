@@ -1,11 +1,10 @@
-import { Box, useDimensions, VStack } from '@chakra-ui/react'
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { Box, VStack } from '@chakra-ui/react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Navigate } from 'react-router-dom'
 
 import { routes } from '~constants/routes'
 import { LetterViewer } from '~features/editor/components/LetterViewer'
-import { HEIGHT_A4 } from '~utils/htmlUtils'
 
 import { PasswordProtectedView } from './components/PasswordProtectedView'
 import {
