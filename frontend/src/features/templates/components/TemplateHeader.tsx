@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Image, Text } from '@chakra-ui/react'
+import { Flex, HStack, Image, Text } from '@chakra-ui/react'
 import {
   Step,
   StepIcon,
@@ -8,9 +8,11 @@ import {
   StepStatus,
 } from '@chakra-ui/stepper'
 import { Button } from '@opengovsg/design-system-react'
+import { useFormContext } from 'react-hook-form'
 import { Link as RouterLink } from 'react-router-dom'
 
 import LogoSvg from '~/assets/Logo.svg'
+import { CitizenNotificationMethod } from '~shared/dtos/letters.dto'
 
 export interface TemplateHeaderProps {
   activeStep: number
@@ -19,7 +21,11 @@ export interface TemplateHeaderProps {
 export const TemplateHeader = ({
   activeStep,
 }: TemplateHeaderProps): JSX.Element => {
-  const steps = ['SETTINGS', 'UPLOAD CSV', 'DOWNLOAD']
+  const { getValues } = useFormContext()
+  const steps =
+    getValues('notificationMethod') === CitizenNotificationMethod.SMS
+      ? ['SETTINGS', 'UPLOAD CSV', 'SEND']
+      : ['SETTINGS', 'UPLOAD CSV', 'DOWNLOAD']
 
   return (
     <HStack

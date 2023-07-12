@@ -53,7 +53,6 @@ export const BulkIssuePage = (): JSX.Element => {
             <BulkIssueCompletionCard
               shouldDisplay={activeStep === 2}
               bulkLetters={bulkLetters}
-              goToPrevious={() => goToPrevious()}
             />
           )}
         </VStack>

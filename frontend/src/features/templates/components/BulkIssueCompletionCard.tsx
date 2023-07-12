@@ -17,22 +17,17 @@ import { BulkIssueCard } from './BulkIssueCard'
 interface BulkIssueCompletionCardProps {
   bulkLetters: GetBulkLetterDto[]
   shouldDisplay: boolean
-  goToPrevious: () => void
 }
 
 export const BulkIssueCompletionCard = ({
   bulkLetters,
   shouldDisplay,
-  goToPrevious,
 }: BulkIssueCompletionCardProps): JSX.Element => {
   const navigate = useNavigate()
   const { templateId } = useTemplateId()
   const { template } = useGetTemplateById(templateId)
 
   const downloadCsvName = `${template?.name} [COMPLETED].csv`
-
-  const onDownload = () =>
-    navigate(`/${routes.admin.index}/${routes.admin.templates}`)
 
   const handleDownloadCsv = () => {
     if (!bulkLetters) return
@@ -46,14 +41,13 @@ export const BulkIssueCompletionCard = ({
       }
     })
     jsonArrToCsv(downloadCsvName, bulkLettersWithLink)
-    onDownload()
+    navigate(`/${routes.admin.index}/${routes.admin.templates}`)
   }
 
   return (
     <BulkIssueCard
       shouldDisplay={shouldDisplay}
       handleNextClick={handleDownloadCsv}
-      handlePreviousClick={() => goToPrevious()}
       buttonConfig={{ nextButtonLabel: 'Download file' }}
     >
       <Box padding={'5px'}>

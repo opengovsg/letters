@@ -1,5 +1,4 @@
 import { Spacer, Text, useDisclosure } from '@chakra-ui/react'
-import { useToast } from '@opengovsg/design-system-react'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -7,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '~constants/routes'
 import { useAdminAuth } from '~features/auth/context/AdminProtectedContext'
 import { useCreateBulkLetterMutation } from '~features/issue/hooks/templates.hooks'
+import { useToast } from '~hooks/useToast'
 import {
   BulkLetterValidationResultError,
   CreateBulkLetterDto,
@@ -48,7 +48,7 @@ export const BulkIssueSendLettersCard = ({
 
   const onSuccess = () => {
     toast({
-      description: 'Letters sent successfully!',
+      title: 'Letters sent successfully!',
     })
   }
 
@@ -80,11 +80,12 @@ export const BulkIssueSendLettersCard = ({
       <Spacer padding={'12px'} />
       <Text fontSize={'12px'}>BODY </Text>
       <Text textStyle={'body-1'}>
-        You have received a letter from HDB issued by clement@hdb.gov.sg
+        You have received a letter from HDB issued by{' '}
+        {adminAuth.adminUser?.email ?? ''}
       </Text>
       <Text textStyle={'body-1'}>{` {{letter_link}}`}</Text>
       <Text textStyle={'body-1'}>
-        If you face issues viewing, write to {adminAuth.adminUser?.email ?? ''}.
+        If you face issues viewing, write to letters@open.gov.sg.
       </Text>
       <BulkIssueSendLettersConfirmationModal
         isOpen={isOpen}

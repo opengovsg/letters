@@ -36,9 +36,8 @@ export const BulkIssueSettingsCard = ({
 }: BulkIssueSettingsCardProps) => {
   const { register } = useFormContext<BulkLetterIssueFormState>()
   const [isPasswordProtected, setIsPasswordProtected] = useState(false)
-  const [notificationMethod, setNotificationMethod] = useState(
-    CitizenNotificationMethod.SMS,
-  )
+  const [notificationMethod, setNotificationMethod] =
+    useState<CitizenNotificationMethod>()
 
   return (
     <BulkIssueCard
@@ -53,7 +52,6 @@ export const BulkIssueSettingsCard = ({
         </HStack>
         <RadioGroup
           {...register('notificationMethod')}
-          defaultValue="1"
           marginLeft={'24px'}
           onChange={(newVal: CitizenNotificationMethod) => {
             setNotificationMethod(newVal)
@@ -61,7 +59,7 @@ export const BulkIssueSettingsCard = ({
           value={notificationMethod}
         >
           <Stack textStyle="subhead-2">
-            <Radio value={CitizenNotificationMethod.SMS} defaultChecked>
+            <Radio value={CitizenNotificationMethod.SMS}>
               <Text>Via SMS sent through LetterSG</Text>
               <Text textStyle={'caption-1'} color={'grey.400'}>
                 Send letter links using a SMS{' '}
