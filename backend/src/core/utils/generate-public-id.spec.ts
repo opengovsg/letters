@@ -11,13 +11,32 @@ describe('generatePublicId', () => {
   test('should regenerate ID if it matches a protected string', () => {
     const mockGenerator = jest
       .fn()
-      .mockReturnValueOnce('api')
-      .mockReturnValue('abcdefghi')
+      .mockReturnValueOnce('apicd')
+      .mockReturnValue('abcdeabcdeabcdeabcde')
 
     const id = generatePublicId(mockGenerator)
 
-    expect(mockGenerator).toHaveBeenCalledTimes(2)
+    expect(mockGenerator).toHaveBeenCalledTimes(1)
     expect(PROTECTED_NAMESPACES).not.toContain(id)
-    expect(id).toEqual('abcdefghi')
+    expect(id).toEqual('apicd')
+  })
+
+  test('should throw error if ID string is not divisible by block size', () => {
+    const mockGenerator = jest
+      .fn()
+      .mockReturnValueOnce('api')
+      .mockReturnValue('abcdefgj')
+
+    expect(() => {
+      generatePublicId(mockGenerator)
+    }).toThrow()
+  })
+
+  test('should correctly insert delimeter in the id string generated', () => {
+    const mockGenerator = jest.fn().mockReturnValueOnce('23432dfdsf')
+
+    const id = generatePublicId(mockGenerator)
+
+    expect(id).toEqual('23432-dfdsf')
   })
 })

@@ -10,6 +10,7 @@ import { DataSource, EntityManager, Repository } from 'typeorm'
 import { PASSWORD_ERROR_MESSAGE } from '~shared/constants/letters'
 import { CreateBatchDto } from '~shared/dtos/batches.dto'
 import {
+  BulkLetterValidationResultDto,
   CreateBulkLetterDto,
   CreateLetterDto,
   UpdateLetterDto,
@@ -51,6 +52,31 @@ export class LettersService {
   ): Promise<Letter[]> {
     const letters = this.repository.create(createLetterDtos)
     return entityManager.save(letters)
+  }
+
+  async bulkValidate(createBulkLetterDto: CreateBulkLetterDto): Promise<[]> {
+    const {
+      templateId,
+      letterParamMaps,
+      passwords,
+      passwordInstructions,
+      phoneNumbers,
+    } = createBulkLetterDto
+    const template = await this.templatesService.findOne(templateId)
+    if (!template) throw new NotFoundException('Template not found')
+
+    const validationResult = this.lettersValidationService.validateBulk(
+      template.fields,
+      letterParamMaps,
+      passwords,
+      passwordInstructions,
+      phoneNumbers,
+    )
+    // We need to throw an error to stop the flow
+    if (!validationResult.success)
+      throw new BadRequestException(validationResult)
+
+    return []
   }
 
   async bulkCreate(

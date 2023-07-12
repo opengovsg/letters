@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  HStack,
-  Table,
-  TableContainer,
-  Td,
-  Text,
-  Th,
-  Tr,
-} from '@chakra-ui/react'
+import { Box, Table, TableContainer, Td, Text, Th, Tr } from '@chakra-ui/react'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
 import {
@@ -80,22 +70,7 @@ export const UploadCsvErrorsTable = ({
   })
 
   return (
-    <Box padding={8}>
-      <HStack>
-        <Button
-          variant="clear"
-          padding={0}
-          minWidth={0}
-          minHeight={0}
-          color=""
-          onClick={onClose}
-        >
-          <BiLeftArrowAlt size="1.5rem" />
-        </Button>
-        <Text>
-          {uploadCsvErrors.length} {pluraliseIfNeeded(uploadCsvErrors, 'error')}
-        </Text>
-      </HStack>
+    <Box paddingTop={4}>
       <TableContainer w="100%">
         <Table variant="simple">
           <Tr backgroundColor="interaction.main-subtle.default">

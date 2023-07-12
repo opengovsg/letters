@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common'
 
 import {
+  BulkLetterValidationResultDto,
   CreateBulkLetterDto,
   CreateLetterDto,
   GetBulkLetterDto,
@@ -50,6 +51,11 @@ export class LettersController {
       letters,
       bulkRequest.passwords,
     )
+  }
+
+  @Post('validate')
+  async validate(@Body() bulkRequest: CreateBulkLetterDto): Promise<[]> {
+    return await this.lettersService.bulkValidate(bulkRequest)
   }
 
   @Get()

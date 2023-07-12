@@ -26,6 +26,30 @@ export const useGetTemplateById = (templateId: number) => {
   return { template: data!, isTemplatesLoading: isLoading }
 }
 
+export const useValidateBulkLetterMutation = ({
+  onError,
+}: {
+  onError?: (res: BulkLetterValidationResultError[]) => void
+} = {}) => {
+  return useMutation(
+    async (
+      body: CreateBulkLetterDto,
+    ): Promise<BulkLetterValidationResultDto> => {
+      return await api
+        .url(`/letters/validate`)
+        .post(body)
+        .json<BulkLetterValidationResultDto>()
+    },
+    {
+      onError: (e: WretchError) => {
+        const err = e.json as BulkLetterValidationResultDto
+        if (!err.errors) return
+        onError?.(err.errors)
+      },
+    },
+  )
+}
+
 export const useCreateBulkLetterMutation = ({
   onSuccess,
   onError,
@@ -34,7 +58,6 @@ export const useCreateBulkLetterMutation = ({
   onError?: (errors: BulkLetterValidationResultError[]) => void
 } = {}) => {
   const queryClient = useQueryClient()
-
   return useMutation(
     async (body: CreateBulkLetterDto): Promise<GetBulkLetterDto[]> => {
       return await api

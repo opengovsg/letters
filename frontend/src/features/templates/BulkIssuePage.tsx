@@ -1,56 +1,62 @@
-import { HStack, VStack } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { VStack } from '@chakra-ui/react'
+import { useSteps } from '@chakra-ui/stepper'
+import { useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 
-import { BulkIssueButton } from './components/BulkIssueButton'
-import { CompletionCsvCard } from './components/CompletionCsvCard'
-import { SampleCsvCard } from './components/SampleCsvCard'
+import {
+  CitizenNotificationMethod,
+  GetBulkLetterDto,
+} from '~shared/dtos/letters.dto'
+
+import { BulkIssueCompletionCard } from './components/BulkIssueCompletionCard'
+import { BulkIssueSendLettersCard } from './components/BulkIssueSendLettersCard'
+import { BulkIssueSettingsCard } from './components/BulkIssueSettingsCard'
+import { BulkIssueUploadCsvCard } from './components/BulkIssueUploadCsvCard'
+import { BulkLetterIssueFormState } from './components/states/BulkLetterIssueFormState'
 import { TemplateHeader } from './components/TemplateHeader'
-import { UploadCsvCard } from './components/UploadCsvCard'
-import { useGetTemplateById, useTemplateId } from './hooks/templates.hooks'
-import { useCardIndex } from './hooks/useCardIndex'
 
 export const BulkIssuePage = (): JSX.Element => {
-  const { templateId } = useTemplateId()
-  const { name } = useGetTemplateById(templateId)
-  const navigate = useNavigate()
+  const methods = useForm<BulkLetterIssueFormState>()
 
-  const [currIndex, setCurrIndex, handleNext, handlePrev] = useCardIndex(0)
+  const notificationMethod = methods.getValues('notificationMethod')
 
-  const steps = [
-    'Download .CSV file',
-    'Upload completed .CSV file',
-    'Send letters',
-  ]
+  const [bulkLetters, setBulkLetters] = useState<GetBulkLetterDto[]>([])
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { activeStep, goToNext, goToPrevious } = useSteps()
 
   return (
-    <VStack alignItems="left" spacing="0px">
-      <TemplateHeader templateName={name} />
-      <VStack pt={16} spacing={8} align={'center'}>
-        <HStack spacing={8}>
-          {steps.map((text, i) => (
-            <BulkIssueButton
-              key={i}
-              onClick={() => setCurrIndex(i)}
-              buttonIndex={i}
-              currIndex={currIndex}
-            >
-              {text}
-            </BulkIssueButton>
-          ))}
-        </HStack>
-        <SampleCsvCard
-          shouldDisplay={currIndex === 0}
-          onCompletion={handleNext}
-        />
-        <UploadCsvCard
-          shouldDisplay={currIndex === 1}
-          onCompletion={handleNext}
-        />
-        <CompletionCsvCard
-          shouldDisplay={currIndex === 2}
-          onCompletion={() => navigate('/admin/templates')}
-        />
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    <FormProvider {...methods}>
+      <VStack alignItems="left" spacing="0px" h="100%">
+        <TemplateHeader activeStep={activeStep} />
+        <VStack pt={10} align={'center'} backgroundColor={'grey.50'} h="100%">
+          <BulkIssueSettingsCard
+            shouldDisplay={activeStep === 0}
+            goToNext={() => goToNext()}
+          />
+
+          <BulkIssueUploadCsvCard
+            onSuccess={(letters: GetBulkLetterDto[]) => {
+              setBulkLetters(letters)
+            }}
+            shouldDisplay={activeStep === 1}
+            goToNext={() => goToNext()}
+            goToPrevious={() => goToPrevious()}
+          />
+          {notificationMethod === CitizenNotificationMethod.SMS ? (
+            <BulkIssueSendLettersCard
+              shouldDisplay={activeStep === 2}
+              goToPrevious={() => goToPrevious()}
+            />
+          ) : (
+            <BulkIssueCompletionCard
+              shouldDisplay={activeStep === 2}
+              bulkLetters={bulkLetters}
+            />
+          )}
+        </VStack>
       </VStack>
-    </VStack>
+    </FormProvider>
   )
 }

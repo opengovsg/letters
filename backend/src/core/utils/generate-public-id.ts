@@ -26,20 +26,47 @@ const customRandom = (
     }
   }
 }
+
+const splitStrIntoBlocks = (
+  stringToSplit: string,
+  blockSize: number,
+  divider = '-',
+): string => {
+  // throws error if the stirng is not divisible by blockSize
+  if (stringToSplit.length % blockSize != 0) {
+    throw new Error('The string cannot be split into equal block sizes.')
+  }
+  const blockSizeRegex = new RegExp(`(.{${blockSize}})`, 'g')
+  const stringBlockArr = stringToSplit.match(blockSizeRegex)
+
+  if (!stringBlockArr) {
+    throw new Error(
+      'The string block array cannot be empty for generating letter ID.',
+    )
+  }
+  return stringBlockArr.join(divider)
+}
+
 const customAlphabet = (alphabet: string, size: number) =>
   customRandom(alphabet, size, random)
 
-const ALPHABET =
-  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-const ID_LENGTH = 32
+const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'
+const BLOCK_SIZE = 5
+const GROUPS = 4
+const ID_LENGTH = BLOCK_SIZE * GROUPS
 
+/*
+ * Generates publicID of the format `xzyqd-dsfss-sdfs0-sdfss`
+ * Where each alphabet belongs to the ALPHABET const string above
+ * The letter ID contains 4 GROUPS and each group has a BLOCK_SIZE of 5
+ */
 export const generatePublicId = (
   generator = customAlphabet(ALPHABET, ID_LENGTH),
 ): string => {
-  let id = generator()
+  let id = splitStrIntoBlocks(generator(), BLOCK_SIZE)
   // if publicId is in protected name space, regenerate
   while (PROTECTED_NAMESPACES.includes(id)) {
-    id = generator()
+    id = splitStrIntoBlocks(generator(), BLOCK_SIZE)
   }
 
   return id

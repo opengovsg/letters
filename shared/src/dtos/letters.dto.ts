@@ -34,6 +34,12 @@ export enum BulkLetterValidationResultErrorMessage {
   INVALID_PHONE_NUMBER = 'Invalid phone number',
 }
 
+export enum CitizenNotificationMethod {
+  EMAIL = 'email',
+  SMS = 'sms',
+  NONE = 'none',
+}
+
 export class BulkLetterValidationResultError {
   id: number
   param: string
