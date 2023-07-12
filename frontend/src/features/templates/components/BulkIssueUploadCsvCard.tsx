@@ -22,6 +22,7 @@ import {
   useCreateBulkLetterMutation,
   useGetTemplateById,
   useTemplateId,
+  useValidateBulkLetterMutation,
 } from '~features/issue/hooks/templates.hooks'
 import useParseCsv from '~features/issue/hooks/useParseCsv'
 import {
@@ -106,6 +107,12 @@ export const BulkIssueUploadCsvCard = ({
     onError,
   })
 
+  const { mutateAsync: validate } = useValidateBulkLetterMutation({
+    onSuccess: (res: BulkLetterValidationResultError[]) => {
+      setUploadCsvErrors(res)
+    },
+  })
+
   const handleSubmit = async (): Promise<void> => {
     const reqBody: CreateBulkLetterDto = {
       templateId,
@@ -117,6 +124,7 @@ export const BulkIssueUploadCsvCard = ({
     }
     if (isSendViaSms) {
       reqBody.phoneNumbers = phoneNumbers
+      await validate(reqBody)
     }
     setValue('letterGenerationObject', reqBody)
 
