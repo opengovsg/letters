@@ -10,6 +10,4 @@ export const PROTECTED_NAMESPACES = [
   'privacy',
   'guide',
   'not-found',
-  // adding one for testing purposes
-  'where-dream',
 ]

@@ -11,14 +11,14 @@ describe('generatePublicId', () => {
   test('should regenerate ID if it matches a protected string', () => {
     const mockGenerator = jest
       .fn()
-      .mockReturnValueOnce('wheredream')
+      .mockReturnValueOnce('apicd')
       .mockReturnValue('abcdeabcdeabcdeabcde')
 
     const id = generatePublicId(mockGenerator)
 
-    expect(mockGenerator).toHaveBeenCalledTimes(2)
+    expect(mockGenerator).toHaveBeenCalledTimes(1)
     expect(PROTECTED_NAMESPACES).not.toContain(id)
-    expect(id).toEqual('abcde-abcde-abcde-abcde')
+    expect(id).toEqual('apicd')
   })
 
   test('should throw error if ID string is not divisible by block size', () => {

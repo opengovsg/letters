@@ -31,17 +31,20 @@ const splitStrIntoBlocks = (
   stringToSplit: string,
   blockSize: number,
   divider = '-',
-) => {
+): string => {
   // throws error if the stirng is not divisible by blockSize
   if (stringToSplit.length % blockSize != 0) {
     throw new Error('The string cannot be split into equal block sizes.')
   }
-  // generate regex pattern for recurrently matching a string length of blockSize
-  const matchBlockSizeRegex = new RegExp(`(.{${blockSize}})`, 'g')
+  const blockSizeRegex = new RegExp(`(.{${blockSize}})`, 'g')
+  const stringBlockArr = stringToSplit.match(blockSizeRegex)
 
-  // now, simply match with the above generated regex and insert dividers
-  // also remove the last character to remove the extra added '-' at the end using .slice(0, -1)
-  return stringToSplit.replace(matchBlockSizeRegex, '$1' + divider).slice(0, -1)
+  if (!stringBlockArr) {
+    throw new Error(
+      'The string block array cannot be empty for generating letter ID.',
+    )
+  }
+  return stringBlockArr.join(divider)
 }
 
 const customAlphabet = (alphabet: string, size: number) =>
