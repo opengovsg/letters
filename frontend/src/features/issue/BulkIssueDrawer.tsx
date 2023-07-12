@@ -45,7 +45,7 @@ export const BulkIssueDrawer = (): JSX.Element => {
   const [bulkLetters, setBulkLetters] = useState<GetBulkLetterDto[]>([])
 
   const onClose = () =>
-    navigate(`/${routes.admin.index}/${routes.admin.templates}`)
+    navigate(`/${routes.admin.index}/${routes.admin.templates.index}`)
 
   return (
     <Drawer size="lg" isOpen placement="right" onClose={onClose}>

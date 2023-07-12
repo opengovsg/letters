@@ -23,7 +23,7 @@ export const CreateTemplatePage = (): JSX.Element => {
             aria-label="back"
             variant="clear"
             icon={<BiLeftArrowAlt style={{ color: '#2C2E34' }} />}
-            onClick={() => navigate(`/admin/${routes.admin.templates}`)}
+            onClick={() => navigate(`/admin/${routes.admin.templates.index}`)}
             _hover={{ background: 'none' }}
             size="lg"
           />
