@@ -41,7 +41,7 @@ export const BulkIssueCompletionCard = ({
       }
     })
     jsonArrToCsv(downloadCsvName, bulkLettersWithLink)
-    navigate(`/${routes.admin.index}/${routes.admin.templates}`)
+    navigate(`/${routes.admin.index}/${routes.admin.templates.index}`)
   }
 
   return (

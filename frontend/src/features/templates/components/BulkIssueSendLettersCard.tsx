@@ -64,7 +64,7 @@ export const BulkIssueSendLettersCard = ({
 
     await mutateAsync(reqBody)
     if (!uploadCsvErrors?.length) {
-      navigate(`/${routes.admin.index}/${routes.admin.templates}`)
+      navigate(`/${routes.admin.index}/${routes.admin.templates.index}`)
     }
   }
 
