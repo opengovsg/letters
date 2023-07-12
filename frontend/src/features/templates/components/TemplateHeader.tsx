@@ -22,15 +22,17 @@ export const TemplateHeader = ({
   const steps = ['SETTINGS', 'UPLOAD CSV', 'DOWNLOAD']
 
   return (
-    <HStack spacing={4}>
+    <HStack
+      spacing={4}
+      borderBottom="1px"
+      borderBottomColor="base.divider.medium"
+    >
       <Flex
         position="static"
         pos="relative"
         flexDir="row"
         p={2}
         justifyContent="space-between"
-        borderBottom="1px"
-        borderBottomColor="base.divider.medium"
         w="38%"
         align="center"
       >

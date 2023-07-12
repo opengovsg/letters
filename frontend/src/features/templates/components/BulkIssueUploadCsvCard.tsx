@@ -108,9 +108,7 @@ export const BulkIssueUploadCsvCard = ({
   })
 
   const { mutateAsync: validate } = useValidateBulkLetterMutation({
-    onSuccess: (res: BulkLetterValidationResultError[]) => {
-      setUploadCsvErrors(res)
-    },
+    onError,
   })
 
   const handleSubmit = async (): Promise<void> => {
@@ -131,10 +129,7 @@ export const BulkIssueUploadCsvCard = ({
     if (!isSendViaSms) {
       await mutateAsync(reqBody)
     }
-
-    if (!uploadCsvErrors?.length) {
-      goToNext()
-    }
+    goToNext()
   }
 
   const getErrorMessage = (): string => {

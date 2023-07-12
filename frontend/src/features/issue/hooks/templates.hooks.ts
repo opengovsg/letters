@@ -27,9 +27,9 @@ export const useGetTemplateById = (templateId: number) => {
 }
 
 export const useValidateBulkLetterMutation = ({
-  onSuccess,
+  onError,
 }: {
-  onSuccess?: (res: BulkLetterValidationResultError[]) => void
+  onError?: (res: BulkLetterValidationResultError[]) => void
 } = {}) => {
   return useMutation(
     async (
@@ -41,9 +41,10 @@ export const useValidateBulkLetterMutation = ({
         .json<BulkLetterValidationResultDto>()
     },
     {
-      onSuccess: (res: BulkLetterValidationResultDto) => {
-        if (!res.errors) return
-        onSuccess?.(res.errors)
+      onError: (e: WretchError) => {
+        const err = e.json as BulkLetterValidationResultDto
+        if (!err.errors) return
+        onError?.(err.errors)
       },
     },
   )

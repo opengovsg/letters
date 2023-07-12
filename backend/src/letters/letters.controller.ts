@@ -54,11 +54,7 @@ export class LettersController {
   }
 
   @Post('validate')
-  async validate(
-    @Body() bulkRequest: CreateBulkLetterDto,
-  ): Promise<BulkLetterValidationResultDto> {
-    console.log('calling validate')
-    console.log(await this.lettersService.bulkValidate(bulkRequest))
+  async validate(@Body() bulkRequest: CreateBulkLetterDto): Promise<[]> {
     return await this.lettersService.bulkValidate(bulkRequest)
   }
 

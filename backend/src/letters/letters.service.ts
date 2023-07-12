@@ -54,9 +54,7 @@ export class LettersService {
     return entityManager.save(letters)
   }
 
-  async bulkValidate(
-    createBulkLetterDto: CreateBulkLetterDto,
-  ): Promise<BulkLetterValidationResultDto> {
+  async bulkValidate(createBulkLetterDto: CreateBulkLetterDto): Promise<[]> {
     const {
       templateId,
       letterParamMaps,
@@ -74,7 +72,11 @@ export class LettersService {
       passwordInstructions,
       phoneNumbers,
     )
-    return validationResult
+    // We need to throw an error to stop the flow
+    if (!validationResult.success)
+      throw new BadRequestException(validationResult)
+
+    return []
   }
 
   async bulkCreate(
