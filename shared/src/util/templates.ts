@@ -12,7 +12,4 @@ export const getTemplateFields = (html: string): string[] => {
 }
 
 export const parseTemplateField = (field: string): string =>
-  field
-    .replace(/&nbsp;/g, '')
-    .trim()
-    .toLowerCase()
+  field.trim().toLowerCase()

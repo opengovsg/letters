@@ -37,7 +37,7 @@ export const CreateTemplateModal = ({
   const { mutateAsync, isLoading } = useCreateTemplateMutation({
     onSuccess: () => {
       onClose()
-      navigate(`/admin/${routes.admin.templates}`)
+      navigate(`/admin/${routes.admin.templates.index}`)
     },
   })
   const {
